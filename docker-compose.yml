@@ -1,0 +1,20 @@
+services:
+  database:
+    container_name: sanare-docker
+    image: bitnami/postgresql:latest
+    ports:
+      - '5432:5432'
+    environment:
+      - POSTGRES_USER=sanare
+      - POSTGRES_PASSWORD=sanare
+      - POSTGRES_DB=sanare-db
+    volumes:
+      - ./data/pg:/data/postgres
+    healthcheck:
+      test: ['CMD', 'pg_isready', '-U', 'sanare']
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  postgres_data:
