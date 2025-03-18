@@ -1,8 +1,8 @@
-import { Either, left, right } from "@/core/either";
-import { Account } from "../../enterprise/entities/account";
-import { Injectable } from "@nestjs/common";
-import { AccountRepository } from "../repositories/account-repository";
-import { HashComparer } from "@/domain/account/cryptography/hash-comparer";
+import { Either, left, right } from '@/core/either';
+import { Account } from '../../enterprise/entities/account';
+import { Injectable } from '@nestjs/common';
+import { AccountRepository } from '../repositories/account-repository';
+import { HashComparer } from '@/domain/account/cryptography/hash-comparer';
 
 interface UpdateAccountEmailUseCaseRequest {
   accountId: string;
@@ -13,26 +13,30 @@ interface UpdateAccountEmailUseCaseRequest {
 type UpdateAccountEmailUseCaseResponse = Either<
   null,
   {
-    account: Account
+    account: Account;
   }
 >;
 
 @Injectable()
 export class UpdateAccountEmailUseCase {
-
-  constructor (
+  constructor(
     private accountRepository: AccountRepository,
-    private hashComparer: HashComparer
+    private hashComparer: HashComparer,
   ) {}
 
-  async execute (data: UpdateAccountEmailUseCaseRequest): Promise<UpdateAccountEmailUseCaseResponse> {
+  async execute(
+    data: UpdateAccountEmailUseCaseRequest,
+  ): Promise<UpdateAccountEmailUseCaseResponse> {
     const account = await this.accountRepository.findById(data.accountId);
 
     if (!account) {
       return left(null);
     }
 
-    const passwordMatch = await this.hashComparer.compare(data.password, account.password);
+    const passwordMatch = await this.hashComparer.compare(
+      data.password,
+      account.password,
+    );
 
     if (!passwordMatch) {
       return left(null);
@@ -42,7 +46,7 @@ export class UpdateAccountEmailUseCase {
     account.isVerified = false;
 
     return right({
-      account
+      account,
     });
   }
 }

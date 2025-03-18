@@ -1,12 +1,12 @@
-import { Either, left, right } from "@/core/either";
-import { Account } from "../../enterprise/entities/account";
-import { Injectable } from "@nestjs/common";
-import { AccountRepository } from "../repositories/account-repository";
+import { Either, left, right } from '@/core/either';
+import { Account } from '../../enterprise/entities/account';
+import { Injectable } from '@nestjs/common';
+import { AccountRepository } from '../repositories/account-repository';
 
 interface UpdateMyAccountUseCaseRequest {
   accountId: string;
   name?: string;
-  theme?: "LIGHT" | "DARK";
+  theme?: 'LIGHT' | 'DARK';
 }
 
 type UpdateMyAccountUseCaseResponse = Either<
@@ -18,12 +18,11 @@ type UpdateMyAccountUseCaseResponse = Either<
 
 @Injectable()
 export class UpdateMyAccountUseCase {
+  constructor(private accountRepository: AccountRepository) {}
 
-  constructor (
-    private accountRepository: AccountRepository,
-  ) {};
-
-  async execute (request: UpdateMyAccountUseCaseRequest): Promise<UpdateMyAccountUseCaseResponse> {
+  async execute(
+    request: UpdateMyAccountUseCaseRequest,
+  ): Promise<UpdateMyAccountUseCaseResponse> {
     const account = await this.accountRepository.findById(request.accountId);
 
     if (!account) {
@@ -39,5 +38,4 @@ export class UpdateMyAccountUseCase {
       account,
     });
   }
-
-};
+}

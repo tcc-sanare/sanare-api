@@ -1,7 +1,7 @@
-import { Either, left, right } from "@/core/either";
-import { Account } from "../../enterprise/entities/account";
-import { Injectable } from "@nestjs/common";
-import { AccountRepository } from "../repositories/account-repository";
+import { Either, left, right } from '@/core/either';
+import { Account } from '../../enterprise/entities/account';
+import { Injectable } from '@nestjs/common';
+import { AccountRepository } from '../repositories/account-repository';
 
 interface DeleteAccountUseCaseRequest {
   accountId: string;
@@ -16,12 +16,11 @@ type DeleteAccountUseCaseResponse = Either<
 
 @Injectable()
 export class DeleteAccountUseCase {
+  constructor(private accountRepository: AccountRepository) {}
 
-  constructor (
-    private accountRepository: AccountRepository
-  ) {}
-
-  async execute (request: DeleteAccountUseCaseRequest): Promise<DeleteAccountUseCaseResponse> {
+  async execute(
+    request: DeleteAccountUseCaseRequest,
+  ): Promise<DeleteAccountUseCaseResponse> {
     const account = await this.accountRepository.findById(request.accountId);
 
     if (!account) {

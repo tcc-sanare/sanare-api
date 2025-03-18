@@ -1,8 +1,8 @@
-import { Either, left, right } from "@/core/either";
-import { Account } from "../../enterprise/entities/account";
-import { AccountRepository } from "../repositories/account-repository";
-import { Injectable } from "@nestjs/common";
-import { HashGenerator } from "../../../cryptography/hash-generetor";
+import { Either, left, right } from '@/core/either';
+import { Account } from '../../enterprise/entities/account';
+import { AccountRepository } from '../repositories/account-repository';
+import { Injectable } from '@nestjs/common';
+import { HashGenerator } from '../../../cryptography/hash-generetor';
 
 interface CreateAccountUseCaseRequest {
   name: string;
@@ -24,18 +24,20 @@ type CreateAccountUseCaseResponse = Either<
 
 @Injectable()
 export class CreateAccountUseCase {
-  constructor (
+  constructor(
     private accountRepository: AccountRepository,
-    private hashGenerator: HashGenerator
-  ) {};
+    private hashGenerator: HashGenerator,
+  ) {}
 
-  async execute (request: CreateAccountUseCaseRequest): Promise<CreateAccountUseCaseResponse> {
+  async execute(
+    request: CreateAccountUseCaseRequest,
+  ): Promise<CreateAccountUseCaseResponse> {
     const account = await Account.create({
       name: request.name,
       email: request.email,
       password: await this.hashGenerator.hash(request.password),
       isVerified: false,
-      profilePhotoKey: null
+      profilePhotoKey: null,
     });
 
     if (!account) {
@@ -49,7 +51,7 @@ export class CreateAccountUseCase {
     await this.accountRepository.save(account);
 
     return right({
-      account
+      account,
     });
   }
 }

@@ -1,6 +1,6 @@
-import { HashComparer } from "@/domain/account/cryptography/hash-comparer";
-import { HashGenerator } from "@/domain/account/cryptography/hash-generetor";
-import bcrypt from "bcryptjs";
+import { HashComparer } from '@/domain/account/cryptography/hash-comparer';
+import { HashGenerator } from '@/domain/account/cryptography/hash-generetor';
+import bcrypt from 'bcryptjs';
 
 export class BcryptHasher implements HashGenerator, HashComparer {
   async hash(plain: string): Promise<string> {

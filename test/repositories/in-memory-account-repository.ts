@@ -1,5 +1,5 @@
-import { AccountRepository } from "@/domain/account/user/application/repositories/account-repository";
-import { Account } from "@/domain/account/user/enterprise/entities/account";
+import { AccountRepository } from '@/domain/account/user/application/repositories/account-repository';
+import { Account } from '@/domain/account/user/enterprise/entities/account';
 
 export class InMemoryAccountRepository implements AccountRepository {
   public items: Account[] = [];
@@ -21,5 +21,4 @@ export class InMemoryAccountRepository implements AccountRepository {
   async findByEmail(email: string): Promise<Account | null> {
     return this.items.find((item) => item.email === email) || null;
   }
-    
 }
