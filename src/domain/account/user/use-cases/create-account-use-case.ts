@@ -1,6 +1,6 @@
 import { Either, left, right } from "@/core/either";
-import { Account } from "../../enterprise/entities/account";
-import { AccountRepository } from "../repositories/account-repository";
+import { Account } from "../enterprise/entities/account";
+import { AccountRepository } from "../application/repositories/account-repository";
 import { Injectable } from "@nestjs/common";
 import { HashGenerator } from "../../cryptography/hash-generetor";
 
@@ -32,6 +32,10 @@ export class CreateAccountUseCase {
     });
 
     if (!account) {
+      return left(null);
+    }
+
+    if (await this.accountRepository.findByEmail(account.email)) {
       return left(null);
     }
 
