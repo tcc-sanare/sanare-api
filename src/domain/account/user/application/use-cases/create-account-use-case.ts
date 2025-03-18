@@ -8,6 +8,11 @@ interface CreateAccountUseCaseRequest {
   name: string;
   email: string;
   password: string;
+  profilePhoto: {
+    fileName: string;
+    fileType: string;
+    buffer: Buffer;
+  } | null;
 }
 
 type CreateAccountUseCaseResponse = Either<
@@ -28,7 +33,9 @@ export class CreateAccountUseCase {
     const account = await Account.create({
       name: request.name,
       email: request.email,
-      password: await this.hashGenerator.hash(request.password)
+      password: await this.hashGenerator.hash(request.password),
+      isVerified: false,
+      profilePhotoKey: null
     });
 
     if (!account) {

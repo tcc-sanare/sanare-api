@@ -10,6 +10,8 @@ export function makeAccount (
     name: faker.person.fullName(),
     email: faker.internet.email(),
     password: faker.internet.password(),
+    profilePhotoKey: null,
+    isVerified: false,
     theme: 'LIGHT',
     ...override
   });
