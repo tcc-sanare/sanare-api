@@ -59,5 +59,24 @@ describe("UpdateAccountPasswordUseCase", () => {
       expect(response.isLeft()).toBeTruthy();
       expect(response.value).toBeNull();
       expect(await bcryptHasher.compare(oldPassword, inMemoryAccountRepository.items[0].password)).toBeTruthy();
+    });
+
+    it("should be return null if the new passwords dont matched", async () => {
+      const account = await makeAccount({
+        password: await bcryptHasher.hash(oldPassword)
+      });
+
+      await inMemoryAccountRepository.save(account);
+
+      const response = await sut.execute({
+        accountId: account.id.toString(),
+        oldPassword,
+        password: newPassword,
+        confirmPassword: "aaaaa"
+      });
+
+      expect(response.isLeft()).toBeTruthy();
+      expect(response.value).toBeNull();
+      expect(await bcryptHasher.compare(oldPassword, inMemoryAccountRepository.items[0].password)).toBeTruthy();
     })
 })
