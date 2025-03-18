@@ -14,10 +14,12 @@ datasource db {
 }
 
 model Users {
-  id       String @id @default(uuid())
-  name     String
-  email    String
-  password String
+  id              String  @id @default(uuid())
+  name            String
+  email           String
+  password        String
+  profilePhotoKey String?
+  isVerified      Boolean @default(false)
 
   theme  UserTheme @default(LIGHT)
   status RowStatus @default(ACTIVED)
@@ -128,7 +130,6 @@ model Posts {
 }
 
 model PostLikes {
-
   userId String
   postId String
 
@@ -160,7 +161,6 @@ model CommunityNotes {
 }
 
 model CommunityNoteRatings {
-
   userId String
   noteId String
 
@@ -204,7 +204,6 @@ model Allergies {
 }
 
 model MedicalRecordToAllergies {
-
   medicalRecordId String
   allergyId       String
 
@@ -229,7 +228,6 @@ model ChronicDiseases {
 }
 
 model MedicalRecordToChronicDiseases {
-
   medicalRecordId  String
   chronicDiseaseId String
 
@@ -275,7 +273,6 @@ model Diseases {
 }
 
 model MedicalLogsToDiseases {
-
   medicalLogId String
   diseaseId    String
 
@@ -300,7 +297,6 @@ model Symptoms {
 }
 
 model MedicalLogsToSymptoms {
-
   medicalLogId String
   symptomId    String
 
