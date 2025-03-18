@@ -1,7 +1,7 @@
 import { Either, left, right } from "@/core/either";
-import { Account } from "../enterprise/entities/account";
+import { Account } from "../../enterprise/entities/account";
 import { Injectable } from "@nestjs/common";
-import { AccountRepository } from "../application/repositories/account-repository";
+import { AccountRepository } from "../repositories/account-repository";
 
 interface GetMyAccountUseCaseRequest {
   accountId: string;

@@ -6,6 +6,8 @@ export interface AccountProps {
   name: string;
   email: string;
   password: string;
+  theme: "LIGHT" | "DARK";
+
   createdAt: Date;
   updatedAt?: Date;
 }
@@ -39,6 +41,15 @@ export class Account extends Entity<AccountProps> {
     this.update();
   }
 
+  get theme () {
+    return this.props.theme;
+  }
+
+  set theme (theme: "LIGHT" | "DARK") {
+    this.props.theme = theme;
+    this.update();
+  }
+
   get createdAt () {
     return this.props.createdAt;
   }
@@ -52,12 +63,13 @@ export class Account extends Entity<AccountProps> {
   }
 
   static async create (
-    props: Optional<AccountProps, 'createdAt'>,
+    props: Optional<AccountProps, 'createdAt' | 'theme'>,
     id?: UniqueEntityID
   ) {
     const account = new Account({
       ...props,
       createdAt: new Date(),
+      theme: 'LIGHT',
     }, id);
     
     return account;

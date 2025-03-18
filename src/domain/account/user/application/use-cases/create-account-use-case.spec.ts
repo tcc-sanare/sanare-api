@@ -1,7 +1,7 @@
 import { InMemoryAccountRepository } from "test/repositories/in-memory-account-repository"
 import { CreateAccountUseCase } from "./create-account-use-case";
 import { makeAccount } from "test/factories/make-account";
-import { Account } from "../enterprise/entities/account";
+import { Account } from "../../enterprise/entities/account";
 import { BcryptHasher } from "test/cryptography/bcrypt-hasher";
 
 let inMemoryAccountRepository: InMemoryAccountRepository;
