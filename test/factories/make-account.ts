@@ -1,5 +1,5 @@
 import { UniqueEntityID } from "@/core/entities/unique-entity-id";
-import { Account, AccountProps } from "@/domain/account/enterprise/entities/account";
+import { Account, AccountProps } from "@/domain/account/user/enterprise/entities/account";
 import { faker } from "@faker-js/faker";
 
 export function makeAccount (
