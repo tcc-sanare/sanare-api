@@ -30,8 +30,8 @@ export class UpdateMyAccountUseCase {
       return left(null);
     }
 
-    account.name = request.name;
-    account.theme = request.theme;
+    account.name = request.name || account.name;
+    account.theme = request.theme || account.theme;
 
     await this.accountRepository.save(account);
 
