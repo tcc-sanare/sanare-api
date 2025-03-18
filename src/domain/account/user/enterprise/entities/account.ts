@@ -6,6 +6,8 @@ export interface AccountProps {
   name: string;
   email: string;
   password: string;
+  profilePhotoKey: string;
+  isVerified: boolean;
   theme: "LIGHT" | "DARK";
 
   createdAt: Date;
@@ -47,6 +49,24 @@ export class Account extends Entity<AccountProps> {
 
   set theme (theme: "LIGHT" | "DARK") {
     this.props.theme = theme;
+    this.update();
+  }
+
+  get profilePhotoKey () {
+    return this.profilePhotoKey;
+  }
+
+  set profilePhotoKey (profilePhotoKey: string | null) {
+    this.props.profilePhotoKey = profilePhotoKey;
+    this.update();
+  }
+
+  get isVerified () {
+    return this.props.isVerified;
+  }
+
+  set isVerified (state: boolean) {
+    this.props.isVerified = state;
     this.update();
   }
 
