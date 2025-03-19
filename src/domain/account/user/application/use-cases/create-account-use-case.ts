@@ -8,11 +8,6 @@ interface CreateAccountUseCaseRequest {
   name: string;
   email: string;
   password: string;
-  profilePhoto: {
-    fileName: string;
-    fileType: string;
-    buffer: Buffer;
-  } | null;
 }
 
 type CreateAccountUseCaseResponse = Either<
