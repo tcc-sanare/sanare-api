@@ -6,7 +6,7 @@ export interface AccountProps {
   name: string;
   email: string;
   password: string;
-  profilePhotoKey: string;
+  profilePhotoKey: string | null;
   isVerified: boolean;
   theme: 'LIGHT' | 'DARK';
 
@@ -52,7 +52,7 @@ export class Account extends Entity<AccountProps> {
   }
 
   get profilePhotoKey() {
-    return this.profilePhotoKey;
+    return this.props.profilePhotoKey;
   }
 
   set profilePhotoKey(profilePhotoKey: string | null) {
