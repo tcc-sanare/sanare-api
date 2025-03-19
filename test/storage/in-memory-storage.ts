@@ -1,4 +1,4 @@
-import { Storage } from '@/domain/application/storage/Storage';
+import { Storage } from '@/domain/application/storage';
 import { Blob } from 'buffer';
 import { randomUUID } from 'crypto';
 
@@ -45,6 +45,8 @@ export class InMemoryStorage implements Storage {
       throw new Error('Image not found');
     }
 
-    return { url: URL.createObjectURL(file.file) };
+    const base64Data = Buffer.from(await file.file.arrayBuffer()).toString('base64');
+    const mimeType = file.file.type || 'application/octet-stream';
+    return { url: `data:${mimeType};base64,${base64Data}` };
   }
 }
