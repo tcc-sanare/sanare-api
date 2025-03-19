@@ -14,40 +14,42 @@ datasource db {
 }
 
 model Users {
-  id String @id @default(uuid())
-  name String
-  email String
-  password String
+  id              String  @id @default(uuid())
+  name            String
+  email           String
+  password        String
+  profilePhotoKey String?
+  isVerified      Boolean @default(false)
 
-  theme UserTheme @default(LIGHT)
+  theme  UserTheme @default(LIGHT)
   status RowStatus @default(ACTIVED)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
   // User Profile 
-  userPhones UserPhones[]
+  userPhones       UserPhones[]
   verificationCode VerificationCodes?
-  notifications Notifications[]
+  notifications    Notifications[]
 
   // Community
-  posts Posts[]
-  postLikes PostLikes[]
-  communityNotes CommunityNotes[]
+  posts                Posts[]
+  postLikes            PostLikes[]
+  communityNotes       CommunityNotes[]
   communityNoteRatings CommunityNoteRatings[]
 
   // Medical
-  medicalRecord MedicalRecord?
-  medicalLogs MedicalLogs[]
-  reports MedicalReports[]
+  medicalRecord  MedicalRecord?
+  medicalLogs    MedicalLogs[]
+  reports        MedicalReports[]
   medicineAlarms MedicineAlarms[]
-  aiChats AiChats[]
+  aiChats        AiChats[]
 
   @@map("users")
 }
 
 model UserPhones {
-  token String @unique
+  token  String @unique
   userId String
 
   user Users @relation(fields: [userId], references: [id])
@@ -56,7 +58,7 @@ model UserPhones {
 }
 
 model VerificationCodes {
-  id String @id @default(uuid())
+  id   String @id @default(uuid())
   code String
 
   type VerificationCodeType
@@ -72,10 +74,10 @@ model VerificationCodes {
 }
 
 model Notifications {
-  id String @id @default(uuid())
-  title String
-  body String
-  path String?
+  id     String  @id @default(uuid())
+  title  String
+  body   String
+  path   String?
   isRead Boolean @default(false)
 
   userId String
@@ -89,8 +91,8 @@ model Notifications {
 }
 
 model Forums {
-  id String @id @default(uuid())
-  name String
+  id       String  @id @default(uuid())
+  name     String
   imageKey String?
 
   status RowStatus @default(ACTIVED)
@@ -104,43 +106,42 @@ model Forums {
 }
 
 model Posts {
-  id String @id @default(uuid())
+  id   String @id @default(uuid())
   body String
 
   status RowStatus @default(ACTIVED)
 
-  userId String
+  userId   String
   parentId String?
-  forumId String
+  forumId  String
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  user Users @relation(fields: [userId], references: [id])
-  parent Posts? @relation("Parent", fields: [parentId], references: [id])
-  forum Forums? @relation(fields: [forumId], references: [id])
+  user   Users   @relation(fields: [userId], references: [id])
+  parent Posts?  @relation("Parent", fields: [parentId], references: [id])
+  forum  Forums? @relation(fields: [forumId], references: [id])
 
-  childPosts Posts[] @relation("Parent")
-  likes PostLikes[]
-  notes CommunityNotes[]
+  childPosts Posts[]          @relation("Parent")
+  likes      PostLikes[]
+  notes      CommunityNotes[]
 
   @@map("posts")
 }
 
 model PostLikes {
-  @@id([userId, postId])
-
   userId String
   postId String
 
   user Users @relation(fields: [userId], references: [id])
   post Posts @relation(fields: [postId], references: [id])
 
+  @@id([userId, postId])
   @@map("post_likes")
 }
 
 model CommunityNotes {
-  id String @id @default(uuid())
+  id    String @id @default(uuid())
   cause String
 
   status RowStatus @default(ACTIVED)
@@ -160,21 +161,20 @@ model CommunityNotes {
 }
 
 model CommunityNoteRatings {
-  @@id([userId, noteId])
-
   userId String
   noteId String
 
   rating CommunityNoteRating
 
-  user Users @relation(fields: [userId], references: [id])
+  user Users          @relation(fields: [userId], references: [id])
   note CommunityNotes @relation(fields: [noteId], references: [id])
 
+  @@id([userId, noteId])
   @@map("community_note_ratings")
 }
 
 model MedicalRecord {
-  id String @id @default(uuid())
+  id        String    @id @default(uuid())
   bloodType BloodType
 
   userId String @unique
@@ -184,15 +184,15 @@ model MedicalRecord {
 
   user Users @relation(fields: [userId], references: [id])
 
-  allergies MedicalRecordToAllergies[]
+  allergies       MedicalRecordToAllergies[]
   chronicDiseases MedicalRecordToChronicDiseases[]
 
   @@map("medical_record")
 }
 
 model Allergies {
-  id String @id @default(uuid())
-  name String
+  id          String  @id @default(uuid())
+  name        String
   description String?
 
   createdAt DateTime @default(now())
@@ -204,20 +204,19 @@ model Allergies {
 }
 
 model MedicalRecordToAllergies {
-  @@id([medicalRecordId, allergyId])
-
   medicalRecordId String
-  allergyId String
+  allergyId       String
 
   medicalRecord MedicalRecord @relation(fields: [medicalRecordId], references: [id])
-  allergy Allergies @relation(fields: [allergyId], references: [id])
+  allergy       Allergies     @relation(fields: [allergyId], references: [id])
 
+  @@id([medicalRecordId, allergyId])
   @@map("medical_record_to_allergies")
 }
 
 model ChronicDiseases {
-  id String @id @default(uuid())
-  name String
+  id          String  @id @default(uuid())
+  name        String
   description String?
 
   createdAt DateTime @default(now())
@@ -229,24 +228,23 @@ model ChronicDiseases {
 }
 
 model MedicalRecordToChronicDiseases {
-  @@id([medicalRecordId, chronicDiseaseId])
-
-  medicalRecordId String
+  medicalRecordId  String
   chronicDiseaseId String
 
-  medicalRecord MedicalRecord @relation(fields: [medicalRecordId], references: [id])
+  medicalRecord  MedicalRecord   @relation(fields: [medicalRecordId], references: [id])
   chronicDisease ChronicDiseases @relation(fields: [chronicDiseaseId], references: [id])
 
+  @@id([medicalRecordId, chronicDiseaseId])
   @@map("medical_record_to_chronic_diseases")
 }
 
 model MedicalLogs {
-  id String @id @default(uuid())
+  id            String  @id @default(uuid())
   bloodPressure String?
-  heartRate Int?
-  mood String?
-  hydration Int?
-  bloodSugar Int?
+  heartRate     Int?
+  mood          String?
+  hydration     Int?
+  bloodSugar    Int?
 
   userId String
 
@@ -262,8 +260,8 @@ model MedicalLogs {
 }
 
 model Diseases {
-  id String @id @default(uuid())
-  name String
+  id          String  @id @default(uuid())
+  name        String
   description String?
 
   createdAt DateTime @default(now())
@@ -275,20 +273,19 @@ model Diseases {
 }
 
 model MedicalLogsToDiseases {
-  @@id([medicalLogId, diseaseId])
-
   medicalLogId String
-  diseaseId String
+  diseaseId    String
 
   medicalLog MedicalLogs @relation(fields: [medicalLogId], references: [id])
-  disease Diseases @relation(fields: [diseaseId], references: [id])
+  disease    Diseases    @relation(fields: [diseaseId], references: [id])
 
+  @@id([medicalLogId, diseaseId])
   @@map("medical_logs_to_diseases")
 }
 
 model Symptoms {
-  id String @id @default(uuid())
-  name String
+  id          String  @id @default(uuid())
+  name        String
   description String?
 
   createdAt DateTime @default(now())
@@ -300,21 +297,20 @@ model Symptoms {
 }
 
 model MedicalLogsToSymptoms {
-  @@id([medicalLogId, symptomId])
-
   medicalLogId String
-  symptomId String
+  symptomId    String
 
   medicalLog MedicalLogs @relation(fields: [medicalLogId], references: [id])
-  symptom Symptoms @relation(fields: [symptomId], references: [id])
+  symptom    Symptoms    @relation(fields: [symptomId], references: [id])
 
+  @@id([medicalLogId, symptomId])
   @@map("medical_logs_to_symptoms")
 }
 
 model MedicalReports {
-  id String @id @default(uuid())
+  id      String     @id @default(uuid())
   fileKey String
-  type ReportType
+  type    ReportType
 
   userId String
 
@@ -327,10 +323,10 @@ model MedicalReports {
 }
 
 model MedicineAlarms {
-  id String @id @default(uuid())
-  name String
-  weekDays String[]
-  times String[]
+  id        String   @id @default(uuid())
+  name      String
+  weekDays  String[]
+  times     String[]
   expiresAt DateTime
 
   userId String
@@ -339,13 +335,13 @@ model MedicineAlarms {
   updatedAt DateTime @updatedAt
 
   user Users @relation(fields: [userId], references: [id])
-  
+
   @@map("medicine_alarms")
 }
 
 model AiChats {
-  id String @id @default(uuid())
-  prompt String
+  id       String @id @default(uuid())
+  prompt   String
   response String
 
   userId String
@@ -386,12 +382,12 @@ enum CommunityNoteRating {
 }
 
 enum BloodType {
-  A_MINUS @map("a-")
-  A_PLUS @map("a+")
-  B_MINUS @map("b-")
-  B_PLUS @map("b+")
+  A_MINUS  @map("a-")
+  A_PLUS   @map("a+")
+  B_MINUS  @map("b-")
+  B_PLUS   @map("b+")
   AB_MINUS @map("ab-")
-  AB_PLUS @map("ab+")
-  O_MINUS @map("o-")
-  O_PLUS @map("o+")
+  AB_PLUS  @map("ab+")
+  O_MINUS  @map("o-")
+  O_PLUS   @map("o+")
 }

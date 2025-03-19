@@ -4,7 +4,7 @@ import { DomainEvents } from './domain-events';
 
 class CustomAggregateCreated implements DomainEvents {
   public ocurredAt: Date;
-  private aggregrate: CustomAggregate; //eslint-disable-line
+  private aggregrate: CustomAggregate;
 
   constructor(aggregrate: CustomAggregate) {
     this.ocurredAt = new Date();
