@@ -1,7 +1,6 @@
 import { Storage } from '@/domain/application/storage/Storage';
 import { Blob } from 'buffer';
 import { randomUUID } from 'crypto';
-import { existsSync, readFileSync, unlinkSync, writeFileSync } from 'fs';
 
 interface StorageParams {
   fileName: string;
@@ -10,31 +9,42 @@ interface StorageParams {
 }
 
 export class InMemoryStorage implements Storage {
+  items: {
+    fileKey: string;
+    file: Blob;
+  }[];
+  constructor() {
+    this.items = [];
+  }
+
   async upload(params: StorageParams): Promise<{ fileKey: string }> {
     const fileKey = `${randomUUID()}-${params.fileName}`;
 
-    writeFileSync(`./test/storage/items/${fileKey}`, params.buffer);
+    this.items.push({
+      fileKey,
+      file: new Blob([params.buffer]),
+    });
 
     return { fileKey };
   }
   async delete(fileKey: string): Promise<void> {
-    const path = `./test/storage/items/${fileKey}`;
-    if (!existsSync(path)) {
+    const file = this.items.find((item) => item.fileKey === fileKey);
+
+    if (!file) {
       throw new Error('Image not found');
     }
 
-    unlinkSync(path);
+    this.items = this.items.filter((item) => item.fileKey !== fileKey);
+
+    return;
   }
   async getSignedUrl(fileKey: string): Promise<{ url: string }> {
-    const path = `./test/storage/items/${fileKey}`;
+    const file = this.items.find((item) => item.fileKey === fileKey);
 
-    if (!existsSync(path)) {
+    if (!file) {
       throw new Error('Image not found');
     }
-    const fileBuffer = readFileSync(path);
 
-    const file = new Blob([fileBuffer]);
-
-    return { url: URL.createObjectURL(file) };
+    return { url: URL.createObjectURL(file.file) };
   }
 }
