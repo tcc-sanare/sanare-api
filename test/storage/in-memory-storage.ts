@@ -45,7 +45,9 @@ export class InMemoryStorage implements Storage {
       throw new Error('Image not found');
     }
 
-    const base64Data = Buffer.from(await file.file.arrayBuffer()).toString('base64');
+    const base64Data = Buffer.from(await file.file.arrayBuffer()).toString(
+      'base64',
+    );
     const mimeType = file.file.type || 'application/octet-stream';
     return { url: `data:${mimeType};base64,${base64Data}` };
   }
