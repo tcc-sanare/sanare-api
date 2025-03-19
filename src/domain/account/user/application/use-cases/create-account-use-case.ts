@@ -8,6 +8,7 @@ interface CreateAccountUseCaseRequest {
   name: string;
   email: string;
   password: string;
+  cep: string;
 }
 
 type CreateAccountUseCaseResponse = Either<
@@ -33,6 +34,7 @@ export class CreateAccountUseCase {
       password: await this.hashGenerator.hash(request.password),
       isVerified: false,
       profilePhotoKey: null,
+      cep: request.cep,
     });
 
     if (!account) {

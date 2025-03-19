@@ -8,6 +8,7 @@ interface UpdateMyAccountUseCaseRequest {
   accountId: string;
   name?: string;
   theme?: 'LIGHT' | 'DARK';
+  cep?: string;
   profilePhoto?: {
     fileName: string;
     fileType: string;
@@ -38,19 +39,24 @@ export class UpdateMyAccountUseCase {
       return left(null);
     }
 
-    account.name = request.name || account.name;
-    account.theme = request.theme || account.theme;
-    
+    request.name && (account.name = request.name);
+    request.theme && (account.theme = request.theme);
+    request.cep && (account.cep = request.cep);
+
     if (request.profilePhoto !== undefined) {
       if (account.profilePhotoKey) {
         await this.storage.delete(account.profilePhotoKey);
       }
-      
-      account.profilePhotoKey = request.profilePhoto ? await this.storage.upload({
-        fileName: request.profilePhoto.fileName,
-        fileType: request.profilePhoto.fileType,
-        buffer: request.profilePhoto.buffer,
-      }).then(res => res.fileKey) : null;
+
+      account.profilePhotoKey = request.profilePhoto
+        ? await this.storage
+            .upload({
+              fileName: request.profilePhoto.fileName,
+              fileType: request.profilePhoto.fileType,
+              buffer: request.profilePhoto.buffer,
+            })
+            .then((res) => res.fileKey)
+        : null;
     }
 
     await this.accountRepository.save(account);
