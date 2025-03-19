@@ -22,7 +22,7 @@ describe('CreateAccountUseCase', () => {
       name: account.name,
       email: account.email,
       password: account.password,
-      profilePhoto: null,
+      cep: account.cep,
     });
 
     expect(response.isRight()).toBe(true);
@@ -46,7 +46,7 @@ describe('CreateAccountUseCase', () => {
       name: secondAccount.name,
       email: secondAccount.email,
       password: secondAccount.password,
-      profilePhoto: null,
+      cep: secondAccount.cep,
     });
 
     expect(response2.isLeft()).toBe(true);

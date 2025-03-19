@@ -15,7 +15,7 @@ describe('UpdateMyAccountUseCase', () => {
     inMemoryAccountRepository = new InMemoryAccountRepository();
     updateMyAccountUseCase = new UpdateMyAccountUseCase(
       inMemoryAccountRepository,
-      inMemoryStorage
+      inMemoryStorage,
     );
   });
 
@@ -54,11 +54,14 @@ describe('UpdateMyAccountUseCase', () => {
 
     await inMemoryAccountRepository.save(account);
 
-    const file = new File([
-      new Blob([
-        readFileSync('./test/storage/test-files/profile-photo.webp')
-      ])
-    ], 'profile-photo.webp');
+    const file = new File(
+      [
+        new Blob([
+          readFileSync('./test/storage/test-files/profile-photo.webp'),
+        ]),
+      ],
+      'profile-photo.webp',
+    );
 
     const response = await updateMyAccountUseCase.execute({
       accountId: account.id.toString(),
@@ -72,24 +75,30 @@ describe('UpdateMyAccountUseCase', () => {
     expect(response.isRight()).toBeTruthy();
     expect(response.value.account).toBeInstanceOf(Account);
     expect(response.value.account.profilePhotoKey).not.toBeNull();
-    expect(inMemoryStorage.items[0].fileKey).toBe(response.value.account.profilePhotoKey);
-    
-  })
+    expect(inMemoryStorage.items[0].fileKey).toBe(
+      response.value.account.profilePhotoKey,
+    );
+  });
 
   it('should remove an account profile photo', async () => {
     const account = await makeAccount();
 
-    const file = new File([
-      new Blob([
-        readFileSync('./test/storage/test-files/profile-photo.webp')
-      ])
-    ], 'profile-photo.webp');
+    const file = new File(
+      [
+        new Blob([
+          readFileSync('./test/storage/test-files/profile-photo.webp'),
+        ]),
+      ],
+      'profile-photo.webp',
+    );
 
-    account.profilePhotoKey = await inMemoryStorage.upload({
-      fileName: file.name,
-      fileType: file.type,
-      buffer: Buffer.from(await file.arrayBuffer()),
-    }).then(res => res.fileKey);
+    account.profilePhotoKey = await inMemoryStorage
+      .upload({
+        fileName: file.name,
+        fileType: file.type,
+        buffer: Buffer.from(await file.arrayBuffer()),
+      })
+      .then((res) => res.fileKey);
 
     await inMemoryAccountRepository.save(account);
 
@@ -102,6 +111,21 @@ describe('UpdateMyAccountUseCase', () => {
     expect(response.value.account).toBeInstanceOf(Account);
     expect(response.value.account.profilePhotoKey).toBeNull();
     expect(inMemoryStorage.items.length).toBe(0);
+  });
+
+  it('should update an account cep', async () => {
+    const account = await makeAccount();
+
+    await inMemoryAccountRepository.save(account);
+
+    const response = await updateMyAccountUseCase.execute({
+      accountId: account.id.toString(),
+      cep: '12345678',
+    });
+
+    expect(response.isRight()).toBeTruthy();
+    expect(response.value.account).toEqual(account);
+    expect(response.value.account.cep).toBe('12345678');
   });
 
   it('should return null if account does not exist', async () => {
