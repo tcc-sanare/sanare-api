@@ -14,7 +14,7 @@ describe("CreateAllergyUseCase", () => {
   });
 
   it('should be create a allergy', async () => {
-    const allergy = await makeAllergy();
+    const allergy = makeAllergy();
 
     const response = await sut.execute(allergy);
 
