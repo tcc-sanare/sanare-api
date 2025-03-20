@@ -1,8 +1,7 @@
-import { Either, left, right } from "@/core/either";
-import { Allergy } from "../../enterprise/entities/allergy";
-import { All, Injectable } from "@nestjs/common";
-import { AllergyRepository } from "../repositories/allergy-repository";
-import { UniqueEntityID } from "@/core/entities/unique-entity-id";
+import { Either, left, right } from '@/core/either';
+import { Allergy } from '../../enterprise/entities/allergy';
+import { Injectable } from '@nestjs/common';
+import { AllergyRepository } from '../repositories/allergy-repository';
 
 interface CreateAllergyUseCaseRequest {
   name: string;
@@ -12,24 +11,21 @@ interface CreateAllergyUseCaseRequest {
 type CreateAllergyUseCaseResponse = Either<
   null,
   {
-    allergy: Allergy
+    allergy: Allergy;
   }
 >;
 
 @Injectable()
 export class CreateAllergyUseCase {
+  constructor(private allergyRepository: AllergyRepository) {}
 
-  constructor (
-    private allergyRepository: AllergyRepository
-  ) {};
-
-  async execute (data: CreateAllergyUseCaseRequest): Promise<CreateAllergyUseCaseResponse> {
-    const allergy = Allergy.create(
-      {
-        name: data.name,
-        description: data.description
-      }
-    );
+  async execute(
+    data: CreateAllergyUseCaseRequest,
+  ): Promise<CreateAllergyUseCaseResponse> {
+    const allergy = Allergy.create({
+      name: data.name,
+      description: data.description,
+    });
 
     try {
       await this.allergyRepository.create(allergy);

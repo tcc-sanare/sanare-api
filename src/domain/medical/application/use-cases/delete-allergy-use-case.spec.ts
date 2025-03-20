@@ -1,16 +1,14 @@
-import { InMemoryAllergyRepository } from "test/repositories/in-memory-allergy-repository";
-import { DeleteAllergyUseCase } from "./delete-allergy-use-case"
-import { makeAllergy } from "test/factories/make-allergy";
+import { InMemoryAllergyRepository } from 'test/repositories/in-memory-allergy-repository';
+import { DeleteAllergyUseCase } from './delete-allergy-use-case';
+import { makeAllergy } from 'test/factories/make-allergy';
 
-describe("DeleteAllergyUseCase", () => {
+describe('DeleteAllergyUseCase', () => {
   let sut: DeleteAllergyUseCase;
   let inMemoryAllergyRepository: InMemoryAllergyRepository;
 
   beforeEach(() => {
     inMemoryAllergyRepository = new InMemoryAllergyRepository();
-    sut = new DeleteAllergyUseCase(
-      inMemoryAllergyRepository
-    );
+    sut = new DeleteAllergyUseCase(inMemoryAllergyRepository);
   });
 
   it('should be delete a allergy', async () => {
@@ -19,7 +17,7 @@ describe("DeleteAllergyUseCase", () => {
     await inMemoryAllergyRepository.create(allergy);
 
     const response = await sut.execute({
-      allergyId: allergy.id.toString()
+      allergyId: allergy.id.toString(),
     });
 
     expect(response.isRight()).toBeTruthy();
