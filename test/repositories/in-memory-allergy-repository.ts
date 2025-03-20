@@ -1,10 +1,10 @@
-import { AllergyRepository } from "@/domain/medical/application/repositories/allergy-repository";
-import { Allergy } from "@/domain/medical/enterprise/entities/allergy";
+import { AllergyRepository } from '@/domain/medical/application/repositories/allergy-repository';
+import { Allergy } from '@/domain/medical/enterprise/entities/allergy';
 
 export class InMemoryAllergyRepository implements AllergyRepository {
   items: Allergy[];
 
-  constructor () {
+  constructor() {
     this.items = [];
   }
 
@@ -17,35 +17,36 @@ export class InMemoryAllergyRepository implements AllergyRepository {
   }
 
   async save(allergy: Allergy): Promise<void> {
-    const allergyIndex = this.items.findIndex(item => item.id === allergy.id);
+    const allergyIndex = this.items.findIndex((item) => item.id === allergy.id);
 
     if (allergyIndex === -1) {
-      throw new Error("allergy not found");
+      throw new Error('allergy not found');
     }
 
     this.items[allergyIndex] = allergy;
   }
 
   async delete(allergy: Allergy): Promise<void> {
-    const allergyIndex = this.items.findIndex(item => item.id === allergy.id);
+    const allergyIndex = this.items.findIndex((item) => item.id === allergy.id);
 
     if (allergyIndex === -1) {
-      throw new Error("allergy not found");
+      throw new Error('allergy not found');
     }
 
     this.items.splice(allergyIndex, 1);
   }
 
   async findById(id: string): Promise<Allergy> {
-    const allergy = this.items.find(allergy => allergy.id.toString() === id);
+    const allergy = this.items.find((allergy) => allergy.id.toString() === id);
 
     return allergy;
   }
 
   async findByName(name: string): Promise<Allergy[]> {
-    const allergies = this.items.filter(allergy => allergy.name.toLowerCase().includes(name));
+    const allergies = this.items.filter((allergy) =>
+      allergy.name.toLowerCase().includes(name),
+    );
 
     return allergies;
   }
-  
 }

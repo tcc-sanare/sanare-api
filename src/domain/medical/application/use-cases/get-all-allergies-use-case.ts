@@ -1,7 +1,7 @@
-import { Either, left, right } from "@/core/either";
-import { Injectable } from "@nestjs/common";
-import { Allergy } from "../../enterprise/entities/allergy";
-import { AllergyRepository } from "../repositories/allergy-repository";
+import { Either, left, right } from '@/core/either';
+import { Injectable } from '@nestjs/common';
+import { Allergy } from '../../enterprise/entities/allergy';
+import { AllergyRepository } from '../repositories/allergy-repository';
 
 type GetAllAllergiesUseCaseResponse = Either<
   null,
@@ -12,10 +12,7 @@ type GetAllAllergiesUseCaseResponse = Either<
 
 @Injectable()
 export class GetAllAllergiesUseCase {
-  
-  constructor (
-    private allergyRepository: AllergyRepository
-  ) {};
+  constructor(private allergyRepository: AllergyRepository) {}
 
   async execute(): Promise<GetAllAllergiesUseCaseResponse> {
     const allergies = await this.allergyRepository.findAll();
