@@ -16,7 +16,7 @@ describe('CreateAccountUseCase', () => {
   });
 
   it('should create a new account', async () => {
-    const account = await makeAccount();
+    const account = makeAccount();
 
     const response = await sut.execute({
       name: account.name,
@@ -36,9 +36,9 @@ describe('CreateAccountUseCase', () => {
     console.log(inMemoryAccountRepository.items);
     const firstAccount = await makeAccount();
 
-    await inMemoryAccountRepository.save(firstAccount);
+    await inMemoryAccountRepository.create(firstAccount);
 
-    const secondAccount = await makeAccount({
+    const secondAccount = makeAccount({
       email: firstAccount.email,
     });
 

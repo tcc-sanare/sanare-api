@@ -22,7 +22,7 @@ describe('UpdateMyAccountUseCase', () => {
   it('should update an account name', async () => {
     const account = await makeAccount();
 
-    await inMemoryAccountRepository.save(account);
+    await inMemoryAccountRepository.create(account);
 
     const response = await updateMyAccountUseCase.execute({
       accountId: account.id.toString(),
@@ -37,7 +37,7 @@ describe('UpdateMyAccountUseCase', () => {
   it('should update an account theme', async () => {
     const account = await makeAccount();
 
-    await inMemoryAccountRepository.save(account);
+    await inMemoryAccountRepository.create(account);
 
     const response = await updateMyAccountUseCase.execute({
       accountId: account.id.toString(),
@@ -52,7 +52,7 @@ describe('UpdateMyAccountUseCase', () => {
   it('should update an account profile photo', async () => {
     const account = await makeAccount();
 
-    await inMemoryAccountRepository.save(account);
+    await inMemoryAccountRepository.create(account);
 
     const file = new File(
       [
@@ -100,7 +100,7 @@ describe('UpdateMyAccountUseCase', () => {
       })
       .then((res) => res.fileKey);
 
-    await inMemoryAccountRepository.save(account);
+    await inMemoryAccountRepository.create(account);
 
     const response = await updateMyAccountUseCase.execute({
       accountId: account.id.toString(),
@@ -114,9 +114,9 @@ describe('UpdateMyAccountUseCase', () => {
   });
 
   it('should update an account cep', async () => {
-    const account = await makeAccount();
+    const account = makeAccount();
 
-    await inMemoryAccountRepository.save(account);
+    await inMemoryAccountRepository.create(account);
 
     const response = await updateMyAccountUseCase.execute({
       accountId: account.id.toString(),
