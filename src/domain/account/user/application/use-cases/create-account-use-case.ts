@@ -28,7 +28,7 @@ export class CreateAccountUseCase {
   async execute(
     request: CreateAccountUseCaseRequest,
   ): Promise<CreateAccountUseCaseResponse> {
-    const account = await Account.create({
+    const account = Account.create({
       name: request.name,
       email: request.email,
       password: await this.hashGenerator.hash(request.password),
