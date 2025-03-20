@@ -91,17 +91,17 @@ export class Account extends Entity<AccountProps> {
     this.props.updatedAt = new Date();
   }
 
-  static async create(
+  static create(
     props: Optional<AccountProps, 'createdAt' | 'theme'>,
     id?: UniqueEntityID,
   ) {
     const account = new Account(
       {
         ...props,
-        createdAt: new Date(),
+        createdAt: props.createdAt ?? new Date(),
         theme: 'LIGHT',
       },
-      id,
+      id ?? new UniqueEntityID(),
     );
 
     return account;
