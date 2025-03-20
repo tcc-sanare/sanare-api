@@ -8,8 +8,22 @@ export class InMemoryAllergyRepository implements AllergyRepository {
     this.items = [];
   }
 
-  async save(allergy: Allergy): Promise<void> {
+  async create(allergy: Allergy): Promise<void> {
     this.items.push(allergy);
+  }
+
+  async findAll(): Promise<Allergy[]> {
+    return this.items;
+  }
+
+  async save(allergy: Allergy): Promise<void> {
+    const allergyIndex = this.items.findIndex(item => item.id === allergy.id);
+
+    if (allergyIndex === -1) {
+      throw new Error("allergy not found");
+    }
+
+    this.items[allergyIndex] = allergy;
   }
 
   async delete(allergy: Allergy): Promise<void> {
