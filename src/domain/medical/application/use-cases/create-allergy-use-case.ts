@@ -32,7 +32,7 @@ export class CreateAllergyUseCase {
     );
 
     try {
-      await this.allergyRepository.save(allergy);
+      await this.allergyRepository.create(allergy);
 
       return right({ allergy });
     } catch {
