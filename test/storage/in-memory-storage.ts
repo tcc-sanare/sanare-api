@@ -22,7 +22,7 @@ export class InMemoryStorage implements Storage {
 
     this.items.push({
       fileKey,
-      file: new Blob([params.buffer]),
+      file: new Blob([params.buffer], { type: params.fileType }),
     });
 
     return { fileKey };
