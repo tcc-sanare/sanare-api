@@ -1,7 +1,7 @@
 import { Either, left, right } from '@/core/either';
-import { Allergy } from '../../enterprise/entities/allergy';
+import { Allergy } from '../../../enterprise/entities/allergy';
 import { Injectable } from '@nestjs/common';
-import { AllergyRepository } from '../repositories/allergy-repository';
+import { AllergyRepository } from '../../repositories/allergy-repository';
 
 interface CreateAllergyUseCaseRequest {
   name: string;

@@ -1,7 +1,7 @@
 import { Either, left, right } from '@/core/either';
 import { Injectable } from '@nestjs/common';
-import { Allergy } from '../../enterprise/entities/allergy';
-import { AllergyRepository } from '../repositories/allergy-repository';
+import { Allergy } from '../../../enterprise/entities/allergy';
+import { AllergyRepository } from '../../repositories/allergy-repository';
 
 type GetAllAllergiesUseCaseResponse = Either<
   null,

@@ -1,13 +1,13 @@
 import { Either, left, right } from '@/core/either';
+import { Allergy } from '../../../enterprise/entities/allergy';
 import { Injectable } from '@nestjs/common';
-import { Allergy } from '../../enterprise/entities/allergy';
-import { AllergyRepository } from '../repositories/allergy-repository';
+import { AllergyRepository } from '../../repositories/allergy-repository';
 
-interface DeleteAllergyUseCaseRequest {
+interface GetAllergyByIdUseCaseRequest {
   allergyId: string;
 }
 
-type DeleteAllergyUseCaseResponse = Either<
+type GetAllergyByIdUseCaseResponse = Either<
   null,
   {
     allergy: Allergy;
@@ -15,19 +15,17 @@ type DeleteAllergyUseCaseResponse = Either<
 >;
 
 @Injectable()
-export class DeleteAllergyUseCase {
+export class GetAllergyByIdUseCase {
   constructor(private allergyRepository: AllergyRepository) {}
 
   async execute(
-    request: DeleteAllergyUseCaseRequest,
-  ): Promise<DeleteAllergyUseCaseResponse> {
+    request: GetAllergyByIdUseCaseRequest,
+  ): Promise<GetAllergyByIdUseCaseResponse> {
     const allergy = await this.allergyRepository.findById(request.allergyId);
 
     if (!allergy) {
       return left(null);
     }
-
-    await this.allergyRepository.delete(allergy);
 
     return right({ allergy });
   }

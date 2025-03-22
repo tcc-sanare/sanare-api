@@ -61,6 +61,9 @@ describe('UpdateMyAccountUseCase', () => {
         ]),
       ],
       'profile-photo.webp',
+      {
+        type: 'image/webp',
+      }
     );
 
     const response = await updateMyAccountUseCase.execute({

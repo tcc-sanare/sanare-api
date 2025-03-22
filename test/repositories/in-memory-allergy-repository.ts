@@ -44,7 +44,7 @@ export class InMemoryAllergyRepository implements AllergyRepository {
 
   async findByName(name: string): Promise<Allergy[]> {
     const allergies = this.items.filter((allergy) =>
-      allergy.name.toLowerCase().includes(name),
+      allergy.name.toLowerCase().includes(name.toLowerCase()),
     );
 
     return allergies;
