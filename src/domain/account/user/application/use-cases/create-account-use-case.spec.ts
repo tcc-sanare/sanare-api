@@ -33,8 +33,7 @@ describe('CreateAccountUseCase', () => {
   });
 
   it('shold return left if account is already registered', async () => {
-    console.log(inMemoryAccountRepository.items);
-    const firstAccount = await makeAccount();
+    const firstAccount = makeAccount();
 
     await inMemoryAccountRepository.create(firstAccount);
 
