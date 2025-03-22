@@ -1,16 +1,14 @@
-import { InMemoryAllergyRepository } from "test/repositories/in-memory-allergy-repository";
-import { UpdateAllergyUseCase } from "./update-allergy-use-case"
-import { makeAllergy } from "test/factories/make-allergy";
+import { InMemoryAllergyRepository } from 'test/repositories/in-memory-allergy-repository';
+import { UpdateAllergyUseCase } from './update-allergy-use-case';
+import { makeAllergy } from 'test/factories/make-allergy';
 
-describe("UpdateAllergyUseCase", () => {
+describe('UpdateAllergyUseCase', () => {
   let sut: UpdateAllergyUseCase;
   let inMemoryAllergyRepository: InMemoryAllergyRepository;
 
   beforeEach(() => {
     inMemoryAllergyRepository = new InMemoryAllergyRepository();
-    sut = new UpdateAllergyUseCase(
-      inMemoryAllergyRepository
-    );
+    sut = new UpdateAllergyUseCase(inMemoryAllergyRepository);
   });
 
   it('should be update a allergy', async () => {
@@ -21,7 +19,7 @@ describe("UpdateAllergyUseCase", () => {
     const response = await sut.execute({
       allergyId: allergy.id.toString(),
       name: 'new-name',
-      description: 'new-description'
+      description: 'new-description',
     });
 
     expect(response.isRight()).toBeTruthy();
@@ -35,7 +33,7 @@ describe("UpdateAllergyUseCase", () => {
     const response = await sut.execute({
       allergyId: 'invalid-id',
       name: 'new-name',
-      description: 'new-description'
+      description: 'new-description',
     });
 
     expect(response.isLeft()).toBeTruthy();

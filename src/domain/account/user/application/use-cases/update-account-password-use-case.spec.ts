@@ -24,11 +24,11 @@ describe('UpdateAccountPasswordUseCase', () => {
   });
 
   it('should be update password', async () => {
-    const account = await makeAccount({
+    const account = makeAccount({
       password: await bcryptHasher.hash(oldPassword),
     });
 
-    await inMemoryAccountRepository.save(account);
+    await inMemoryAccountRepository.create(account);
 
     const response = await sut.execute({
       accountId: account.id.toString(),
@@ -50,11 +50,11 @@ describe('UpdateAccountPasswordUseCase', () => {
   });
 
   it('should be return null if password is incorrect', async () => {
-    const account = await makeAccount({
+    const account = makeAccount({
       password: await bcryptHasher.hash(oldPassword),
     });
 
-    await inMemoryAccountRepository.save(account);
+    await inMemoryAccountRepository.create(account);
 
     const response = await sut.execute({
       accountId: account.id.toString(),
@@ -74,11 +74,11 @@ describe('UpdateAccountPasswordUseCase', () => {
   });
 
   it('should be return null if the new passwords dont matched', async () => {
-    const account = await makeAccount({
+    const account = makeAccount({
       password: await bcryptHasher.hash(oldPassword),
     });
 
-    await inMemoryAccountRepository.save(account);
+    await inMemoryAccountRepository.create(account);
 
     const response = await sut.execute({
       accountId: account.id.toString(),

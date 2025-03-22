@@ -4,8 +4,19 @@ import { Account } from '@/domain/account/user/enterprise/entities/account';
 export class InMemoryAccountRepository implements AccountRepository {
   public items: Account[] = [];
 
-  async save(account: Account): Promise<void> {
+  async create(account: Account): Promise<void> {
     this.items.push(account);
+    return;
+  }
+
+  async save(account: Account): Promise<void> {
+    const index = this.items.findIndex((item) => item.id === account.id);
+
+    if (index === -1) {
+      throw new Error('Account not found');
+    }
+
+    this.items[index] = account;
     return;
   }
 

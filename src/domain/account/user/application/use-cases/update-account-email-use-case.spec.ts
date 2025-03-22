@@ -21,12 +21,12 @@ describe('UpdateAccountEmailUseCase', () => {
   it('should be update email', async () => {
     const password = faker.internet.password();
 
-    const account = await makeAccount({
+    const account = makeAccount({
       password: await bcryptHasher.hash(password),
       isVerified: true,
     });
 
-    await inMemoryAccountRepository.save(account);
+    await inMemoryAccountRepository.create(account);
 
     const newEmail = faker.internet.email();
 
@@ -43,11 +43,11 @@ describe('UpdateAccountEmailUseCase', () => {
   });
 
   it('should be return null if the password is incorrect', async () => {
-    const account = await makeAccount({
+    const account = makeAccount({
       isVerified: true,
     });
 
-    await inMemoryAccountRepository.save(account);
+    await inMemoryAccountRepository.create(account);
 
     const response = await sut.execute({
       accountId: account.id.toString(),

@@ -1,16 +1,14 @@
-import { InMemoryAllergyRepository } from "test/repositories/in-memory-allergy-repository";
-import { CreateAllergyUseCase } from "./create-allergy-use-case"
-import { makeAllergy } from "test/factories/make-allergy";
+import { InMemoryAllergyRepository } from 'test/repositories/in-memory-allergy-repository';
+import { CreateAllergyUseCase } from './create-allergy-use-case';
+import { makeAllergy } from 'test/factories/make-allergy';
 
-describe("CreateAllergyUseCase", () => {
+describe('CreateAllergyUseCase', () => {
   let sut: CreateAllergyUseCase;
   let inMemoryAllergyRepository: InMemoryAllergyRepository;
 
   beforeEach(() => {
     inMemoryAllergyRepository = new InMemoryAllergyRepository();
-    sut = new CreateAllergyUseCase(
-      inMemoryAllergyRepository
-    );
+    sut = new CreateAllergyUseCase(inMemoryAllergyRepository);
   });
 
   it('should be create a allergy', async () => {

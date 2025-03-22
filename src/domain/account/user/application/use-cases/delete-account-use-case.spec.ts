@@ -12,9 +12,9 @@ describe('DeleteAccountUseCase', () => {
   });
 
   it('should delete an account', async () => {
-    const account = await makeAccount();
+    const account = makeAccount();
 
-    await inMemoryAccountRepository.save(account);
+    await inMemoryAccountRepository.create(account);
 
     const response = await sut.execute({
       accountId: account.id.toString(),

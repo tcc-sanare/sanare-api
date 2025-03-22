@@ -45,7 +45,7 @@ export class CreateAccountUseCase {
       return left(null);
     }
 
-    await this.accountRepository.save(account);
+    await this.accountRepository.create(account);
 
     return right({
       account,
