@@ -5,6 +5,7 @@ import { Optional } from '@/core/types/optional';
 export interface AllergyProps {
   name: string;
   description?: string;
+  iconKey?: string;
 
   createdAt: Date;
   updatedAt?: Date;
@@ -26,6 +27,15 @@ export class Allergy extends Entity<AllergyProps> {
 
   set description(description: string) {
     this.props.description = description;
+    this.update();
+  }
+
+  get iconKey() {
+    return this.props.iconKey;
+  }
+
+  set iconKey(iconKey: string) {
+    this.props.iconKey = iconKey;
     this.update();
   }
 
