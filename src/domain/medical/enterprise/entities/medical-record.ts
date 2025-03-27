@@ -6,6 +6,7 @@ export type BloodType = 'a-' | 'a+' | 'b-' | 'b+' | 'ab-' | 'ab+' | 'o-' | 'o+';
 
 export interface MedicalRecordProps {
   bloodType: BloodType;
+  userId: string;
 
   createdAt: Date;
   updatedAt?: Date;
@@ -19,6 +20,18 @@ export class MedicalRecord extends Entity<MedicalRecordProps> {
   set bloodType (bloodType: BloodType) {
     this.props.bloodType = bloodType;
     this.update();
+  }
+
+  get userId () {
+    return this.props.userId;
+  }
+
+  get createdAt () {
+    return this.props.createdAt;
+  }
+
+  get updatedAt () {
+    return this.props.updatedAt;
   }
 
   private update () {
