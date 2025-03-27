@@ -1,31 +1,44 @@
-import { Either } from "@/core/either";
+import { Either, left, right } from "@/core/either";
 import { BloodType, MedicalRecord } from "@/domain/medical/enterprise/entities/medical-record";
 import { MedicalRecordRepository } from "../../repositories/medical-record-repository";
+import { Injectable } from "@nestjs/common";
 
-// interface CreateMedicalRecordUseCaseRequest {
-//   bloodType: BloodType;
-//   userId: string;
-//   allergies: string[];
-//   chronicDiseases: string[];
+interface CreateMedicalRecordUseCaseRequest {
+  bloodType: BloodType;
+  userId: string;
+  allergies: string[];
+  chronicDiseases: string[];
 
-// }
+}
 
-// type CreateMedicalRecordUseCaseRequest = Either<
-//   null,
-//   {
-//     medicalRecord: MedicalRecord
-//   }
-// >
+type CreateMedicalRecordUseCaseResponse = Either<
+  null,
+  {
+    medicalRecord: MedicalRecord
+  }
+>;
 
+@Injectable()
 export class CreateMedicalRecordUseCase {
   constructor(
     private medicalRecordRepository: MedicalRecordRepository,
-    private storage: Storage,
   ) {}
 
-  // async execute (
-  //   data: CreateMedicalRecordUseCaseRequest
-  // ): Promise<CreateMedicalRecordUseCase> {
-    
-  // }
+  async execute (
+    data: CreateMedicalRecordUseCaseRequest
+  ): Promise<CreateMedicalRecordUseCaseResponse> {
+    const medicalRecord = MedicalRecord.create({
+      bloodType: data.bloodType,
+      userId: data.userId
+
+    });
+
+    try {
+      await this.medicalRecordRepository.create(medicalRecord);
+
+      return right({medicalRecord});
+    } catch {
+      return left(null);
+    }
+  }
 }
