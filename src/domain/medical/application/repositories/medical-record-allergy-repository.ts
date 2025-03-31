@@ -1,6 +1,6 @@
 import { MedicalRecordAllergy } from '../../enterprise/entities/medical-record-allergy';
 
-export abstract class MedicalRecordAllergysRepository {
+export abstract class MedicalRecordAllergiesRepository {
   abstract createMany(MedicalRecordAllergy: MedicalRecordAllergy[]): Promise<void>;
   abstract deleteMany(MedicalRecordAllergy: MedicalRecordAllergy[]): Promise<void>;
   abstract findManyByMedicalRecordId(
