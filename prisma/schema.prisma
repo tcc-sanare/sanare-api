@@ -34,7 +34,7 @@ model Users {
 
   // Community
   posts                Posts[]
-  postLikes            PostLikes[]
+  postSaves            PostSaves[]
   communityNotes       CommunityNotes[]
   communityNoteRatings CommunityNoteRatings[]
 
@@ -123,13 +123,13 @@ model Posts {
   forum  Forums? @relation(fields: [forumId], references: [id])
 
   childPosts Posts[]          @relation("Parent")
-  likes      PostLikes[]
+  saves      PostSaves[]
   notes      CommunityNotes[]
 
   @@map("posts")
 }
 
-model PostLikes {
+model PostSaves {
   userId String
   postId String
 
@@ -137,7 +137,7 @@ model PostLikes {
   post Posts @relation(fields: [postId], references: [id])
 
   @@id([userId, postId])
-  @@map("post_likes")
+  @@map("post_saves")
 }
 
 model CommunityNotes {
