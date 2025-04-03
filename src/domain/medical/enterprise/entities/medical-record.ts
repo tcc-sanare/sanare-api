@@ -6,7 +6,7 @@ export type BloodType = 'a-' | 'a+' | 'b-' | 'b+' | 'ab-' | 'ab+' | 'o-' | 'o+';
 
 export interface MedicalRecordProps {
   bloodType: BloodType;
-  userId: string;
+  userId: UniqueEntityID;
 
   createdAt: Date;
   updatedAt?: Date;

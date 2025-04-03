@@ -38,7 +38,7 @@ export class CreateMedicalRecordUseCase {
   ): Promise<CreateMedicalRecordUseCaseResponse> {
     const medicalRecord = MedicalRecord.create({
       bloodType: data.bloodType,
-      userId: data.userId
+      userId: new UniqueEntityID(data.userId)
     });
 
     try {
