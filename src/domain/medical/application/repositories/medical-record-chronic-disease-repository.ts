@@ -6,5 +6,8 @@ export abstract class MedicalRecordChronicDiseasesRepository {
   abstract findManyByMedicalRecordId(
     medicalRecordId: string,
   ): Promise<MedicalRecordChronicDisease[] | null>;
+  abstract deleteManyByMedicalRecordId(
+    medicalRecordId: string
+  )
   abstract deleteManyByChronicDiseaseId(allergyId: string): Promise<void>;
 }

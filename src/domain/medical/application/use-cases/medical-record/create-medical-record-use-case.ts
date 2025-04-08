@@ -4,7 +4,7 @@ import { MedicalRecordRepository } from "../../repositories/medical-record-repos
 import { Injectable } from "@nestjs/common";
 import { AllergyRepository } from "../../repositories/allergy-repository";
 import { MedicalRecordAllergiesRepository } from "../../repositories/medical-record-allergy-repository";
-import { MedicalRecordChronicDiseasesRepository } from "../../repositories/medical-record-chronic-disease";
+import { MedicalRecordChronicDiseasesRepository } from "../../repositories/medical-record-chronic-disease-repository";
 import { MedicalRecordAllergy } from "@/domain/medical/enterprise/entities/medical-record-allergy";
 import { UniqueEntityID } from "@/core/entities/unique-entity-id";
 import { ChronicDisease } from "@/domain/medical/enterprise/entities/chronic-disease";
@@ -42,6 +42,7 @@ export class CreateMedicalRecordUseCase {
     });
 
     try {
+      console.log(medicalRecord.id.toString())
       await this.medicalRecordRepository.create(medicalRecord);
 
       const medicalRecordAllergies = data.allergies

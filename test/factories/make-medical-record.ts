@@ -5,7 +5,7 @@ import { faker } from '@faker-js/faker';
 
 const bloodTypes: BloodType[] = ['a-', 'b-', 'ab-', 'o-', 'a+', 'b+', 'ab+', 'o+'];
 
-export function makeMedicalRecord(props: Partial<MedicalRecordProps>){
+export function makeMedicalRecord(props?: Partial<MedicalRecordProps>){
   const medicalRecord = MedicalRecord.create({
     bloodType: bloodTypes.sort(() => Math.floor(Math.random() * 1 ? -1 : 1))[0],
     userId: new UniqueEntityID(),
