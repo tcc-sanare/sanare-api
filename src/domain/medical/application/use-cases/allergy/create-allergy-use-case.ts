@@ -25,7 +25,7 @@ type CreateAllergyUseCaseResponse = Either<
 export class CreateAllergyUseCase {
   constructor(
     private allergyRepository: AllergyRepository,
-    private storage: Storage
+    private storage: Storage,
   ) {}
 
   async execute(
@@ -34,7 +34,9 @@ export class CreateAllergyUseCase {
     const allergy = Allergy.create({
       name: data.name,
       description: data.description,
-      iconKey: data.icon && await this.storage.upload(data.icon).then((res) => res.fileKey),
+      iconKey:
+        data.icon &&
+        (await this.storage.upload(data.icon).then((res) => res.fileKey)),
     });
 
     try {

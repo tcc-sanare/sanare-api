@@ -12,10 +12,7 @@ describe('CreateAllergyUseCase', () => {
   beforeEach(() => {
     inMemoryAllergyRepository = new InMemoryAllergyRepository();
     inMemoryStorage = new InMemoryStorage();
-    sut = new CreateAllergyUseCase(
-      inMemoryAllergyRepository,
-      inMemoryStorage,
-    );
+    sut = new CreateAllergyUseCase(inMemoryAllergyRepository, inMemoryStorage);
   });
 
   it('should be create a allergy without a icon', async () => {
@@ -32,15 +29,9 @@ describe('CreateAllergyUseCase', () => {
 
   it('should be create a allergy with a icon', async () => {
     const icon = new File(
-      [
-        new Blob(
-          [
-            readFileSync('./test/storage/test-files/al-icon.svg')
-          ]
-        )
-      ],
+      [new Blob([readFileSync('./test/storage/test-files/al-icon.svg')])],
       'al-icon.svg',
-      { type: 'image/svg+xml' }
+      { type: 'image/svg+xml' },
     );
 
     const allergy = makeAllergy();
@@ -51,8 +42,8 @@ describe('CreateAllergyUseCase', () => {
       icon: {
         fileName: icon.name,
         fileType: icon.type,
-        buffer: Buffer.from(await icon.arrayBuffer())
-      }
+        buffer: Buffer.from(await icon.arrayBuffer()),
+      },
     });
 
     expect(response.isRight()).toBeTruthy();
@@ -60,7 +51,9 @@ describe('CreateAllergyUseCase', () => {
     expect(response.value.allergy.name).toEqual(allergy.name);
     expect(response.value.allergy.description).toEqual(allergy.description);
     expect(response.value.allergy.iconKey).toBeTruthy();
-    expect(response.value.allergy.iconKey).toEqual(inMemoryStorage.items[0].fileKey);
+    expect(response.value.allergy.iconKey).toEqual(
+      inMemoryStorage.items[0].fileKey,
+    );
     expect(inMemoryAllergyRepository.items.length).toEqual(1);
   });
 });

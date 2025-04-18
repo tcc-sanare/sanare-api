@@ -12,10 +12,7 @@ describe('UpdateAllergyUseCase', () => {
   beforeEach(() => {
     inMemoryAllergyRepository = new InMemoryAllergyRepository();
     inMemoryStorage = new InMemoryStorage();
-    sut = new UpdateAllergyUseCase(
-      inMemoryAllergyRepository,
-      inMemoryStorage
-    );
+    sut = new UpdateAllergyUseCase(inMemoryAllergyRepository, inMemoryStorage);
   });
 
   it('should be update a allergy with a icon', async () => {
@@ -24,15 +21,9 @@ describe('UpdateAllergyUseCase', () => {
     await inMemoryAllergyRepository.create(allergy);
 
     const icon = new File(
-      [
-        new Blob(
-          [
-            readFileSync('./test/storage/test-files/al-icon.svg')
-          ]
-        )
-      ],
+      [new Blob([readFileSync('./test/storage/test-files/al-icon.svg')])],
       'al-icon.svg',
-      { type: 'image/svg+xml' }
+      { type: 'image/svg+xml' },
     );
 
     const response = await sut.execute({
@@ -42,8 +33,8 @@ describe('UpdateAllergyUseCase', () => {
       icon: {
         fileName: icon.name,
         fileType: icon.type,
-        buffer: Buffer.from(await icon.arrayBuffer())
-      }
+        buffer: Buffer.from(await icon.arrayBuffer()),
+      },
     });
 
     expect(response.isRight()).toBeTruthy();
@@ -51,30 +42,28 @@ describe('UpdateAllergyUseCase', () => {
     expect(response.value.allergy.name).toEqual('new-name');
     expect(response.value.allergy.description).toEqual('new-description');
     expect(response.value.allergy.iconKey).toBeTruthy();
-    expect(response.value.allergy.iconKey).toEqual(inMemoryStorage.items[0].fileKey);
+    expect(response.value.allergy.iconKey).toEqual(
+      inMemoryStorage.items[0].fileKey,
+    );
     expect(inMemoryAllergyRepository.items.length).toEqual(1);
     expect(inMemoryStorage.items.length).toEqual(1);
   });
 
   it('should be update a allergy removing a icon', async () => {
     const icon = new File(
-      [
-        new Blob(
-          [
-            readFileSync('./test/storage/test-files/al-icon.svg')
-          ]
-        )
-      ],
+      [new Blob([readFileSync('./test/storage/test-files/al-icon.svg')])],
       'al-icon.svg',
-      { type: 'image/svg+xml' }
+      { type: 'image/svg+xml' },
     );
 
     const allergy = makeAllergy({
-      iconKey: await inMemoryStorage.upload({
-        fileName: icon.name,
-        fileType: icon.type,
-        buffer: Buffer.from(await icon.arrayBuffer())
-      }).then((res) => res.fileKey)
+      iconKey: await inMemoryStorage
+        .upload({
+          fileName: icon.name,
+          fileType: icon.type,
+          buffer: Buffer.from(await icon.arrayBuffer()),
+        })
+        .then((res) => res.fileKey),
     });
 
     await inMemoryAllergyRepository.create(allergy);
@@ -83,7 +72,7 @@ describe('UpdateAllergyUseCase', () => {
       allergyId: allergy.id.toString(),
       name: 'new-name',
       description: 'new-description',
-      icon: null
+      icon: null,
     });
 
     expect(response.isRight()).toBeTruthy();
@@ -93,7 +82,7 @@ describe('UpdateAllergyUseCase', () => {
     expect(response.value.allergy.iconKey).toBeNull();
     expect(inMemoryAllergyRepository.items.length).toEqual(1);
     expect(inMemoryStorage.items.length).toEqual(0);
-  })
+  });
 
   it('should be return null if allergy not found', async () => {
     const response = await sut.execute({

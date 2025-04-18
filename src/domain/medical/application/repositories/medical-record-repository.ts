@@ -1,4 +1,4 @@
-import { MedicalRecord } from "../../enterprise/entities/medical-record";
+import { MedicalRecord } from '../../enterprise/entities/medical-record';
 
 export abstract class MedicalRecordRepository {
   abstract create(medicalRecord: MedicalRecord): Promise<void>;

@@ -16,12 +16,16 @@ describe('GetChronicDiseaseByIdUseCase', () => {
 
     await inMemoryChronicDiseaseRepository.create(chronicDisease);
 
-    const response = await sut.execute({ chronicDiseaseId: chronicDisease.id.toString() });
+    const response = await sut.execute({
+      chronicDiseaseId: chronicDisease.id.toString(),
+    });
 
     expect(response.isRight()).toBeTruthy();
     expect(response.value.chronicDisease.id).toEqual(chronicDisease.id);
     expect(response.value.chronicDisease.name).toEqual(chronicDisease.name);
-    expect(response.value.chronicDisease.description).toEqual(chronicDisease.description);
+    expect(response.value.chronicDisease.description).toEqual(
+      chronicDisease.description,
+    );
   });
 
   it('should be return null if chronic disease not found', async () => {

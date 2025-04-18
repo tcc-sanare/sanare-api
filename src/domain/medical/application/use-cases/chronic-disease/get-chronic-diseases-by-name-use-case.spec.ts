@@ -20,7 +20,9 @@ describe('GetChronicDiseasesByNameUseCase', () => {
     await inMemoryChronicDiseaseRepository.create(chronicDisease);
     await inMemoryChronicDiseaseRepository.create(chronicDisease2);
 
-    const response = await sut.execute({ name: chronicDisease.name.substring(0, 3) });
+    const response = await sut.execute({
+      name: chronicDisease.name.substring(0, 3),
+    });
 
     expect(response.isRight()).toBeTruthy();
     expect(response.value.chronicDiseases.length).toEqual(1);
@@ -36,7 +38,9 @@ describe('GetChronicDiseasesByNameUseCase', () => {
     await inMemoryChronicDiseaseRepository.create(chronicDisease);
     await inMemoryChronicDiseaseRepository.create(chronicDisease2);
 
-    const response = await sut.execute({ name: chronicDisease.name.substring(0, 3) });
+    const response = await sut.execute({
+      name: chronicDisease.name.substring(0, 3),
+    });
 
     expect(response.isRight()).toBeTruthy();
     expect(response.value.chronicDiseases.length).toEqual(2);

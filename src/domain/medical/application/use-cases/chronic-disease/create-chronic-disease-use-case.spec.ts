@@ -1,22 +1,20 @@
-import { ChronicDisease } from "@/domain/medical/enterprise/entities/chronic-disease";
-import { InMemoryChronicDiseaseRepository } from "test/repositories/in-memory-chronic-disease-repository";
-import { ChronicDiseaseRepository } from "../../repositories/chronic-disease-repository";
-import { CreateChronicDiseaseUseCase } from "./create-chronic-disease-use-case";
-import { InMemoryStorage } from "test/storage/in-memory-storage";
-import { makeChronicDisease } from "test/factories/make-chronic-disease";
-import { readFileSync } from "node:fs";
+import { InMemoryChronicDiseaseRepository } from 'test/repositories/in-memory-chronic-disease-repository';
+import { CreateChronicDiseaseUseCase } from './create-chronic-disease-use-case';
+import { InMemoryStorage } from 'test/storage/in-memory-storage';
+import { makeChronicDisease } from 'test/factories/make-chronic-disease';
+import { readFileSync } from 'node:fs';
 
 describe('CreateChronicDiseaseUseCase', () => {
   let sut: CreateChronicDiseaseUseCase;
   let inMemoryChronicDiseaseRepository: InMemoryChronicDiseaseRepository;
   let inMemoryStorage: InMemoryStorage;
-  
+
   beforeEach(() => {
     inMemoryChronicDiseaseRepository = new InMemoryChronicDiseaseRepository();
     inMemoryStorage = new InMemoryStorage();
     sut = new CreateChronicDiseaseUseCase(
       inMemoryChronicDiseaseRepository,
-      inMemoryStorage
+      inMemoryStorage,
     );
   });
 
@@ -27,24 +25,25 @@ describe('CreateChronicDiseaseUseCase', () => {
 
     expect(result.isRight()).toBeTruthy();
     expect(result.value.chronicDisease.name).toEqual(chronicDisease.name);
-    expect(result.value.chronicDisease.description).toEqual(chronicDisease.description);
+    expect(result.value.chronicDisease.description).toEqual(
+      chronicDisease.description,
+    );
     expect(result.value.chronicDisease.iconKey).toBeNull();
-    expect(inMemoryChronicDiseaseRepository.items[0]).toEqual(result.value.chronicDisease);
+    expect(inMemoryChronicDiseaseRepository.items[0]).toEqual(
+      result.value.chronicDisease,
+    );
     expect(inMemoryStorage.items).toHaveLength(0);
   });
 
   it('should create a chronic disease with an icon', async () => {
     const file = new File(
       [
-        new Blob(
-          [
-            readFileSync('./test/storage/test-files/cd-icon.svg')
-          ],
-          { type: 'image/svg+xml' }
-        )
+        new Blob([readFileSync('./test/storage/test-files/cd-icon.svg')], {
+          type: 'image/svg+xml',
+        }),
       ],
       'cd-icon.svg',
-      { type: 'image/svg+xml' }
+      { type: 'image/svg+xml' },
     );
 
     const chronicDisease = makeChronicDisease();
@@ -55,15 +54,19 @@ describe('CreateChronicDiseaseUseCase', () => {
       icon: {
         fileName: file.name,
         fileType: file.type,
-        buffer: Buffer.from(await file.arrayBuffer())
+        buffer: Buffer.from(await file.arrayBuffer()),
       },
     });
 
     expect(result.isRight()).toBeTruthy();
     expect(result.value.chronicDisease.name).toEqual(chronicDisease.name);
-    expect(result.value.chronicDisease.description).toEqual(chronicDisease.description);
+    expect(result.value.chronicDisease.description).toEqual(
+      chronicDisease.description,
+    );
     expect(result.value.chronicDisease.iconKey).toBeTruthy();
-    expect(inMemoryChronicDiseaseRepository.items[0]).toEqual(result.value.chronicDisease);
+    expect(inMemoryChronicDiseaseRepository.items[0]).toEqual(
+      result.value.chronicDisease,
+    );
     expect(inMemoryStorage.items).toHaveLength(1);
   });
 });

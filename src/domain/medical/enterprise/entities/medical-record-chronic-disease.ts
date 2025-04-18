@@ -1,5 +1,5 @@
-import { Entity } from "@/core/entities/entity";
-import { UniqueEntityID } from "@/core/entities/unique-entity-id";
+import { Entity } from '@/core/entities/entity';
+import { UniqueEntityID } from '@/core/entities/unique-entity-id';
 
 export interface MedicalRecordChronicDiseaseProps {
   medicalRecordId: UniqueEntityID;
@@ -7,21 +7,18 @@ export interface MedicalRecordChronicDiseaseProps {
 }
 
 export class MedicalRecordChronicDisease extends Entity<MedicalRecordChronicDiseaseProps> {
-  get medicalRecordId () {
+  get medicalRecordId() {
     return this.props.medicalRecordId;
   }
 
-  get chronicDiseaseId () {
+  get chronicDiseaseId() {
     return this.props.chronicDiseaseId;
   }
 
-  static create (
-    props: MedicalRecordChronicDiseaseProps,
-    id?: UniqueEntityID
-  ) {
+  static create(props: MedicalRecordChronicDiseaseProps, id?: UniqueEntityID) {
     const medicalRecordChronicDisease = new MedicalRecordChronicDisease(
       props,
-      id ?? new UniqueEntityID()
+      id ?? new UniqueEntityID(),
     );
 
     return medicalRecordChronicDisease;

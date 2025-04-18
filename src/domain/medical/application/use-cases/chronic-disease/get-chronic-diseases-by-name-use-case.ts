@@ -21,7 +21,9 @@ export class GetChronicDiseasesByNameUseCase {
   async execute(
     request: GetChronicDiseasesByNameUseCaseRequest,
   ): Promise<GetChronicDiseasesByNameUseCaseResponse> {
-    const chronicDiseases = await this.chronicDiseaseRepository.findByName(request.name);
+    const chronicDiseases = await this.chronicDiseaseRepository.findByName(
+      request.name,
+    );
 
     if (!chronicDiseases) {
       return left(null);
