@@ -1,8 +1,8 @@
 import { Either, left, right } from '@/core/either';
-import { Account } from '../../enterprise/entities/account';
-import { AccountRepository } from '../repositories/account-repository';
+import { Account } from '../../../enterprise/entities/account';
+import { AccountRepository } from '../../repositories/account-repository';
 import { Injectable } from '@nestjs/common';
-import { HashGenerator } from '../../../cryptography/hash-generetor';
+import { HashGenerator } from '../../../../cryptography/hash-generetor';
 
 interface CreateAccountUseCaseRequest {
   name: string;
