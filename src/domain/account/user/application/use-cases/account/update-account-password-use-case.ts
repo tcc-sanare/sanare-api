@@ -1,7 +1,7 @@
 import { Either, left, right } from '@/core/either';
-import { Account } from '../../enterprise/entities/account';
+import { Account } from '../../../enterprise/entities/account';
 import { Injectable } from '@nestjs/common';
-import { AccountRepository } from '../repositories/account-repository';
+import { AccountRepository } from '../../repositories/account-repository';
 import { HashComparer } from '@/domain/account/cryptography/hash-comparer';
 import { HashGenerator } from '@/domain/account/cryptography/hash-generetor';
 

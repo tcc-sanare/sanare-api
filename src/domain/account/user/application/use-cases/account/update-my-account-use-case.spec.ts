@@ -3,7 +3,7 @@ import { UpdateMyAccountUseCase } from './update-my-account-use-case';
 import { makeAccount } from 'test/factories/make-account';
 import { InMemoryStorage } from 'test/storage/in-memory-storage';
 import { readFileSync } from 'fs';
-import { Account } from '../../enterprise/entities/account';
+import { Account } from '../../../enterprise/entities/account';
 
 describe('UpdateMyAccountUseCase', () => {
   let updateMyAccountUseCase: UpdateMyAccountUseCase;
