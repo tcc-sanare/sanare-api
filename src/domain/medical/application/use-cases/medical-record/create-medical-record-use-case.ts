@@ -1,67 +1,76 @@
-import { Either, left, right } from "@/core/either";
-import { BloodType, MedicalRecord } from "@/domain/medical/enterprise/entities/medical-record";
-import { MedicalRecordRepository } from "../../repositories/medical-record-repository";
-import { Injectable } from "@nestjs/common";
-import { AllergyRepository } from "../../repositories/allergy-repository";
-import { MedicalRecordAllergiesRepository } from "../../repositories/medical-record-allergy-repository";
-import { MedicalRecordChronicDiseasesRepository } from "../../repositories/medical-record-chronic-disease-repository";
-import { MedicalRecordAllergy } from "@/domain/medical/enterprise/entities/medical-record-allergy";
-import { UniqueEntityID } from "@/core/entities/unique-entity-id";
-import { ChronicDisease } from "@/domain/medical/enterprise/entities/chronic-disease";
-import { MedicalRecordChronicDisease } from "@/domain/medical/enterprise/entities/medical-record-chronic-disease";
+import { Either, left, right } from '@/core/either';
+import {
+  BloodType,
+  MedicalRecord,
+} from '@/domain/medical/enterprise/entities/medical-record';
+import { MedicalRecordRepository } from '../../repositories/medical-record-repository';
+import { Injectable } from '@nestjs/common';
+import { MedicalRecordAllergy } from '@/domain/medical/enterprise/entities/medical-record-allergy';
+import { UniqueEntityID } from '@/core/entities/unique-entity-id';
+import { MedicalRecordChronicDisease } from '@/domain/medical/enterprise/entities/medical-record-chronic-disease';
+import { MedicalRecordAllergyList } from '@/domain/medical/enterprise/entities/medical-record-allergy-list';
+import { MedicalRecordChronicDiseaseList } from '@/domain/medical/enterprise/entities/medical-record-chronic-disease-list';
 
 interface CreateMedicalRecordUseCaseRequest {
   bloodType: BloodType;
   userId: string;
   allergies: string[];
   chronicDiseases: string[];
-
 }
 
 type CreateMedicalRecordUseCaseResponse = Either<
   null,
   {
-    medicalRecord: MedicalRecord
+    medicalRecord: MedicalRecord;
   }
 >;
 
 @Injectable()
 export class CreateMedicalRecordUseCase {
-  constructor(
-    private medicalRecordRepository: MedicalRecordRepository,
-    private medicalRecordAllergiesRepository: MedicalRecordAllergiesRepository,
-    private medicalRecordChronicDiseasesRepository: MedicalRecordChronicDiseasesRepository
-  ) {}
+  constructor(private medicalRecordRepository: MedicalRecordRepository) {}
 
-  async execute (
-    data: CreateMedicalRecordUseCaseRequest
+  async execute(
+    data: CreateMedicalRecordUseCaseRequest,
   ): Promise<CreateMedicalRecordUseCaseResponse> {
     const medicalRecord = MedicalRecord.create({
       bloodType: data.bloodType,
-      userId: new UniqueEntityID(data.userId)
+      userId: new UniqueEntityID(data.userId),
     });
 
     try {
-      console.log(medicalRecord.id.toString())
+      const userMedicalRecord = await this.medicalRecordRepository.findByUserId(
+        data.userId,
+      );
+
+      if (userMedicalRecord) {
+        return left(null);
+      }
+
+      const medicalRecordAllergies = data.allergies.map((allergy) =>
+        MedicalRecordAllergy.create({
+          medicalRecordId: medicalRecord.id,
+          allergyId: new UniqueEntityID(allergy),
+        }),
+      );
+
+      const medicalRecordChronicDiseases = data.chronicDiseases.map(
+        (chronicDisease) =>
+          MedicalRecordChronicDisease.create({
+            medicalRecordId: medicalRecord.id,
+            chronicDiseaseId: new UniqueEntityID(chronicDisease),
+          }),
+      );
+
+      medicalRecord.allergies = new MedicalRecordAllergyList(
+        medicalRecordAllergies,
+      );
+      medicalRecord.chronicDiseases = new MedicalRecordChronicDiseaseList(
+        medicalRecordChronicDiseases,
+      );
+
       await this.medicalRecordRepository.create(medicalRecord);
 
-      const medicalRecordAllergies = data.allergies
-        .map(allergy => MedicalRecordAllergy.create({
-          medicalRecordId: medicalRecord.id,
-          allergyId: new UniqueEntityID(allergy)
-        }));
-
-      await this.medicalRecordAllergiesRepository.createMany(medicalRecordAllergies);
-
-      const medicalRecordChronicDiseases = data.chronicDiseases
-        .map(chronicDisease => MedicalRecordChronicDisease.create({
-          medicalRecordId: medicalRecord.id,
-          chronicDiseaseId: new UniqueEntityID(chronicDisease)
-        }));
-
-      await this.medicalRecordChronicDiseasesRepository.createMany(medicalRecordChronicDiseases);
-
-      return right({medicalRecord});
+      return right({ medicalRecord });
     } catch {
       return left(null);
     }
