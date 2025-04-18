@@ -26,13 +26,15 @@ type UpdateChronicDiseaseUseCaseResponse = Either<
 export class UpdateChronicDiseaseUseCase {
   constructor(
     private chronicDiseaseRepository: ChronicDiseaseRepository,
-    private storage: Storage
+    private storage: Storage,
   ) {}
 
   async execute(
     request: UpdateChronicDiseaseUseCaseRequest,
   ): Promise<UpdateChronicDiseaseUseCaseResponse> {
-    const chronicDisease = await this.chronicDiseaseRepository.findById(request.chronicDiseaseId);
+    const chronicDisease = await this.chronicDiseaseRepository.findById(
+      request.chronicDiseaseId,
+    );
 
     if (!chronicDisease) {
       return left(null);
@@ -40,14 +42,14 @@ export class UpdateChronicDiseaseUseCase {
 
     request.name && (chronicDisease.name = request.name);
     request.description && (chronicDisease.description = request.description);
-    
+
     if (request.icon !== undefined) {
       if (!request.icon && chronicDisease.iconKey) {
         await this.storage.delete(chronicDisease.iconKey);
       }
 
-      chronicDisease.iconKey = request.icon ? 
-        await this.storage.upload(request.icon).then(res => res.fileKey) 
+      chronicDisease.iconKey = request.icon
+        ? await this.storage.upload(request.icon).then((res) => res.fileKey)
         : null;
     }
 

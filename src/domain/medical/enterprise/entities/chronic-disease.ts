@@ -1,6 +1,6 @@
-import { Entity } from "@/core/entities/entity";
-import { UniqueEntityID } from "@/core/entities/unique-entity-id";
-import { Optional } from "@/core/types/optional";
+import { Entity } from '@/core/entities/entity';
+import { UniqueEntityID } from '@/core/entities/unique-entity-id';
+import { Optional } from '@/core/types/optional';
 
 export interface ChronicDiseaseProps {
   name: string;
@@ -12,55 +12,55 @@ export interface ChronicDiseaseProps {
 }
 
 export class ChronicDisease extends Entity<ChronicDiseaseProps> {
-  get name () {
+  get name() {
     return this.props.name;
   }
 
-  set name (name: string) {
+  set name(name: string) {
     this.props.name = name;
     this.update();
   }
 
-  get description () {
+  get description() {
     return this.props.description;
   }
 
-  set description (description: string) {
+  set description(description: string) {
     this.props.description = description;
     this.update();
   }
 
-  get iconKey () {
+  get iconKey() {
     return this.props.iconKey;
   }
 
-  set iconKey (iconKey: string) {
+  set iconKey(iconKey: string) {
     this.props.iconKey = iconKey;
     this.update();
   }
 
-  get createdAt () {
+  get createdAt() {
     return this.props.createdAt;
   }
 
-  get updatedAt () {
+  get updatedAt() {
     return this.props.updatedAt;
   }
 
-  private update () {
+  private update() {
     this.props.updatedAt = new Date();
   }
 
   public static create(
     props: Optional<ChronicDiseaseProps, 'createdAt'>,
-    id?: UniqueEntityID
+    id?: UniqueEntityID,
   ): ChronicDisease {
     return new ChronicDisease(
       {
         ...props,
         createdAt: new Date(),
       },
-      id ?? new UniqueEntityID()
+      id ?? new UniqueEntityID(),
     );
   }
 }

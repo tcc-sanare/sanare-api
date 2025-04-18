@@ -32,7 +32,9 @@ describe('UpdateChronicDiseaseUseCase', () => {
     expect(response.isRight()).toBeTruthy();
     expect(response.value.chronicDisease.id).toBeTruthy();
     expect(response.value.chronicDisease.name).toEqual('new-name');
-    expect(response.value.chronicDisease.description).toEqual('new-description');
+    expect(response.value.chronicDisease.description).toEqual(
+      'new-description',
+    );
     expect(inMemoryChronicDiseaseRepository.items.length).toEqual(1);
   });
 
@@ -42,13 +44,9 @@ describe('UpdateChronicDiseaseUseCase', () => {
     await inMemoryChronicDiseaseRepository.create(chronicDisease);
 
     const icon = new File(
-      [
-        new Blob([
-          readFileSync('./test/storage/test-files/cd-icon.svg')
-        ])
-      ], 
-      'cd-icon.svg', 
-      { type: 'image/svg+xml' }
+      [new Blob([readFileSync('./test/storage/test-files/cd-icon.svg')])],
+      'cd-icon.svg',
+      { type: 'image/svg+xml' },
     );
 
     const response = await sut.execute({
@@ -59,13 +57,15 @@ describe('UpdateChronicDiseaseUseCase', () => {
         fileName: icon.name,
         fileType: icon.type,
         buffer: Buffer.from(await icon.arrayBuffer()),
-      }
+      },
     });
 
     expect(response.isRight()).toBeTruthy();
     expect(response.value.chronicDisease.id).toBeTruthy();
     expect(response.value.chronicDisease.name).toEqual('new-name');
-    expect(response.value.chronicDisease.description).toEqual('new-description');
+    expect(response.value.chronicDisease.description).toEqual(
+      'new-description',
+    );
     expect(response.value.chronicDisease.iconKey).toBeTruthy();
     expect(inMemoryChronicDiseaseRepository.items.length).toEqual(1);
     expect(inMemoryStorage.items.length).toEqual(1);
@@ -73,21 +73,19 @@ describe('UpdateChronicDiseaseUseCase', () => {
 
   it('should be delete icon if icon is null', async () => {
     const icon = new File(
-      [
-        new Blob([
-          readFileSync('./test/storage/test-files/cd-icon.svg')
-        ])
-      ], 
-      'cd-icon.svg', 
-      { type: 'image/svg+xml' }
+      [new Blob([readFileSync('./test/storage/test-files/cd-icon.svg')])],
+      'cd-icon.svg',
+      { type: 'image/svg+xml' },
     );
-    
-    const fileKey = await inMemoryStorage.upload({
-      fileName: icon.name,
-      fileType: icon.type,
-      buffer: Buffer.from(await icon.arrayBuffer()),
-    }).then(result => result.fileKey);
-    
+
+    const fileKey = await inMemoryStorage
+      .upload({
+        fileName: icon.name,
+        fileType: icon.type,
+        buffer: Buffer.from(await icon.arrayBuffer()),
+      })
+      .then((result) => result.fileKey);
+
     const chronicDisease = makeChronicDisease({
       iconKey: fileKey,
     });

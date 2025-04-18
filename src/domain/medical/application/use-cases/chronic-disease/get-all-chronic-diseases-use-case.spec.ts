@@ -1,6 +1,6 @@
-import { makeChronicDisease } from "test/factories/make-chronic-disease";
-import { InMemoryChronicDiseaseRepository } from "test/repositories/in-memory-chronic-disease-repository";
-import { GetAllChronicDiseasesUseCase } from "./get-all-chronic-diseases-use-case";
+import { makeChronicDisease } from 'test/factories/make-chronic-disease';
+import { InMemoryChronicDiseaseRepository } from 'test/repositories/in-memory-chronic-disease-repository';
+import { GetAllChronicDiseasesUseCase } from './get-all-chronic-diseases-use-case';
 
 describe('GetAllChronicDiseasesUseCase', () => {
   let sut: GetAllChronicDiseasesUseCase;

@@ -1,11 +1,13 @@
-import { ChronicDiseaseRepository } from "@/domain/medical/application/repositories/chronic-disease-repository";
-import { ChronicDisease } from "@/domain/medical/enterprise/entities/chronic-disease";
+import { ChronicDiseaseRepository } from '@/domain/medical/application/repositories/chronic-disease-repository';
+import { ChronicDisease } from '@/domain/medical/enterprise/entities/chronic-disease';
 
-export class InMemoryChronicDiseaseRepository implements ChronicDiseaseRepository {
-  items: ChronicDisease[]
+export class InMemoryChronicDiseaseRepository
+  implements ChronicDiseaseRepository
+{
+  items: ChronicDisease[];
 
   constructor() {
-    this.items = []
+    this.items = [];
   }
 
   async create(chronicDisease: ChronicDisease): Promise<void> {
@@ -17,32 +19,34 @@ export class InMemoryChronicDiseaseRepository implements ChronicDiseaseRepositor
   }
 
   async save(chronicDisease: ChronicDisease): Promise<void> {
-    const index = this.items.findIndex(item => item.id === chronicDisease.id);
+    const index = this.items.findIndex((item) => item.id === chronicDisease.id);
 
     if (index === -1) {
-      throw new Error("Chronic Disease not found");
+      throw new Error('Chronic Disease not found');
     }
 
     this.items[index] = chronicDisease;
   }
 
   async delete(chronicDisease: ChronicDisease): Promise<void> {
-    const index = this.items.findIndex(item => item.id === chronicDisease.id);
+    const index = this.items.findIndex((item) => item.id === chronicDisease.id);
 
     if (index === -1) {
-      throw new Error("Chronic Disease not found");
+      throw new Error('Chronic Disease not found');
     }
 
     this.items.splice(index, 1);
   }
 
   async findById(id: string): Promise<ChronicDisease | null> {
-    return this.items.find(item => item.id.toString() === id) || null;
+    return this.items.find((item) => item.id.toString() === id) || null;
   }
 
   async findByName(name: string): Promise<ChronicDisease[] | null> {
-    return this.items.filter(item => item.name.toLowerCase().includes(name.toLowerCase())) || null;
+    return (
+      this.items.filter((item) =>
+        item.name.toLowerCase().includes(name.toLowerCase()),
+      ) || null
+    );
   }
-
-  
 }

@@ -21,7 +21,9 @@ export class DeleteChronicDiseaseUseCase {
   async execute(
     request: DeleteChronicDiseaseUseCaseRequest,
   ): Promise<DeleteChronicDiseaseUseCaseResponse> {
-    const chronicDisease = await this.chronicDiseaseRepository.findById(request.chronicDiseaseId);
+    const chronicDisease = await this.chronicDiseaseRepository.findById(
+      request.chronicDiseaseId,
+    );
 
     if (!chronicDisease) {
       return left(null);
