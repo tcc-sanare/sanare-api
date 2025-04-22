@@ -19,7 +19,7 @@ const bloodTypes: BloodType[] = [
 export function makeMedicalRecord(props?: Partial<MedicalRecordProps>) {
   const medicalRecord = MedicalRecord.create({
     bloodType: bloodTypes.sort(() => Math.floor(Math.random() * 1 ? -1 : 1))[0],
-    userId: new UniqueEntityID(),
+    selfMonitorId: new UniqueEntityID(),
     ...props,
   });
 
