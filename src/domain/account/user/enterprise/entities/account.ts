@@ -99,7 +99,7 @@ export class Account extends Entity<AccountProps> {
       {
         ...props,
         createdAt: props.createdAt ?? new Date(),
-        theme: 'LIGHT',
+        theme: props.theme ?? 'LIGHT',
       },
       id ?? new UniqueEntityID(),
     );
