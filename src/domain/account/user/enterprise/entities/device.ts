@@ -43,7 +43,7 @@ export class Device extends Entity<DeviceProps> {
     const device = new Device(
       {
         ...props,
-        createdAt: new Date(),
+        createdAt: props.createdAt ?? new Date(),
       },
       id ?? new UniqueEntityID()
     );
