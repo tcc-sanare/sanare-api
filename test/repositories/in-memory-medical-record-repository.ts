@@ -30,7 +30,7 @@ export class InMemoryMedicalRecordRepository
     return this.items.find((item) => item.id.toString() === id);
   }
 
-  async findByUserId(userId: string): Promise<MedicalRecord> {
-    return this.items.find((item) => item.userId.toString() === userId);
+  async findBySelfMonitorId(selfMonitorId: string): Promise<MedicalRecord> {
+    return this.items.find((item) => item.selfMonitorId.toString() === selfMonitorId);
   }
 }

@@ -2,25 +2,25 @@ import { Entity } from "@/core/entities/entity";
 import { UniqueEntityID } from "@/core/entities/unique-entity-id";
 import { Optional } from "@/core/types/optional";
 
-export interface DeviceProps {
-  token: string;
+export interface SelfMonitorProps {
   userId: UniqueEntityID;
+  caregiverId?: UniqueEntityID;
 
   createdAt: Date;
   updatedAt?: Date;
-}
+};
 
-export class Device extends Entity<DeviceProps> {
-  get token() {
-    return this.props.token;
-  }
-
+export class SelfMonitor extends Entity<SelfMonitorProps> {
   get userId() {
     return this.props.userId;
   }
 
-  set userId(userId: UniqueEntityID) {
-    this.props.userId = userId;
+  get caregiverId() {
+    return this.props.caregiverId;
+  }
+
+  set caregiverId(caregiverId: UniqueEntityID) {
+    this.props.caregiverId = caregiverId;
     this.update();
   }
 
@@ -37,10 +37,10 @@ export class Device extends Entity<DeviceProps> {
   }
 
   static create(
-    props: Optional<DeviceProps, "createdAt">,
+    props: Optional<SelfMonitorProps, "createdAt">,
     id?: UniqueEntityID
-  ): Device {
-    const device = new Device(
+  ) {
+    const selfMonitor = new SelfMonitor(
       {
         ...props,
         createdAt: props.createdAt ?? new Date(),
@@ -48,6 +48,6 @@ export class Device extends Entity<DeviceProps> {
       id ?? new UniqueEntityID()
     );
 
-    return device;
+    return selfMonitor;
   }
 }

@@ -1,15 +1,15 @@
 import { InMemoryMedicalRecordRepository } from 'test/repositories/in-memory-medical-record-repository';
-import { GetMedicalRecordByUserIdUseCase } from './get-medical-record-by-user-id';
+import { GetMedicalRecordBySelfMonitorIdUseCase } from './get-medical-record-by-self-monitor-id';
 import { makeMedicalRecord } from 'test/factories/make-medical-record';
 import { MedicalRecord } from '@/domain/medical/enterprise/entities/medical-record';
 
-describe('GetMedicalRecordByUserIdUseCase', () => {
-  let sut: GetMedicalRecordByUserIdUseCase;
+describe('GetMedicalRecordBySelfMonitorIdUseCase', () => {
+  let sut: GetMedicalRecordBySelfMonitorIdUseCase;
   let inMemoryMedicalRecordRepository: InMemoryMedicalRecordRepository;
 
   beforeEach(() => {
     inMemoryMedicalRecordRepository = new InMemoryMedicalRecordRepository();
-    sut = new GetMedicalRecordByUserIdUseCase(inMemoryMedicalRecordRepository);
+    sut = new GetMedicalRecordBySelfMonitorIdUseCase(inMemoryMedicalRecordRepository);
   });
 
   it('should get a medical record by user id', async () => {
@@ -17,14 +17,14 @@ describe('GetMedicalRecordByUserIdUseCase', () => {
     inMemoryMedicalRecordRepository.items.push(medicalRecord);
 
     const result = await sut.execute({
-      userId: medicalRecord.userId.toString(),
+      selfMonitorId: medicalRecord.selfMonitorId.toString(),
     });
 
     expect(result.isRight()).toBeTruthy();
     expect(result.value.medicalRecord).toEqual(medicalRecord);
     expect(result.value.medicalRecord).toBeInstanceOf(MedicalRecord);
-    expect(result.value.medicalRecord.userId.toString()).toEqual(
-      medicalRecord.userId.toString(),
+    expect(result.value.medicalRecord.selfMonitorId.toString()).toEqual(
+      medicalRecord.selfMonitorId.toString(),
     );
   });
 
@@ -33,7 +33,7 @@ describe('GetMedicalRecordByUserIdUseCase', () => {
     inMemoryMedicalRecordRepository.items.push(medicalRecord);
 
     const result = await sut.execute({
-      userId: 'non-existing-id',
+      selfMonitorId: 'non-existing-id',
     });
 
     expect(result.isLeft()).toBeTruthy();

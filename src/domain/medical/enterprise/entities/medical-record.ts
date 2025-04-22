@@ -8,7 +8,7 @@ export type BloodType = 'a-' | 'a+' | 'b-' | 'b+' | 'ab-' | 'ab+' | 'o-' | 'o+';
 
 export interface MedicalRecordProps {
   bloodType: BloodType;
-  userId: UniqueEntityID;
+  selfMonitorId: UniqueEntityID;
 
   allergies: MedicalRecordAllergyList;
   chronicDiseases: MedicalRecordChronicDiseaseList;
@@ -27,8 +27,8 @@ export class MedicalRecord extends AggregateRoot<MedicalRecordProps> {
     this.update();
   }
 
-  get userId() {
-    return this.props.userId;
+  get selfMonitorId() {
+    return this.props.selfMonitorId;
   }
 
   get allergies() {

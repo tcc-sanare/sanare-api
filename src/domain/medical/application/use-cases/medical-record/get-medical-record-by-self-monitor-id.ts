@@ -3,11 +3,11 @@ import { MedicalRecord } from '@/domain/medical/enterprise/entities/medical-reco
 import { MedicalRecordRepository } from '../../repositories/medical-record-repository';
 import { Injectable } from '@nestjs/common';
 
-interface GetMedicalRecordByUserIdUseCaseRequest {
-  userId: string;
+interface GetMedicalRecordBySelfMonitorIdUseCaseRequest {
+  selfMonitorId: string;
 }
 
-type GetMedicalRecordByIdUseCaseResponse = Either<
+type GetMedicalRecordBySelfMonitorIdUseCaseResponse = Either<
   null,
   {
     medicalRecord: MedicalRecord;
@@ -15,14 +15,14 @@ type GetMedicalRecordByIdUseCaseResponse = Either<
 >;
 
 @Injectable()
-export class GetMedicalRecordByUserIdUseCase {
+export class GetMedicalRecordBySelfMonitorIdUseCase {
   constructor(private medicalRecordRepository: MedicalRecordRepository) {}
 
   async execute(
-    data: GetMedicalRecordByUserIdUseCaseRequest,
-  ): Promise<GetMedicalRecordByIdUseCaseResponse> {
-    const medicalRecord = await this.medicalRecordRepository.findByUserId(
-      data.userId,
+    data: GetMedicalRecordBySelfMonitorIdUseCaseRequest,
+  ): Promise<GetMedicalRecordBySelfMonitorIdUseCaseResponse> {
+    const medicalRecord = await this.medicalRecordRepository.findBySelfMonitorId(
+      data.selfMonitorId,
     );
 
     if (!medicalRecord) {

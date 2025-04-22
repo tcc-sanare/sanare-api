@@ -17,7 +17,7 @@ describe('CreateMedicalRecordUseCase', () => {
   it('should create a Medical Record', async () => {
     const medicalRecord = makeMedicalRecord();
     const result = await sut.execute({
-      userId: medicalRecord.userId.toString(),
+      selfMonitorId: medicalRecord.selfMonitorId.toString(),
       bloodType: medicalRecord.bloodType,
       allergies: ['a', 'c'],
       chronicDiseases: ['b', 'd'],
@@ -25,8 +25,8 @@ describe('CreateMedicalRecordUseCase', () => {
 
     expect(result.isRight()).toBeTruthy();
     expect(result.value.medicalRecord.id).toBeTruthy();
-    expect(result.value.medicalRecord.userId.toString()).toEqual(
-      medicalRecord.userId.toString(),
+    expect(result.value.medicalRecord.selfMonitorId.toString()).toEqual(
+      medicalRecord.selfMonitorId.toString(),
     );
     expect(result.value.medicalRecord.allergies.currentItems).toEqual([
       expect.objectContaining({
@@ -62,7 +62,7 @@ describe('CreateMedicalRecordUseCase', () => {
     inMemoryMedicalRecordRepository.items.push(medicalRecord);
 
     const result = await sut.execute({
-      userId: medicalRecord.userId.toString(),
+      selfMonitorId: medicalRecord.selfMonitorId.toString(),
       bloodType: medicalRecord.bloodType,
       allergies: ['a', 'c'],
       chronicDiseases: ['b', 'd'],
