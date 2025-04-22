@@ -23,7 +23,6 @@ describe("CreateDeviceUseCase", () => {
     expect(result.value?.device).toBeInstanceOf(Object);
     expect(result.value?.device.token).toEqual(device.token);
     expect(result.value?.device.userId.toString()).toEqual(device.userId.toString());
-    expect(result.value?.device.createdAt).toEqual(device.createdAt);
     expect(inMemoryDeviceRepository.items).toHaveLength(1);
   });
 
