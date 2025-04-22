@@ -13,7 +13,7 @@ import { MedicalRecordChronicDiseaseList } from '@/domain/medical/enterprise/ent
 
 interface CreateMedicalRecordUseCaseRequest {
   bloodType: BloodType;
-  userId: string;
+  selfMonitorId: string;
   allergies: string[];
   chronicDiseases: string[];
 }
@@ -34,12 +34,12 @@ export class CreateMedicalRecordUseCase {
   ): Promise<CreateMedicalRecordUseCaseResponse> {
     const medicalRecord = MedicalRecord.create({
       bloodType: data.bloodType,
-      userId: new UniqueEntityID(data.userId),
+      selfMonitorId: new UniqueEntityID(data.selfMonitorId),
     });
 
     try {
-      const userMedicalRecord = await this.medicalRecordRepository.findByUserId(
-        data.userId,
+      const userMedicalRecord = await this.medicalRecordRepository.findBySelfMonitorId(
+        data.selfMonitorId,
       );
 
       if (userMedicalRecord) {
