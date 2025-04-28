@@ -7,6 +7,14 @@ export function makeSelfMonitor(
   const selfMonitor = SelfMonitor.create(
     {
       userId: new UniqueEntityID(),
+      logInputs: {
+        bloodPressure: false,
+        bloodSugar: false,
+        hydration: false,
+        imc: false,
+        mood: false,
+        symptoms: false,
+      },
       updatedAt: props?.updatedAt ?? new Date(),
       ...props,
     },

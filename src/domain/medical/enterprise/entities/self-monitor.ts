@@ -2,9 +2,12 @@ import { Entity } from "@/core/entities/entity";
 import { UniqueEntityID } from "@/core/entities/unique-entity-id";
 import { Optional } from "@/core/types/optional";
 
+type SelfMonitorLogInput = 'mood' | 'symptoms' | 'imc' | 'hydration' | 'bloodPressure' | 'bloodSugar';
+
 export interface SelfMonitorProps {
   userId: UniqueEntityID;
   caregiverId?: UniqueEntityID;
+  logInputs: Record<SelfMonitorLogInput, boolean>;
 
   createdAt: Date;
   updatedAt?: Date;
@@ -21,6 +24,15 @@ export class SelfMonitor extends Entity<SelfMonitorProps> {
 
   set caregiverId(caregiverId: UniqueEntityID) {
     this.props.caregiverId = caregiverId;
+    this.update();
+  }
+
+  get logInputs() {
+    return this.props.logInputs;
+  }
+
+  set logInputs(logInputs: Record<SelfMonitorLogInput, boolean>) {
+    this.props.logInputs = logInputs;
     this.update();
   }
 
