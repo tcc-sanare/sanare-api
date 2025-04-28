@@ -28,12 +28,8 @@ export class Caregiver extends Entity<CaregiverProps> {
     return this.props.updatedAt;
   }
 
-  private update() {
-    this.props.updatedAt = new Date();
-  }
-
   static create(
-    props: Optional<Caregiver, 'createdAt' | 'code'>,
+    props: Optional<CaregiverProps, 'createdAt' | 'code'>,
     id?: UniqueEntityID,
   ) {
     const caregiver = new Caregiver(
