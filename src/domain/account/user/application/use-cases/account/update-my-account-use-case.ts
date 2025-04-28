@@ -8,7 +8,6 @@ interface UpdateMyAccountUseCaseRequest {
   accountId: string;
   name?: string;
   theme?: 'LIGHT' | 'DARK';
-  cep?: string;
   profilePhoto?: {
     fileName: string;
     fileType: string;
@@ -41,7 +40,6 @@ export class UpdateMyAccountUseCase {
 
     request.name && (account.name = request.name);
     request.theme && (account.theme = request.theme);
-    request.cep && (account.cep = request.cep);
 
     if (request.profilePhoto !== undefined) {
       if (account.profilePhotoKey) {

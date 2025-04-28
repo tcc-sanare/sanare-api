@@ -116,21 +116,6 @@ describe('UpdateMyAccountUseCase', () => {
     expect(inMemoryStorage.items.length).toBe(0);
   });
 
-  it('should update an account cep', async () => {
-    const account = makeAccount();
-
-    await inMemoryAccountRepository.create(account);
-
-    const response = await updateMyAccountUseCase.execute({
-      accountId: account.id.toString(),
-      cep: '12345678',
-    });
-
-    expect(response.isRight()).toBeTruthy();
-    expect(response.value.account).toEqual(account);
-    expect(response.value.account.cep).toBe('12345678');
-  });
-
   it('should return null if account does not exist', async () => {
     const response = await updateMyAccountUseCase.execute({
       accountId: '1',

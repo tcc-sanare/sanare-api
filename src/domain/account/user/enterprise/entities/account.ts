@@ -9,7 +9,6 @@ export interface AccountProps {
   profilePhotoKey: string | null;
   isVerified: boolean;
   theme: 'LIGHT' | 'DARK';
-  cep: string;
 
   createdAt: Date;
   updatedAt?: Date;
@@ -67,15 +66,6 @@ export class Account extends Entity<AccountProps> {
 
   set isVerified(state: boolean) {
     this.props.isVerified = state;
-    this.update();
-  }
-
-  get cep() {
-    return this.props.cep;
-  }
-
-  set cep(cep: string) {
-    this.props.cep = cep;
     this.update();
   }
 

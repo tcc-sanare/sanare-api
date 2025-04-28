@@ -14,11 +14,6 @@ export function makeAccount(
       name: faker.person.fullName(),
       email: faker.internet.email(),
       password: faker.internet.password(),
-      cep: faker.location
-        .zipCode({
-          format: '########',
-        })
-        .replace('-', ''),
       profilePhotoKey: null,
       isVerified: false,
       theme: 'LIGHT',

@@ -26,6 +26,14 @@ export class CreateSelfMonitorUseCase {
   }: CreateSelfMonitorUseCaseRequest): Promise<CreateSelfMonitorUseCaseResponse> {
     const selfMonitor = SelfMonitor.create({
       userId: new UniqueEntityID(userId),
+      logInputs: {
+        bloodPressure: false,
+        bloodSugar: false,
+        hydration: false,
+        imc: false,
+        mood: false,
+        symptoms: false,
+      }
     });
 
     if (await this.selfMonitorRepository.findByUserId(userId)) {
