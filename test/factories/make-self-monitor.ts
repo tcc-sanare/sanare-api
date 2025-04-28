@@ -4,7 +4,6 @@ import { SelfMonitor, SelfMonitorProps } from "@/domain/medical/enterprise/entit
 export function makeSelfMonitor(
   props?: Partial<SelfMonitorProps>,
 ): SelfMonitor {
-  console.log("makeSelfMonitor", props);
   const selfMonitor = SelfMonitor.create(
     {
       userId: new UniqueEntityID(),
