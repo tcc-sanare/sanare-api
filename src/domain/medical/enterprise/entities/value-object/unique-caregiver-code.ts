@@ -1,22 +1,8 @@
-function createCaregiverCode() {
-  let code: string = '';
+import { UniqueCode } from "@/core/entities/unique-code";
 
-  for (let i = 0; i < 10; i++) {
-    const chars = 'abcdefghijklmnopqrstuvwxyz1234567890';
-    code += chars[Math.floor(Math.random() * chars.length)].toUpperCase();
-  }
-
-  return code;
-}
-
-export class UniqueCaregiverCode {
-  private value: string;
+export class UniqueCaregiverCode extends UniqueCode {
 
   constructor(value?: string) {
-    this.value = value ?? createCaregiverCode();
-  }
-
-  toValue() {
-    return this.value;
+    super({ length: 10, chars: 'ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890' }, value);
   }
 }
