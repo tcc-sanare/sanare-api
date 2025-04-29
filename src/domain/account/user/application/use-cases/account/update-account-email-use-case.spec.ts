@@ -1,20 +1,20 @@
 import { InMemoryAccountRepository } from 'test/repositories/in-memory-account-repository';
 import { UpdateAccountEmailUseCase } from './update-account-email-use-case';
-import { BcryptHasher } from 'test/cryptography/bcrypt-hasher';
+import { FakeHasher } from 'test/cryptography/fake-hasher';
 import { makeAccount } from 'test/factories/make-account';
 import { faker } from '@faker-js/faker';
 
 describe('UpdateAccountEmailUseCase', () => {
   let sut: UpdateAccountEmailUseCase;
   let inMemoryAccountRepository: InMemoryAccountRepository;
-  let bcryptHasher: BcryptHasher;
+  let fakeHasher: FakeHasher;
 
   beforeEach(() => {
-    bcryptHasher = new BcryptHasher();
+    fakeHasher = new FakeHasher();
     inMemoryAccountRepository = new InMemoryAccountRepository();
     sut = new UpdateAccountEmailUseCase(
       inMemoryAccountRepository,
-      bcryptHasher,
+      fakeHasher,
     );
   });
 
@@ -22,7 +22,7 @@ describe('UpdateAccountEmailUseCase', () => {
     const password = faker.internet.password();
 
     const account = makeAccount({
-      password: await bcryptHasher.hash(password),
+      password: await fakeHasher.hash(password),
       isVerified: true,
     });
 

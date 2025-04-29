@@ -2,17 +2,17 @@ import { InMemoryAccountRepository } from 'test/repositories/in-memory-account-r
 import { CreateAccountUseCase } from './create-account-use-case';
 import { makeAccount } from 'test/factories/make-account';
 import { Account } from '../../../enterprise/entities/account';
-import { BcryptHasher } from 'test/cryptography/bcrypt-hasher';
+import { FakeHasher } from 'test/cryptography/fake-hasher';
 
 let inMemoryAccountRepository: InMemoryAccountRepository;
-let bcryptGenerator: BcryptHasher;
+let fakeHasher: FakeHasher;
 let sut: CreateAccountUseCase;
 
 describe('CreateAccountUseCase', () => {
   beforeEach(() => {
     inMemoryAccountRepository = new InMemoryAccountRepository();
-    bcryptGenerator = new BcryptHasher();
-    sut = new CreateAccountUseCase(inMemoryAccountRepository, bcryptGenerator);
+    fakeHasher = new FakeHasher();
+    sut = new CreateAccountUseCase(inMemoryAccountRepository, fakeHasher);
   });
 
   it('should create a new account', async () => {
