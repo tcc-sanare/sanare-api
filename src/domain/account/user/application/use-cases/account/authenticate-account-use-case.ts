@@ -3,6 +3,7 @@ import { Injectable } from "@nestjs/common";
 import { AccountRepository } from "../../repositories/account-repository";
 import { HashComparer } from "@/domain/account/cryptography/hash-comparer";
 import { Encrypter } from "@/domain/account/cryptography/encrypter";
+import { WrongCredentialsError } from "../../errors/wrong-credentials-error";
 
 interface AuthenticateAccountUseCaseRequest {
   email: string;
@@ -10,7 +11,7 @@ interface AuthenticateAccountUseCaseRequest {
 }
 
 type AuthenticateAccountUseCaseResponse = Either<
-  null,
+  WrongCredentialsError,
   {
     accessToken: string;
   }
@@ -30,7 +31,7 @@ export class AuthenticateAccountUseCase {
     const account = await this.accountRepository.findByEmail(request.email);
 
     if (!account) {
-      return left(null);
+      return left(new WrongCredentialsError());
     }
 
     const isPasswordValid = await this.hashComparer.compare(
@@ -39,7 +40,7 @@ export class AuthenticateAccountUseCase {
     );
 
     if (!isPasswordValid) {
-      return left(null);
+      return left(new WrongCredentialsError());
     }
 
     const accessToken = await this.encrypter.encrypt({

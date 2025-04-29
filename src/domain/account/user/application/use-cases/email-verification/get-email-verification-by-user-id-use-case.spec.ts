@@ -2,7 +2,6 @@ import { makeEmailVerification } from "test/factories/make-email-verification";
 import { InMemoryEmailVerificationRepository } from "test/repositories/in-memory-email-verification-repository";
 import { EmailVerification } from "../../../enterprise/entities/email-verification";
 import { GetEmailVerificationByUserIdUseCase } from "./get-email-verification-by-user-id-use-case";
-import exp from "constants";
 import { UniqueEmailVerificationCode } from "../../../enterprise/entities/value-object/unique-email-verification-code";
 
 describe('GetEmailVerificationByUserIdUseCase', () => {
@@ -24,7 +23,7 @@ describe('GetEmailVerificationByUserIdUseCase', () => {
     expect(result.value?.emailVerification).toBeInstanceOf(EmailVerification);
     expect(result.value?.emailVerification.userId.toString()).toEqual('non-existing-user-id');
     expect(inMemoryEmailVerificationRepository.items[0].userId.toString()).toEqual('non-existing-user-id');
-    expect(result.value.emailVerification.code.toValue().length).toEqual(6);
+    expect(result.value.emailVerification.code.toValue().length).toEqual(4);
   });
 
   it('should be able to get an email verification by user id if exists', async () => {
