@@ -1,23 +1,23 @@
 import { InMemoryAccountRepository } from 'test/repositories/in-memory-account-repository';
 import { UpdateAccountPasswordUseCase } from './update-account-password-use-case';
-import { BcryptHasher } from 'test/cryptography/bcrypt-hasher';
+import { FakeHasher } from 'test/cryptography/fake-hasher';
 import { makeAccount } from 'test/factories/make-account';
 import { faker } from '@faker-js/faker';
 
 describe('UpdateAccountPasswordUseCase', () => {
   let sut: UpdateAccountPasswordUseCase;
   let inMemoryAccountRepository: InMemoryAccountRepository;
-  let bcryptHasher: BcryptHasher;
+  let fakeHasher: FakeHasher;
   let oldPassword: string;
   let newPassword: string;
 
   beforeEach(() => {
     inMemoryAccountRepository = new InMemoryAccountRepository();
-    bcryptHasher = new BcryptHasher();
+    fakeHasher = new FakeHasher();
     sut = new UpdateAccountPasswordUseCase(
       inMemoryAccountRepository,
-      bcryptHasher,
-      bcryptHasher,
+      fakeHasher,
+      fakeHasher,
     );
     oldPassword = faker.internet.password();
     newPassword = faker.internet.password();
@@ -25,7 +25,7 @@ describe('UpdateAccountPasswordUseCase', () => {
 
   it('should be update password', async () => {
     const account = makeAccount({
-      password: await bcryptHasher.hash(oldPassword),
+      password: await fakeHasher.hash(oldPassword),
     });
 
     await inMemoryAccountRepository.create(account);
@@ -39,10 +39,10 @@ describe('UpdateAccountPasswordUseCase', () => {
 
     expect(response.isRight()).toBeTruthy();
     expect(
-      await bcryptHasher.compare(newPassword, response.value.account.password),
+      await fakeHasher.compare(newPassword, response.value.account.password),
     ).toBeTruthy();
     expect(
-      await bcryptHasher.compare(
+      await fakeHasher.compare(
         newPassword,
         inMemoryAccountRepository.items[0].password,
       ),
@@ -51,7 +51,7 @@ describe('UpdateAccountPasswordUseCase', () => {
 
   it('should be return null if password is incorrect', async () => {
     const account = makeAccount({
-      password: await bcryptHasher.hash(oldPassword),
+      password: await fakeHasher.hash(oldPassword),
     });
 
     await inMemoryAccountRepository.create(account);
@@ -66,7 +66,7 @@ describe('UpdateAccountPasswordUseCase', () => {
     expect(response.isLeft()).toBeTruthy();
     expect(response.value).toBeNull();
     expect(
-      await bcryptHasher.compare(
+      await fakeHasher.compare(
         oldPassword,
         inMemoryAccountRepository.items[0].password,
       ),
@@ -75,7 +75,7 @@ describe('UpdateAccountPasswordUseCase', () => {
 
   it('should be return null if the new passwords dont matched', async () => {
     const account = makeAccount({
-      password: await bcryptHasher.hash(oldPassword),
+      password: await fakeHasher.hash(oldPassword),
     });
 
     await inMemoryAccountRepository.create(account);
@@ -90,7 +90,7 @@ describe('UpdateAccountPasswordUseCase', () => {
     expect(response.isLeft()).toBeTruthy();
     expect(response.value).toBeNull();
     expect(
-      await bcryptHasher.compare(
+      await fakeHasher.compare(
         oldPassword,
         inMemoryAccountRepository.items[0].password,
       ),
