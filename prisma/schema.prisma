@@ -39,13 +39,43 @@ model Users {
   communityNoteRatings CommunityNoteRatings[]
 
   // Medical
+  caregiver Caregiver?
+
+  @@map("users")
+}
+
+model Caregiver {
+  id     String @id @default(uuid())
+  code   String @unique
+  userId String @unique
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user Users @relation(fields: [userId], references: [id])
+
+  selfMonitors SelfMonitor[]
+
+  @@map("caregivers")
+}
+
+model SelfMonitor {
+  id          String  @id @default(uuid())
+  caregiverId String?
+  logInputs   Json
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  caregiver Caregiver? @relation(fields: [caregiverId], references: [id])
+
   medicalRecord  MedicalRecord?
   medicalLogs    MedicalLogs[]
   reports        MedicalReports[]
   medicineAlarms MedicineAlarms[]
   aiChats        AiChats[]
 
-  @@map("users")
+  @@map("self_monitors")
 }
 
 model UserPhones {
@@ -177,12 +207,12 @@ model MedicalRecord {
   id        String    @id @default(uuid())
   bloodType BloodType
 
-  userId String @unique
+  selfMonitorId String @unique
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  user Users @relation(fields: [userId], references: [id])
+  selfMonitor SelfMonitor @relation(fields: [selfMonitorId], references: [id])
 
   allergies       MedicalRecordToAllergies[]
   chronicDiseases MedicalRecordToChronicDiseases[]
@@ -246,12 +276,12 @@ model MedicalLogs {
   hydration     Int?
   bloodSugar    Int?
 
-  userId String
+  selfMonitorId String
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  user Users @relation(fields: [userId], references: [id])
+  selfMonitor SelfMonitor @relation(fields: [selfMonitorId], references: [id])
 
   diseases MedicalLogsToDiseases[]
   symptoms MedicalLogsToSymptoms[]
@@ -312,12 +342,12 @@ model MedicalReports {
   fileKey String
   type    ReportType
 
-  userId String
+  selfMonitorId String
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  user Users @relation(fields: [userId], references: [id])
+  selfMonitor SelfMonitor @relation(fields: [selfMonitorId], references: [id])
 
   @@map("medical_reports")
 }
@@ -329,12 +359,12 @@ model MedicineAlarms {
   times     String[]
   expiresAt DateTime
 
-  userId String
+  selfMonitorId String
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  user Users @relation(fields: [userId], references: [id])
+  selfMonitor SelfMonitor @relation(fields: [selfMonitorId], references: [id])
 
   @@map("medicine_alarms")
 }
@@ -344,12 +374,12 @@ model AiChats {
   prompt   String
   response String
 
-  userId String
+  selfMonitorId String
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  user Users @relation(fields: [userId], references: [id])
+  selfMonitor SelfMonitor @relation(fields: [selfMonitorId], references: [id])
 
   @@map("ai_chats")
 }
@@ -390,4 +420,13 @@ enum BloodType {
   AB_PLUS  @map("ab+")
   O_MINUS  @map("o-")
   O_PLUS   @map("o+")
+}
+
+enum LogInput {
+  MOOD           @map("mood")
+  SYPTOMS        @map("symptoms")
+  IMC            @map("imc")
+  HYDRATION      @map("hydration")
+  BLOOD_PRESSURE @map("bloodPressure")
+  BLOOD_SUGAR    @map("bloodSugar")
 }
