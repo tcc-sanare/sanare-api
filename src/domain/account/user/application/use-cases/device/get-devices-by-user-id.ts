@@ -2,13 +2,14 @@ import { Either, left, right } from "@/core/either";
 import { Injectable } from "@nestjs/common";
 import { Device } from "../../../enterprise/entities/device";
 import { DeviceRepository } from "../../repositories/device-repository";
+import { ResourceNotFoundError } from "@/core/errors/errors/resource-not-found-error";
 
 interface GetDevicesByUserIdUseCaseRequest {
   userId: string;
 }
 
 type GetDevicesByUserIdUseCaseResponse = Either<
-  null,
+  ResourceNotFoundError<GetDevicesByUserIdUseCaseRequest>,
   {
     devices: Device[];
   }
@@ -24,7 +25,13 @@ export class GetDevicesByUserIdUseCase {
     const devices = await this.deviceRepository.findByUserId(data.userId);
 
     if (!devices) {
-      return left(null);
+      return left(new ResourceNotFoundError<GetDevicesByUserIdUseCaseRequest>({
+        errors: [
+          {
+            message: "Dispositivos não encontrados",
+          }
+        ],
+      }));
     }
 
     return right({ devices });

@@ -3,6 +3,7 @@ import { Account } from '../../../enterprise/entities/account';
 import { AccountRepository } from '../../repositories/account-repository';
 import { Injectable } from '@nestjs/common';
 import { HashGenerator } from '../../../../cryptography/hash-generetor';
+import { EmailAlreadyExistsError } from './errors/email-already-exists-error';
 
 interface CreateAccountUseCaseRequest {
   name: string;
@@ -11,7 +12,7 @@ interface CreateAccountUseCaseRequest {
 }
 
 type CreateAccountUseCaseResponse = Either<
-  null,
+  EmailAlreadyExistsError,
   {
     account: Account;
   }
@@ -35,12 +36,8 @@ export class CreateAccountUseCase {
       profilePhotoKey: null,
     });
 
-    if (!account) {
-      return left(null);
-    }
-
     if (await this.accountRepository.findByEmail(account.email)) {
-      return left(null);
+      return left(new EmailAlreadyExistsError(account.email));
     }
 
     await this.accountRepository.create(account);

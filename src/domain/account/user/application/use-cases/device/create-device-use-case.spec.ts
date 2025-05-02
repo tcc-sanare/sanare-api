@@ -1,6 +1,7 @@
 import { InMemoryDeviceRepository } from "test/repositories/in-memory-device-repository";
 import { CreateDeviceUseCase } from "./create-device-use-case";
 import { makeDevice } from "test/factories/make-device";
+import { NotAllowedError } from "@/core/errors/errors/not-allowed-error";
 
 describe("CreateDeviceUseCase", () => {
   let sut: CreateDeviceUseCase;
@@ -20,6 +21,7 @@ describe("CreateDeviceUseCase", () => {
     });
 
     expect(result.isRight()).toBeTruthy();
+    if (!result.isRight()) return;
     expect(result.value?.device).toBeInstanceOf(Object);
     expect(result.value?.device.token).toEqual(device.token);
     expect(result.value?.device.userId.toString()).toEqual(device.userId.toString());
@@ -36,7 +38,7 @@ describe("CreateDeviceUseCase", () => {
     });
 
     expect(result.isLeft()).toBeTruthy();
-    expect(result.value).toBeNull();
+    expect(result.value).toBeInstanceOf(NotAllowedError);
     expect(inMemoryDeviceRepository.items).toHaveLength(1);
   });
 });

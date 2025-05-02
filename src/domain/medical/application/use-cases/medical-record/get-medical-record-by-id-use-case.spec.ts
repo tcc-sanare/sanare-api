@@ -2,6 +2,7 @@ import { InMemoryMedicalRecordRepository } from 'test/repositories/in-memory-med
 import { GetMedicalRecordByIdUseCase } from './get-medical-record-by-id-use-case';
 import { makeMedicalRecord } from 'test/factories/make-medical-record';
 import { MedicalRecord } from '@/domain/medical/enterprise/entities/medical-record';
+import { ResourceNotFoundError } from '@/core/errors/errors/resource-not-found-error';
 
 describe('GetMedicalRecordUseCase', () => {
   let sut: GetMedicalRecordByIdUseCase;
@@ -21,6 +22,7 @@ describe('GetMedicalRecordUseCase', () => {
     });
 
     expect(result.isRight()).toBeTruthy();
+    if (!result.isRight()) return;
     expect(result.value.medicalRecord).toEqual(medicalRecord);
     expect(result.value.medicalRecord).toBeInstanceOf(MedicalRecord);
   });
@@ -34,6 +36,6 @@ describe('GetMedicalRecordUseCase', () => {
     });
 
     expect(result.isLeft()).toBeTruthy();
-    expect(result.value).toBeNull();
+    expect(result.value).toBeInstanceOf(ResourceNotFoundError);
   });
 });

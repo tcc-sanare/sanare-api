@@ -3,6 +3,7 @@ import { Injectable } from "@nestjs/common";
 import { Device } from "../../../enterprise/entities/device";
 import { DeviceRepository } from "../../repositories/device-repository";
 import { UniqueEntityID } from "@/core/entities/unique-entity-id";
+import { NotAllowedError } from "@/core/errors/errors/not-allowed-error";
 
 interface CreateDeviceUseCaseRequest {
   token: string;
@@ -10,7 +11,7 @@ interface CreateDeviceUseCaseRequest {
 };
 
 type CreateDeviceUseCaseResponse = Either<
-  null,
+  NotAllowedError<CreateDeviceUseCaseRequest>,
   {
     device: Device;
   }
@@ -33,7 +34,14 @@ export class CreateDeviceUseCase {
     });
 
     if (await this.deviceRepository.findByToken(device.token)) {
-      return left(null);
+      return left(new NotAllowedError<CreateDeviceUseCaseRequest>({
+        statusCode: 400,
+        errors: [
+          {
+            message: "Dispositivo já cadastrado",
+          }
+        ],
+      }));
     }
 
     await this.deviceRepository.create(device);

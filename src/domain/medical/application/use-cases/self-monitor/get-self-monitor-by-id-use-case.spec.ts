@@ -2,6 +2,7 @@ import { SelfMonitor } from "@/domain/medical/enterprise/entities/self-monitor";
 import { makeSelfMonitor } from "test/factories/make-self-monitor";
 import { InMemorySelfMonitorRepository } from "test/repositories/in-memory-self-monitor-repository";
 import { GetSelfMonitorByIdUseCase } from "./get-self-monitor-by-id-use-case";
+import { ResourceNotFoundError } from "@/core/errors/errors/resource-not-found-error";
 
 describe('GetSelfMonitorByIdUseCase', () => {
   let sut: GetSelfMonitorByIdUseCase;
@@ -22,6 +23,7 @@ describe('GetSelfMonitorByIdUseCase', () => {
     });
 
     expect(result.isRight()).toBeTruthy();
+    if (!result.isRight()) return;
     expect(result.value.selfMonitor).toBeInstanceOf(SelfMonitor);
     expect(result.value.selfMonitor.id.toString()).toEqual(selfMonitor.id.toString());
   });
@@ -32,6 +34,6 @@ describe('GetSelfMonitorByIdUseCase', () => {
     });
 
     expect(result.isLeft()).toBeTruthy();
-    expect(result.value).toBeNull();
+    expect(result.value).toBeInstanceOf(ResourceNotFoundError);
   });
 });

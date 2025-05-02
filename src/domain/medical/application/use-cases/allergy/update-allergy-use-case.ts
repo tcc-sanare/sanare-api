@@ -3,6 +3,7 @@ import { Injectable } from '@nestjs/common';
 import { Allergy } from '../../../enterprise/entities/allergy';
 import { AllergyRepository } from '../../repositories/allergy-repository';
 import { Storage } from '@/domain/application/storage';
+import { NotAllowedError } from '@/core/errors/errors/not-allowed-error';
 
 interface UpdateAllergyUseCaseRequest {
   allergyId: string;
@@ -16,7 +17,7 @@ interface UpdateAllergyUseCaseRequest {
 }
 
 type UpdateAllergyUseCaseResponse = Either<
-  null,
+  NotAllowedError<UpdateAllergyUseCaseRequest>,
   {
     allergy: Allergy;
   }
@@ -35,7 +36,14 @@ export class UpdateAllergyUseCase {
     const allergy = await this.allergyRepository.findById(request.allergyId);
 
     if (!allergy) {
-      return left(null);
+      return left(new NotAllowedError<UpdateAllergyUseCaseRequest>({
+        statusCode: 400,
+        errors: [
+          {
+            message: 'Alergia não encontrada',
+          },
+        ],
+      }));
     }
 
     if (request.icon === null && allergy.iconKey) {

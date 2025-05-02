@@ -1,6 +1,7 @@
 import { InMemoryAllergyRepository } from 'test/repositories/in-memory-allergy-repository';
 import { GetAllergyByIdUseCase } from './get-allergy-by-id-use-case';
 import { makeAllergy } from 'test/factories/make-allergy';
+import { ResourceNotFoundError } from '@/core/errors/errors/resource-not-found-error';
 
 describe('GetAllergyByIdUseCase', () => {
   let sut: GetAllergyByIdUseCase;
@@ -19,6 +20,7 @@ describe('GetAllergyByIdUseCase', () => {
     const response = await sut.execute({ allergyId: allergy.id.toString() });
 
     expect(response.isRight()).toBeTruthy();
+    if (!response.isRight()) return;
     expect(response.value.allergy.id).toEqual(allergy.id);
     expect(response.value.allergy.name).toEqual(allergy.name);
     expect(response.value.allergy.description).toEqual(allergy.description);
@@ -28,6 +30,6 @@ describe('GetAllergyByIdUseCase', () => {
     const response = await sut.execute({ allergyId: 'invalid-id' });
 
     expect(response.isLeft()).toBeTruthy();
-    expect(response.value).toBeNull();
+    expect(response.value).toBeInstanceOf(ResourceNotFoundError);
   });
 });

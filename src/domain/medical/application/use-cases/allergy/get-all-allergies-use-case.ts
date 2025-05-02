@@ -17,10 +17,6 @@ export class GetAllAllergiesUseCase {
   async execute(): Promise<GetAllAllergiesUseCaseResponse> {
     const allergies = await this.allergyRepository.findAll();
 
-    if (!allergies) {
-      return left(null);
-    }
-
     return right({ allergies });
   }
 }

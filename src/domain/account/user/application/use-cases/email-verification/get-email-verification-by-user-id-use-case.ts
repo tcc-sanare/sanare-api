@@ -26,7 +26,6 @@ export class GetEmailVerificationByUserIdUseCase {
     userId,
   }: GetEmailVerificationByUserIdUseCaseRequest): Promise<GetEmailVerificationByUserIdUseCaseResponse> {
     const emailVerification = await this.emailVerificationRepository.findByUserId(userId);
-    console.log({ emailVerification })
     if (!emailVerification) {
       const emailVerification = EmailVerification.create({
         userId: new UniqueEntityID(userId),

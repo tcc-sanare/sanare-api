@@ -1,6 +1,7 @@
 import { InMemoryChronicDiseaseRepository } from 'test/repositories/in-memory-chronic-disease-repository';
 import { GetChronicDiseaseByIdUseCase } from './get-chronic-disease-by-id-use-case';
 import { makeChronicDisease } from 'test/factories/make-chronic-disease';
+import { ResourceNotFoundError } from '@/core/errors/errors/resource-not-found-error';
 
 describe('GetChronicDiseaseByIdUseCase', () => {
   let sut: GetChronicDiseaseByIdUseCase;
@@ -21,6 +22,7 @@ describe('GetChronicDiseaseByIdUseCase', () => {
     });
 
     expect(response.isRight()).toBeTruthy();
+    if (!response.isRight()) return;
     expect(response.value.chronicDisease.id).toEqual(chronicDisease.id);
     expect(response.value.chronicDisease.name).toEqual(chronicDisease.name);
     expect(response.value.chronicDisease.description).toEqual(
@@ -32,6 +34,6 @@ describe('GetChronicDiseaseByIdUseCase', () => {
     const response = await sut.execute({ chronicDiseaseId: 'invalid-id' });
 
     expect(response.isLeft()).toBeTruthy();
-    expect(response.value).toBeNull();
+    expect(response.value).toBeInstanceOf(ResourceNotFoundError);
   });
 });

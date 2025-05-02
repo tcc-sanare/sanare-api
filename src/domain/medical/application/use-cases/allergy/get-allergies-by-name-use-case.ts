@@ -23,10 +23,6 @@ export class GetAllergiesByNameUseCase {
   ): Promise<GetAllergiesByNameUseCaseResponse> {
     const allergies = await this.allergyRepository.findByName(request.name);
 
-    if (!allergies) {
-      return left(null);
-    }
-
     return right({ allergies });
   }
 }

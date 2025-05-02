@@ -2,6 +2,7 @@ import { makeDevice } from "test/factories/make-device";
 import { InMemoryDeviceRepository } from "test/repositories/in-memory-device-repository";
 import { Device } from "../../../enterprise/entities/device";
 import { UpdateDeviceUseCase } from "./update-device-use-case";
+import { NotAllowedError } from "@/core/errors/errors/not-allowed-error";
 
 describe("UpdateDeviceUseCase", () => {
   let sut: UpdateDeviceUseCase;
@@ -23,6 +24,7 @@ describe("UpdateDeviceUseCase", () => {
     });
 
     expect(result.isRight()).toBeTruthy();
+    if (!result.isRight()) return;
     expect(result.value?.device).toBeInstanceOf(Device);
     expect(result.value?.device.token).toEqual(device.token);
     expect(result.value?.device.userId.toString()).toEqual(newUserId);
@@ -40,7 +42,7 @@ describe("UpdateDeviceUseCase", () => {
     });
 
     expect(result.isLeft()).toBeTruthy();
-    expect(result.value).toBeNull();
+    expect(result.value).toBeInstanceOf(NotAllowedError);
     expect(inMemoryDeviceRepository.items).toHaveLength(1);
   });
 });

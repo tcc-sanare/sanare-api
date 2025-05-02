@@ -2,6 +2,7 @@ import { InMemoryMedicalRecordRepository } from 'test/repositories/in-memory-med
 import { GetMedicalRecordBySelfMonitorIdUseCase } from './get-medical-record-by-self-monitor-id';
 import { makeMedicalRecord } from 'test/factories/make-medical-record';
 import { MedicalRecord } from '@/domain/medical/enterprise/entities/medical-record';
+import { ResourceNotFoundError } from '@/core/errors/errors/resource-not-found-error';
 
 describe('GetMedicalRecordBySelfMonitorIdUseCase', () => {
   let sut: GetMedicalRecordBySelfMonitorIdUseCase;
@@ -21,6 +22,7 @@ describe('GetMedicalRecordBySelfMonitorIdUseCase', () => {
     });
 
     expect(result.isRight()).toBeTruthy();
+    if (!result.isRight()) return;
     expect(result.value.medicalRecord).toEqual(medicalRecord);
     expect(result.value.medicalRecord).toBeInstanceOf(MedicalRecord);
     expect(result.value.medicalRecord.selfMonitorId.toString()).toEqual(
@@ -37,6 +39,6 @@ describe('GetMedicalRecordBySelfMonitorIdUseCase', () => {
     });
 
     expect(result.isLeft()).toBeTruthy();
-    expect(result.value).toBeNull();
+    expect(result.value).toBeInstanceOf(ResourceNotFoundError);
   });
 });

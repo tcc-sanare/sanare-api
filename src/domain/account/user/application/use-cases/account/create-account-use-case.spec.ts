@@ -3,6 +3,8 @@ import { CreateAccountUseCase } from './create-account-use-case';
 import { makeAccount } from 'test/factories/make-account';
 import { Account } from '../../../enterprise/entities/account';
 import { FakeHasher } from 'test/cryptography/fake-hasher';
+import { NotAllowedError } from '@/core/errors/errors/not-allowed-error';
+import { EmailAlreadyExistsError } from './errors/email-already-exists-error';
 
 let inMemoryAccountRepository: InMemoryAccountRepository;
 let fakeHasher: FakeHasher;
@@ -25,6 +27,7 @@ describe('CreateAccountUseCase', () => {
     });
 
     expect(response.isRight()).toBe(true);
+    if (!response.isRight()) return;
     expect(response.value.account).toBeInstanceOf(Account);
     expect(inMemoryAccountRepository.items[0]).toEqual(response.value.account);
     expect(response.value.account.name).toBe(account.name);
@@ -47,7 +50,9 @@ describe('CreateAccountUseCase', () => {
     });
 
     expect(response2.isLeft()).toBe(true);
-    expect(response2.value).toBeNull();
+    if (!response2.isLeft()) return;
+    expect(response2.value).toBeInstanceOf(EmailAlreadyExistsError);
+    expect(response2.value.props.errors[0].path[0]).toBe('email');
     expect(inMemoryAccountRepository.items.length).toBe(1);
   });
 });

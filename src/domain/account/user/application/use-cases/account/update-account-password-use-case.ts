@@ -4,6 +4,7 @@ import { Injectable } from '@nestjs/common';
 import { AccountRepository } from '../../repositories/account-repository';
 import { HashComparer } from '@/domain/account/cryptography/hash-comparer';
 import { HashGenerator } from '@/domain/account/cryptography/hash-generetor';
+import { NotAllowedError } from '@/core/errors/errors/not-allowed-error';
 
 interface UpdateAccountPasswordUseCaseRequest {
   accountId: string;
@@ -13,7 +14,7 @@ interface UpdateAccountPasswordUseCaseRequest {
 }
 
 type UpdateAccountPasswordUseCaseResponse = Either<
-  null,
+  NotAllowedError<UpdateAccountPasswordUseCaseRequest>,
   {
     account: Account;
   }
@@ -33,7 +34,14 @@ export class UpdateAccountPasswordUseCase {
     const account = await this.accountRepository.findById(data.accountId);
 
     if (!account) {
-      return left(null);
+      return left(new NotAllowedError<UpdateAccountPasswordUseCaseRequest>({
+        statusCode: 400,
+        errors: [
+          {
+            message: 'Conta não encontrada',
+          },
+        ],
+      }));
     }
 
     const passwordCompare = await this.hashComparer.compare(
@@ -42,11 +50,27 @@ export class UpdateAccountPasswordUseCase {
     );
 
     if (!passwordCompare) {
-      return left(null);
+      return left(new NotAllowedError<UpdateAccountPasswordUseCaseRequest>({
+        statusCode: 400,
+        errors: [
+          {
+            message: 'Senha incorreta',
+            path: ['oldPassword'],
+          },
+        ],
+      }));
     }
 
     if (data.password !== data.confirmPassword) {
-      return left(null);
+      return left(new NotAllowedError<UpdateAccountPasswordUseCaseRequest>({
+        statusCode: 400,
+        errors: [
+          {
+            message: 'As senhas não conferem',
+            path: ['password', 'confirmPassword'],
+          },
+        ],
+      }));
     }
 
     account.password = await this.hashGenerator.hash(data.password);

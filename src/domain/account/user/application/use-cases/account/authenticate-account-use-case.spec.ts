@@ -3,6 +3,8 @@ import { makeAccount } from "test/factories/make-account";
 import { InMemoryAccountRepository } from "test/repositories/in-memory-account-repository";
 import { AuthenticateAccountUseCase } from "./authenticate-account-use-case";
 import { FakeEncrypter } from "test/cryptography/fake-encrypter";
+import { WrongCredentialsError } from "./errors/wrong-credentials-error";
+import { Right } from "@/core/either";
 
 describe('AuthenticateAccountUseCase', () => {
   let sut: AuthenticateAccountUseCase;
@@ -34,8 +36,8 @@ describe('AuthenticateAccountUseCase', () => {
     });
 
     expect(response.isRight()).toBe(true);
-    expect(response.value.accessToken).toBeDefined();
-    expect(await fakeEncrypter.decrypt(response.value.accessToken)).toEqual({
+    if (!response.isRight()) return;
+    expect(await fakeEncrypter.decrypt(response.value?.accessToken)).toEqual({
       sub: account.id.toString(),
     });
   });
@@ -47,7 +49,8 @@ describe('AuthenticateAccountUseCase', () => {
     });
 
     expect(response.isLeft()).toBe(true);
-    expect(response.value).toBeNull();
+    if (!response.isLeft()) return;
+    expect(JSON.parse(response.value.message).statusCode).toEqual(400);
     expect(inMemoryAccountRepository.items.length).toBe(0);
   });
 
@@ -64,6 +67,7 @@ describe('AuthenticateAccountUseCase', () => {
     });
 
     expect(response.isLeft()).toBe(true);
-    expect(response.value).toBeNull();
+    if (!response.isLeft()) return;
+    expect(JSON.parse(response.value.message).statusCode).toEqual(400);
   });
 });

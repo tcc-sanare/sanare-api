@@ -3,6 +3,7 @@ import { UpdateMedicalRecordUseCase } from './update-medical-record-use-case';
 import { makeMedicalRecord } from 'test/factories/make-medical-record';
 import { UniqueEntityID } from '@/core/entities/unique-entity-id';
 import { MedicalRecordAllergy } from '@/domain/medical/enterprise/entities/medical-record-allergy';
+import { NotAllowedError } from '@/core/errors/errors/not-allowed-error';
 
 describe('UpdateMedicalRecordUseCase', () => {
   let sut: UpdateMedicalRecordUseCase;
@@ -25,6 +26,7 @@ describe('UpdateMedicalRecordUseCase', () => {
     });
 
     expect(result.isRight()).toBeTruthy();
+    if (!result.isRight()) return;
     expect(result.value.medicalRecord.id).toEqual(medicalRecord.id);
     expect(result.value.medicalRecord.bloodType).toEqual('o+');
     expect(result.value.medicalRecord.allergies.currentItems).toEqual([
@@ -73,6 +75,7 @@ describe('UpdateMedicalRecordUseCase', () => {
     });
 
     expect(result.isRight()).toBeTruthy();
+    if (!result.isRight()) return;
     expect(result.value.medicalRecord.allergies.currentItems).toHaveLength(0);
     expect(
       result.value.medicalRecord.chronicDiseases.currentItems,
@@ -91,6 +94,6 @@ describe('UpdateMedicalRecordUseCase', () => {
     });
 
     expect(result.isLeft()).toBeTruthy();
-    expect(result.value).toBeNull();
+    expect(result.value).toBeInstanceOf(NotAllowedError);
   });
 });
