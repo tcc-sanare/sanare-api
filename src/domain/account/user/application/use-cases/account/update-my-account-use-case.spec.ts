@@ -4,6 +4,7 @@ import { makeAccount } from 'test/factories/make-account';
 import { InMemoryStorage } from 'test/storage/in-memory-storage';
 import { readFileSync } from 'fs';
 import { Account } from '../../../enterprise/entities/account';
+import { NotAllowedError } from '@/core/errors/errors/not-allowed-error';
 
 describe('UpdateMyAccountUseCase', () => {
   let updateMyAccountUseCase: UpdateMyAccountUseCase;
@@ -30,6 +31,7 @@ describe('UpdateMyAccountUseCase', () => {
     });
 
     expect(response.isRight()).toBeTruthy();
+    if (!response.isRight()) return;
     expect(response.value.account).toEqual(account);
     expect(response.value.account.name).toBe('new name');
   });
@@ -45,6 +47,7 @@ describe('UpdateMyAccountUseCase', () => {
     });
 
     expect(response.isRight()).toBeTruthy();
+    if (!response.isRight()) return;
     expect(response.value.account).toEqual(account);
     expect(response.value.account.theme).toBe('DARK');
   });
@@ -76,6 +79,7 @@ describe('UpdateMyAccountUseCase', () => {
     });
 
     expect(response.isRight()).toBeTruthy();
+    if (!response.isRight()) return;
     expect(response.value.account).toBeInstanceOf(Account);
     expect(response.value.account.profilePhotoKey).not.toBeNull();
     expect(inMemoryStorage.items[0].fileKey).toBe(
@@ -111,6 +115,7 @@ describe('UpdateMyAccountUseCase', () => {
     });
 
     expect(response.isRight()).toBeTruthy();
+    if (!response.isRight()) return;
     expect(response.value.account).toBeInstanceOf(Account);
     expect(response.value.account.profilePhotoKey).toBeNull();
     expect(inMemoryStorage.items.length).toBe(0);
@@ -122,6 +127,6 @@ describe('UpdateMyAccountUseCase', () => {
     });
 
     expect(response.isLeft()).toBeTruthy();
-    expect(response.value).toBeNull();
+    expect(response.value).toBeInstanceOf(NotAllowedError);
   });
 });

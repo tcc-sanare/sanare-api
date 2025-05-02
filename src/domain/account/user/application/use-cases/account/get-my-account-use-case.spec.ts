@@ -1,6 +1,7 @@
 import { InMemoryAccountRepository } from 'test/repositories/in-memory-account-repository';
 import { GetMyAccountUseCase } from './get-my-account-use-case';
 import { makeAccount } from 'test/factories/make-account';
+import { ResourceNotFoundError } from '@/core/errors/errors/resource-not-found-error';
 
 describe('GetMyAccountUseCase', () => {
   let getMyAccountUseCase: GetMyAccountUseCase;
@@ -21,6 +22,7 @@ describe('GetMyAccountUseCase', () => {
     });
 
     expect(response.isRight()).toBeTruthy();
+    if (!response.isRight()) return;
     expect(response.value.account).toEqual(account);
     expect(response.value.account.name).toBe(account.name);
     expect(response.value.account.email).toBe(account.email);
@@ -32,6 +34,6 @@ describe('GetMyAccountUseCase', () => {
     });
 
     expect(response.isLeft()).toBeTruthy();
-    expect(response.value).toBeNull();
+    expect(response.value).toBeInstanceOf(ResourceNotFoundError);
   });
 });

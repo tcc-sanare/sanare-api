@@ -3,6 +3,7 @@ import { UniqueEntityID } from "@/core/entities/unique-entity-id";
 import { Injectable } from "@nestjs/common";
 import { Device } from "../../../enterprise/entities/device";
 import { DeviceRepository } from "../../repositories/device-repository";
+import { NotAllowedError } from "@/core/errors/errors/not-allowed-error";
 
 interface UpdateDeviceUseCaseRequest {
   token: string;
@@ -10,7 +11,7 @@ interface UpdateDeviceUseCaseRequest {
 }
 
 type UpdateDeviceUseCaseResponse = Either<
-  null,
+  NotAllowedError<UpdateDeviceUseCaseRequest>,
   {
     device: Device;
   }
@@ -29,7 +30,14 @@ export class UpdateDeviceUseCase {
     const device = await this.deviceRepository.findByToken(data.token);
 
     if (!device) {
-      return left(null);
+      return left(new NotAllowedError<UpdateDeviceUseCaseRequest>({
+        statusCode: 400,
+        errors: [
+          {
+            message: "Dispositivo não encontrado",
+          }
+        ],
+      }));
     }
 
     device.userId = new UniqueEntityID(data.userId);

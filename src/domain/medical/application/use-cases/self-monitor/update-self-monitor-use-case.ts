@@ -3,6 +3,7 @@ import { SelfMonitor } from "@/domain/medical/enterprise/entities/self-monitor";
 import { Injectable } from "@nestjs/common";
 import { SelfMonitorRepository } from "../../repositories/self-monitor-repository";
 import { UniqueEntityID } from "@/core/entities/unique-entity-id";
+import { NotAllowedError } from "@/core/errors/errors/not-allowed-error";
 
 interface UpdateSelfMonitorUseCaseRequest {
   selfMonitorId: string;
@@ -10,7 +11,7 @@ interface UpdateSelfMonitorUseCaseRequest {
 }
 
 type UpdateSelfMonitorUseCaseResponse = Either<
-  null,
+  NotAllowedError<UpdateSelfMonitorUseCaseRequest>,
   {
     selfMonitor: SelfMonitor;
   }
@@ -29,7 +30,14 @@ export class UpdateSelfMonitorUseCase {
     const selfMonitor = await this.selfMonitorRepository.findById(selfMonitorId);
 
     if (!selfMonitor) {
-      return left(null);
+      return left(new NotAllowedError<UpdateSelfMonitorUseCaseRequest>({
+        statusCode: 400,
+        errors: [
+          {
+            message: "Perfil de auto-monitoramento não encontrado",
+          },
+        ],
+      }));
     }
 
     caregiverId && (

@@ -38,13 +38,9 @@ export class CreateAllergyUseCase {
         data.icon &&
         (await this.storage.upload(data.icon).then((res) => res.fileKey)),
     });
+    
+    await this.allergyRepository.create(allergy);
 
-    try {
-      await this.allergyRepository.create(allergy);
-
-      return right({ allergy });
-    } catch {
-      return left(null);
-    }
+    return right({ allergy });
   }
 }

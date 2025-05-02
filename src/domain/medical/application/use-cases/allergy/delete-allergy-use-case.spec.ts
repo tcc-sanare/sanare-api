@@ -1,6 +1,7 @@
 import { InMemoryAllergyRepository } from 'test/repositories/in-memory-allergy-repository';
 import { DeleteAllergyUseCase } from './delete-allergy-use-case';
 import { makeAllergy } from 'test/factories/make-allergy';
+import { NotAllowedError } from '@/core/errors/errors/not-allowed-error';
 
 describe('DeleteAllergyUseCase', () => {
   let sut: DeleteAllergyUseCase;
@@ -21,6 +22,7 @@ describe('DeleteAllergyUseCase', () => {
     });
 
     expect(response.isRight()).toBeTruthy();
+    if (!response.isRight()) return;
     expect(response.value.allergy.id).toEqual(allergy.id);
     expect(inMemoryAllergyRepository.items.length).toEqual(0);
   });
@@ -31,6 +33,8 @@ describe('DeleteAllergyUseCase', () => {
     });
 
     expect(response.isLeft()).toBeTruthy();
-    expect(response.value).toBeNull();
+    expect(response.value).toBeInstanceOf(NotAllowedError);
+    if (!response.isLeft()) return;
+    expect(response.value.props.statusCode).toEqual(400);
   });
 });

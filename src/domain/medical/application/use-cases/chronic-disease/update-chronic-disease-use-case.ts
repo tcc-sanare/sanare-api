@@ -3,6 +3,7 @@ import { Injectable } from '@nestjs/common';
 import { ChronicDisease } from '../../../enterprise/entities/chronic-disease';
 import { ChronicDiseaseRepository } from '../../repositories/chronic-disease-repository';
 import { Storage } from '@/domain/application/storage';
+import { NotAllowedError } from '@/core/errors/errors/not-allowed-error';
 
 interface UpdateChronicDiseaseUseCaseRequest {
   chronicDiseaseId: string;
@@ -16,7 +17,7 @@ interface UpdateChronicDiseaseUseCaseRequest {
 }
 
 type UpdateChronicDiseaseUseCaseResponse = Either<
-  null,
+  NotAllowedError<UpdateChronicDiseaseUseCaseRequest>,
   {
     chronicDisease: ChronicDisease;
   }
@@ -37,7 +38,14 @@ export class UpdateChronicDiseaseUseCase {
     );
 
     if (!chronicDisease) {
-      return left(null);
+      return left(new NotAllowedError<UpdateChronicDiseaseUseCaseRequest>({
+        statusCode: 400,
+        errors: [
+          {
+            message: 'Doença crônica não encontrada',
+          },
+        ],
+      }));
     }
 
     request.name && (chronicDisease.name = request.name);

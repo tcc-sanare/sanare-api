@@ -45,10 +45,6 @@ export class CreateChronicDiseaseUseCase {
         : null,
     });
 
-    if (!chronicDisease) {
-      return left(null);
-    }
-
     await this.chronicDiseaseRepository.create(chronicDisease);
 
     return right({

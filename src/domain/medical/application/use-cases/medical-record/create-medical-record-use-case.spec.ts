@@ -2,6 +2,7 @@ import { InMemoryMedicalRecordRepository } from 'test/repositories/in-memory-med
 import { CreateMedicalRecordUseCase } from './create-medical-record-use-case';
 import { makeMedicalRecord } from 'test/factories/make-medical-record';
 import { UniqueEntityID } from '@/core/entities/unique-entity-id';
+import { NotAllowedError } from '@/core/errors/errors/not-allowed-error';
 
 describe('CreateMedicalRecordUseCase', () => {
   let sut: CreateMedicalRecordUseCase;
@@ -24,6 +25,7 @@ describe('CreateMedicalRecordUseCase', () => {
     });
 
     expect(result.isRight()).toBeTruthy();
+    if (!result.isRight()) return;
     expect(result.value.medicalRecord.id).toBeTruthy();
     expect(result.value.medicalRecord.selfMonitorId.toString()).toEqual(
       medicalRecord.selfMonitorId.toString(),
@@ -69,7 +71,7 @@ describe('CreateMedicalRecordUseCase', () => {
     });
 
     expect(result.isLeft()).toBeTruthy();
-    expect(result.value).toBeNull();
+    expect(result.value).toBeInstanceOf(NotAllowedError);
     expect(inMemoryMedicalRecordRepository.items.length).toEqual(1);
   });
 });

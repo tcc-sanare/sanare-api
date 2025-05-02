@@ -3,6 +3,8 @@ import { UpdateAccountPasswordUseCase } from './update-account-password-use-case
 import { FakeHasher } from 'test/cryptography/fake-hasher';
 import { makeAccount } from 'test/factories/make-account';
 import { faker } from '@faker-js/faker';
+import { WrongCredentialsError } from './errors/wrong-credentials-error';
+import { NotAllowedError } from '@/core/errors/errors/not-allowed-error';
 
 describe('UpdateAccountPasswordUseCase', () => {
   let sut: UpdateAccountPasswordUseCase;
@@ -38,6 +40,7 @@ describe('UpdateAccountPasswordUseCase', () => {
     });
 
     expect(response.isRight()).toBeTruthy();
+    if (!response.isRight()) return;
     expect(
       await fakeHasher.compare(newPassword, response.value.account.password),
     ).toBeTruthy();
@@ -64,7 +67,9 @@ describe('UpdateAccountPasswordUseCase', () => {
     });
 
     expect(response.isLeft()).toBeTruthy();
-    expect(response.value).toBeNull();
+    if (!response.isLeft()) return;
+    expect(response.value).toBeInstanceOf(NotAllowedError);
+    expect(response.value.props.errors[0].path[0]).toEqual('oldPassword');
     expect(
       await fakeHasher.compare(
         oldPassword,
@@ -88,7 +93,9 @@ describe('UpdateAccountPasswordUseCase', () => {
     });
 
     expect(response.isLeft()).toBeTruthy();
-    expect(response.value).toBeNull();
+    expect(response.value).toBeInstanceOf(NotAllowedError);
+    if (!response.isLeft()) return;
+    expect(response.value.props.errors[0].path).toContain('confirmPassword');
     expect(
       await fakeHasher.compare(
         oldPassword,

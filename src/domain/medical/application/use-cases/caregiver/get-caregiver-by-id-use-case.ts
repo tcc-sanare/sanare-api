@@ -2,13 +2,14 @@ import { Either, left, right } from "@/core/either";
 import { Caregiver } from "@/domain/medical/enterprise/entities/caregiver";
 import { Injectable } from "@nestjs/common";
 import { CaregiverRepository } from "../../repositories/caregiver-repository";
+import { ResourceNotFoundError } from "@/core/errors/errors/resource-not-found-error";
 
 interface GetCaregiverByIdUseCaseRequest {
   id: string;
 }
 
 type GetCaregiverByIdUseCaseResponse = Either<
-  null,
+  ResourceNotFoundError<GetCaregiverByIdUseCaseRequest>,
   {
     caregiver: Caregiver;
   }
@@ -26,7 +27,13 @@ export class GetCaregiverByIdUseCase {
     const caregiver = await this.caregiverRepository.findById(id);
 
     if (!caregiver) {
-      return left(null);
+      return left(new ResourceNotFoundError<GetCaregiverByIdUseCaseRequest>({
+        errors: [
+          {
+            message: "Cuidador não encontrado",
+          },
+        ],
+      }));
     }
 
     return right({ caregiver });

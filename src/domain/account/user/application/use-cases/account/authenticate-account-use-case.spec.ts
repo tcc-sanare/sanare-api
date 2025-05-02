@@ -3,7 +3,8 @@ import { makeAccount } from "test/factories/make-account";
 import { InMemoryAccountRepository } from "test/repositories/in-memory-account-repository";
 import { AuthenticateAccountUseCase } from "./authenticate-account-use-case";
 import { FakeEncrypter } from "test/cryptography/fake-encrypter";
-import { WrongCredentialsError } from "../../errors/wrong-credentials-error";
+import { WrongCredentialsError } from "./errors/wrong-credentials-error";
+import { Right } from "@/core/either";
 
 describe('AuthenticateAccountUseCase', () => {
   let sut: AuthenticateAccountUseCase;
@@ -34,9 +35,9 @@ describe('AuthenticateAccountUseCase', () => {
       password: 'password',
     });
 
-    expect(response.isRight()).toBeTruthy();
-    if (response.value instanceof WrongCredentialsError) return;
-    expect(await fakeEncrypter.decrypt(response.value.accessToken)).toEqual({
+    expect(response.isRight()).toBe(true);
+    if (!response.isRight()) return;
+    expect(await fakeEncrypter.decrypt(response.value?.accessToken)).toEqual({
       sub: account.id.toString(),
     });
   });
@@ -48,7 +49,7 @@ describe('AuthenticateAccountUseCase', () => {
     });
 
     expect(response.isLeft()).toBe(true);
-    if (!(response.value instanceof WrongCredentialsError)) return;
+    if (!response.isLeft()) return;
     expect(JSON.parse(response.value.message).statusCode).toEqual(400);
     expect(inMemoryAccountRepository.items.length).toBe(0);
   });
@@ -66,7 +67,7 @@ describe('AuthenticateAccountUseCase', () => {
     });
 
     expect(response.isLeft()).toBe(true);
-    if (!(response.value instanceof WrongCredentialsError)) return;
+    if (!response.isLeft()) return;
     expect(JSON.parse(response.value.message).statusCode).toEqual(400);
   });
 });

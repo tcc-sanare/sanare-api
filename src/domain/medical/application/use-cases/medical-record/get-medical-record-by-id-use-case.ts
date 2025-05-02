@@ -2,13 +2,14 @@ import { Either, left, right } from '@/core/either';
 import { Injectable } from '@nestjs/common';
 import { MedicalRecordRepository } from '../../repositories/medical-record-repository';
 import { MedicalRecord } from '@/domain/medical/enterprise/entities/medical-record';
+import { ResourceNotFoundError } from '@/core/errors/errors/resource-not-found-error';
 
 interface GetMedicalRecordByIdUseCaseRequest {
   medicalRecordId: string;
 }
 
 type GetMedicalRecordByIdUseCaseResponse = Either<
-  null,
+  ResourceNotFoundError<GetMedicalRecordByIdUseCaseRequest>,
   {
     medicalRecord: MedicalRecord;
   }
@@ -26,7 +27,13 @@ export class GetMedicalRecordByIdUseCase {
     );
 
     if (!medicalRecord) {
-      return left(null);
+      return left(new ResourceNotFoundError<GetMedicalRecordByIdUseCaseRequest>({
+        errors: [
+          {
+            message: 'Prontuário médico não encontrado',
+          },
+        ],
+      }));
     }
 
     return right({ medicalRecord });

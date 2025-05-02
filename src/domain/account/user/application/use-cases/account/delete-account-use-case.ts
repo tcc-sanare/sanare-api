@@ -2,13 +2,15 @@ import { Either, left, right } from '@/core/either';
 import { Account } from '../../../enterprise/entities/account';
 import { Injectable } from '@nestjs/common';
 import { AccountRepository } from '../../repositories/account-repository';
+import { NotAllowedError } from '@/core/errors/errors/not-allowed-error';
+import { D } from 'vitest/dist/chunks/reporters.66aFHiyX';
 
 interface DeleteAccountUseCaseRequest {
   accountId: string;
 }
 
 type DeleteAccountUseCaseResponse = Either<
-  null,
+  NotAllowedError<DeleteAccountUseCaseRequest>,
   {
     account: Account;
   }
@@ -24,7 +26,14 @@ export class DeleteAccountUseCase {
     const account = await this.accountRepository.findById(request.accountId);
 
     if (!account) {
-      return left(null);
+      return left(new NotAllowedError<DeleteAccountUseCaseRequest>({
+        statusCode: 400,
+        errors: [
+          {
+            message: 'Conta não encontrada'
+          },
+        ],
+      }));
     }
 
     await this.accountRepository.delete(account);

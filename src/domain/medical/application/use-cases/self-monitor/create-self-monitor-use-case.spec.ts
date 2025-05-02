@@ -3,6 +3,7 @@ import { InMemorySelfMonitorRepository } from "test/repositories/in-memory-self-
 import { CreateSelfMonitorUseCase } from "./create-self-monitor-use-case";
 import { makeSelfMonitor } from "test/factories/make-self-monitor";
 import { UniqueEntityID } from "@/core/entities/unique-entity-id";
+import { NotAllowedError } from "@/core/errors/errors/not-allowed-error";
 
 describe('CreateSelfMonitorUseCase', () => {
   let sut: CreateSelfMonitorUseCase;
@@ -19,6 +20,7 @@ describe('CreateSelfMonitorUseCase', () => {
     });
 
     expect(result.isRight()).toBeTruthy();
+    if (!result.isRight()) return;
     expect(result.value.selfMonitor).toBeInstanceOf(SelfMonitor);
     expect(result.value.selfMonitor.userId.toString()).toEqual('user-1');
     expect(result.value.selfMonitor.caregiverId).toBeUndefined();
@@ -35,7 +37,7 @@ describe('CreateSelfMonitorUseCase', () => {
     });
 
     expect(result.isLeft()).toBeTruthy();
-    expect(result.value).toBeNull();
+    expect(result.value).toBeInstanceOf(NotAllowedError);
     expect(inMemorySelfMonitorRepository.items.length).toBe(1);
   });
 });

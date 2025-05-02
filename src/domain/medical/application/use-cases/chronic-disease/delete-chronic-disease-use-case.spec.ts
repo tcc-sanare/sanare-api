@@ -1,6 +1,7 @@
 import { InMemoryChronicDiseaseRepository } from 'test/repositories/in-memory-chronic-disease-repository';
 import { DeleteChronicDiseaseUseCase } from './delete-chronic-disease-use-case';
 import { makeChronicDisease } from 'test/factories/make-chronic-disease';
+import { NotAllowedError } from '@/core/errors/errors/not-allowed-error';
 
 describe('DeleteChronicDiseaseUseCase', () => {
   let sut: DeleteChronicDiseaseUseCase;
@@ -21,6 +22,7 @@ describe('DeleteChronicDiseaseUseCase', () => {
     });
 
     expect(response.isRight()).toBeTruthy();
+    if (!response.isRight()) return;
     expect(response.value.chronicDisease.id).toEqual(chronicDisease.id);
     expect(inMemoryChronicDiseaseRepository.items.length).toEqual(0);
   });
@@ -31,6 +33,6 @@ describe('DeleteChronicDiseaseUseCase', () => {
     });
 
     expect(response.isLeft()).toBeTruthy();
-    expect(response.value).toBeNull();
+    expect(response.value).toBeInstanceOf(NotAllowedError);
   });
 });

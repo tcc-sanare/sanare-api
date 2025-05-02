@@ -3,13 +3,14 @@ import { SelfMonitor } from "@/domain/medical/enterprise/entities/self-monitor";
 import { Injectable } from "@nestjs/common";
 import { SelfMonitorRepository } from "../../repositories/self-monitor-repository";
 import { UniqueEntityID } from "@/core/entities/unique-entity-id";
+import { NotAllowedError } from "@/core/errors/errors/not-allowed-error";
 
 interface CreateSelfMonitorUseCaseRequest {
   userId: string;
 }
 
 type CreateSelfMonitorUseCaseResponse = Either<
-  null,
+  NotAllowedError<CreateSelfMonitorUseCaseRequest>,
   {
     selfMonitor: SelfMonitor;
   }
@@ -37,7 +38,14 @@ export class CreateSelfMonitorUseCase {
     });
 
     if (await this.selfMonitorRepository.findByUserId(userId)) {
-      return left(null);
+      return left(new NotAllowedError<CreateSelfMonitorUseCaseRequest>({
+        statusCode: 400,
+        errors: [
+          {
+            message: "Já existe um perfil de auto-monitoramento para este usuário",
+          },
+        ],
+      }));
     }
 
     await this.selfMonitorRepository.create(selfMonitor);

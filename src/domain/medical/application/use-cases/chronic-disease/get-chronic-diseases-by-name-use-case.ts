@@ -25,10 +25,6 @@ export class GetChronicDiseasesByNameUseCase {
       request.name,
     );
 
-    if (!chronicDiseases) {
-      return left(null);
-    }
-
     return right({ chronicDiseases });
   }
 }

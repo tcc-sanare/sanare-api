@@ -2,13 +2,14 @@ import { Either, left, right } from '@/core/either';
 import { ChronicDisease } from '../../../enterprise/entities/chronic-disease';
 import { Injectable } from '@nestjs/common';
 import { ChronicDiseaseRepository } from '../../repositories/chronic-disease-repository';
+import { ResourceNotFoundError } from '@/core/errors/errors/resource-not-found-error';
 
 interface GetChronicDiseaseByIdUseCaseRequest {
   chronicDiseaseId: string;
 }
 
 type GetChronicDiseaseByIdUseCaseResponse = Either<
-  null,
+  ResourceNotFoundError<GetChronicDiseaseByIdUseCaseRequest>,
   {
     chronicDisease: ChronicDisease;
   }
@@ -26,7 +27,13 @@ export class GetChronicDiseaseByIdUseCase {
     );
 
     if (!chronicDisease) {
-      return left(null);
+      return left(new ResourceNotFoundError<GetChronicDiseaseByIdUseCaseRequest>({
+        errors: [
+          {
+            message: 'Doença crônica não encontrada',
+          },
+        ],
+      }));
     }
 
     return right({ chronicDisease });

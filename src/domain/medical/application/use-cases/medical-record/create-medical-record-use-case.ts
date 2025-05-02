@@ -10,6 +10,7 @@ import { UniqueEntityID } from '@/core/entities/unique-entity-id';
 import { MedicalRecordChronicDisease } from '@/domain/medical/enterprise/entities/medical-record-chronic-disease';
 import { MedicalRecordAllergyList } from '@/domain/medical/enterprise/entities/medical-record-allergy-list';
 import { MedicalRecordChronicDiseaseList } from '@/domain/medical/enterprise/entities/medical-record-chronic-disease-list';
+import { NotAllowedError } from '@/core/errors/errors/not-allowed-error';
 
 interface CreateMedicalRecordUseCaseRequest {
   bloodType: BloodType;
@@ -19,7 +20,7 @@ interface CreateMedicalRecordUseCaseRequest {
 }
 
 type CreateMedicalRecordUseCaseResponse = Either<
-  null,
+  NotAllowedError<CreateMedicalRecordUseCaseRequest>,
   {
     medicalRecord: MedicalRecord;
   }
@@ -37,42 +38,46 @@ export class CreateMedicalRecordUseCase {
       selfMonitorId: new UniqueEntityID(data.selfMonitorId),
     });
 
-    try {
-      const userMedicalRecord = await this.medicalRecordRepository.findBySelfMonitorId(
-        data.selfMonitorId,
-      );
+    const userMedicalRecord = await this.medicalRecordRepository.findBySelfMonitorId(
+      data.selfMonitorId,
+    );
 
-      if (userMedicalRecord) {
-        return left(null);
-      }
-
-      const medicalRecordAllergies = data.allergies.map((allergy) =>
-        MedicalRecordAllergy.create({
-          medicalRecordId: medicalRecord.id,
-          allergyId: new UniqueEntityID(allergy),
-        }),
-      );
-
-      const medicalRecordChronicDiseases = data.chronicDiseases.map(
-        (chronicDisease) =>
-          MedicalRecordChronicDisease.create({
-            medicalRecordId: medicalRecord.id,
-            chronicDiseaseId: new UniqueEntityID(chronicDisease),
-          }),
-      );
-
-      medicalRecord.allergies = new MedicalRecordAllergyList(
-        medicalRecordAllergies,
-      );
-      medicalRecord.chronicDiseases = new MedicalRecordChronicDiseaseList(
-        medicalRecordChronicDiseases,
-      );
-
-      await this.medicalRecordRepository.create(medicalRecord);
-
-      return right({ medicalRecord });
-    } catch {
-      return left(null);
+    if (userMedicalRecord) {
+      return left(new NotAllowedError<CreateMedicalRecordUseCaseRequest>({
+        statusCode: 400,
+        errors: [
+          {
+            message: 'Já existe um prontuário médico para este usuário',
+          },
+        ],
+      }));
     }
+
+    const medicalRecordAllergies = data.allergies.map((allergy) =>
+      MedicalRecordAllergy.create({
+        medicalRecordId: medicalRecord.id,
+        allergyId: new UniqueEntityID(allergy),
+      }),
+    );
+
+    const medicalRecordChronicDiseases = data.chronicDiseases.map(
+      (chronicDisease) =>
+        MedicalRecordChronicDisease.create({
+          medicalRecordId: medicalRecord.id,
+          chronicDiseaseId: new UniqueEntityID(chronicDisease),
+        }),
+    );
+
+    medicalRecord.allergies = new MedicalRecordAllergyList(
+      medicalRecordAllergies,
+    );
+    medicalRecord.chronicDiseases = new MedicalRecordChronicDiseaseList(
+      medicalRecordChronicDiseases,
+    );
+
+    await this.medicalRecordRepository.create(medicalRecord);
+
+    return right({ medicalRecord });
+  
   }
 }

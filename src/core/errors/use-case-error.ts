@@ -7,7 +7,9 @@ export interface UseCaseErrorProps<T> {
 }
 
 export class UseCaseError<T> extends Error {
+  props: UseCaseErrorProps<keyof T>;
   constructor (props: UseCaseErrorProps<keyof T>) {
     super(JSON.stringify(props));
+    this.props = props;
   }
 }

@@ -8,6 +8,7 @@ import {
 import { MedicalRecordAllergy } from '@/domain/medical/enterprise/entities/medical-record-allergy';
 import { UniqueEntityID } from '@/core/entities/unique-entity-id';
 import { MedicalRecordChronicDisease } from '@/domain/medical/enterprise/entities/medical-record-chronic-disease';
+import { NotAllowedError } from '@/core/errors/errors/not-allowed-error';
 
 interface UpdateMedicalRecordUseCaseRequest {
   medicalRecordId: string;
@@ -17,7 +18,7 @@ interface UpdateMedicalRecordUseCaseRequest {
 }
 
 type UpdateMedicalRecordUseCaseResponse = Either<
-  null,
+  NotAllowedError<UpdateMedicalRecordUseCaseRequest>,
   {
     medicalRecord: MedicalRecord;
   }
@@ -35,7 +36,14 @@ export class UpdateMedicalRecordUseCase {
     );
 
     if (!medicalRecord) {
-      return left(null);
+      return left(new NotAllowedError<UpdateMedicalRecordUseCaseRequest>({
+        statusCode: 400,
+        errors: [
+          {
+            message: 'Prontuário médico não encontrado',
+          },
+        ],
+      }));
     }
 
     if (data.bloodType) {

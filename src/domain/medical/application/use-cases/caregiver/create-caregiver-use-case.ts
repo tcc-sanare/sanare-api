@@ -5,13 +5,14 @@ import { Caregiver } from "@/domain/medical/enterprise/entities/caregiver";
 import { UniqueCaregiverCode } from "@/domain/medical/enterprise/entities/value-object/unique-caregiver-code";
 import { Injectable } from "@nestjs/common";
 import { CaregiverRepository } from "../../repositories/caregiver-repository";
+import { NotAllowedError } from "@/core/errors/errors/not-allowed-error";
 
 interface CreateCaregiverUseCaseRequest {
   userId: string;
 }
 
 type CreateCaregiverUseCaseResponse = Either<
-  null,
+  NotAllowedError<CreateCaregiverUseCaseRequest>,
   {
     caregiver: Caregiver;
   }
@@ -31,7 +32,14 @@ export class CreateCaregiverUseCase {
     });
 
     if (await this.caregiverRepository.findByUserId(userId)) {
-      return left(null);
+      return left(new NotAllowedError<CreateCaregiverUseCaseRequest>({
+        statusCode: 400,
+        errors: [
+          {
+            message: "O perfil de cuidador já existe para este usuário",
+          },
+        ],
+      }));
     }
 
     await this.caregiverRepository.create(caregiver);

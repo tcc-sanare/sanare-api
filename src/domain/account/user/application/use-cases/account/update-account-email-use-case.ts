@@ -3,6 +3,8 @@ import { Account } from '../../../enterprise/entities/account';
 import { Injectable } from '@nestjs/common';
 import { AccountRepository } from '../../repositories/account-repository';
 import { HashComparer } from '@/domain/account/cryptography/hash-comparer';
+import { ResourceNotFoundError } from '@/core/errors/errors/resource-not-found-error';
+import { NotAllowedError } from '@/core/errors/errors/not-allowed-error';
 
 interface UpdateAccountEmailUseCaseRequest {
   accountId: string;
@@ -11,7 +13,7 @@ interface UpdateAccountEmailUseCaseRequest {
 }
 
 type UpdateAccountEmailUseCaseResponse = Either<
-  null,
+  NotAllowedError<UpdateAccountEmailUseCaseRequest>,
   {
     account: Account;
   }
@@ -30,7 +32,14 @@ export class UpdateAccountEmailUseCase {
     const account = await this.accountRepository.findById(data.accountId);
 
     if (!account) {
-      return left(null);
+      return left(new NotAllowedError<UpdateAccountEmailUseCaseRequest>({
+        statusCode: 400,
+        errors: [
+          {
+            message: 'Conta não encontrada',
+          },
+        ],
+      }));
     }
 
     const passwordMatch = await this.hashComparer.compare(
@@ -39,7 +48,15 @@ export class UpdateAccountEmailUseCase {
     );
 
     if (!passwordMatch) {
-      return left(null);
+      return left(new NotAllowedError<UpdateAccountEmailUseCaseRequest>({
+        statusCode: 400,
+        errors: [
+          {
+            message: 'Senha incorreta',
+            path: ['password']
+          },
+        ],
+      }));
     }
 
     account.email = data.email;

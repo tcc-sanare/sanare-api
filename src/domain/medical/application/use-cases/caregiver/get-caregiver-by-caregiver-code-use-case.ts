@@ -3,13 +3,14 @@ import { Caregiver } from "@/domain/medical/enterprise/entities/caregiver";
 import { Injectable } from "@nestjs/common";
 import { CaregiverRepository } from "../../repositories/caregiver-repository";
 import { UniqueCaregiverCode } from "@/domain/medical/enterprise/entities/value-object/unique-caregiver-code";
+import { ResourceNotFoundError } from "@/core/errors/errors/resource-not-found-error";
 
 interface GetCaregiverByCaregiverCodeUseCaseRequest {
   caregiverCode: string;
 }
 
 type GetCaregiverByCaregiverCodeUseCaseResponse = Either<
-  null,
+  ResourceNotFoundError<GetCaregiverByCaregiverCodeUseCaseRequest>,
   {
     caregiver: Caregiver;
   }
@@ -27,7 +28,13 @@ export class GetCaregiverByCaregiverCodeUseCase {
     const caregiver = await this.caregiverRepository.findByCaregiverCode(new UniqueCaregiverCode(caregiverCode));
 
     if (!caregiver) {
-      return left(null);
+      return left(new ResourceNotFoundError<GetCaregiverByCaregiverCodeUseCaseRequest>({
+        errors: [
+          {
+            message: "Cuidador não encontrado",
+          },
+        ],
+      }));
     }
 
     return right({ caregiver });

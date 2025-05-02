@@ -2,13 +2,14 @@ import { Either, left, right } from '@/core/either';
 import { Account } from '../../../enterprise/entities/account';
 import { Injectable } from '@nestjs/common';
 import { AccountRepository } from '../../repositories/account-repository';
+import { ResourceNotFoundError } from '@/core/errors/errors/resource-not-found-error';
 
 interface GetMyAccountUseCaseRequest {
   accountId: string;
 }
 
 type GetMyAccountUseCaseResponse = Either<
-  null,
+  ResourceNotFoundError<GetMyAccountUseCaseRequest>,
   {
     account: Account;
   }
@@ -24,7 +25,13 @@ export class GetMyAccountUseCase {
     const account = await this.accountRepository.findById(request.accountId);
 
     if (!account) {
-      return left(null);
+      return left(new ResourceNotFoundError<GetMyAccountUseCaseRequest>({
+        errors: [
+          {
+            message: 'Conta não encontrada',
+          },
+        ],
+      }));
     }
 
     return right({

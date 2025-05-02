@@ -3,6 +3,7 @@ import { UpdateAllergyUseCase } from './update-allergy-use-case';
 import { makeAllergy } from 'test/factories/make-allergy';
 import { readFileSync } from 'fs';
 import { InMemoryStorage } from 'test/storage/in-memory-storage';
+import { NotAllowedError } from '@/core/errors/errors/not-allowed-error';
 
 describe('UpdateAllergyUseCase', () => {
   let sut: UpdateAllergyUseCase;
@@ -38,6 +39,7 @@ describe('UpdateAllergyUseCase', () => {
     });
 
     expect(response.isRight()).toBeTruthy();
+    if (!response.isRight()) return;
     expect(response.value.allergy.id).toBeTruthy();
     expect(response.value.allergy.name).toEqual('new-name');
     expect(response.value.allergy.description).toEqual('new-description');
@@ -76,6 +78,7 @@ describe('UpdateAllergyUseCase', () => {
     });
 
     expect(response.isRight()).toBeTruthy();
+    if (!response.isRight()) return;
     expect(response.value.allergy.id).toBeTruthy();
     expect(response.value.allergy.name).toEqual('new-name');
     expect(response.value.allergy.description).toEqual('new-description');
@@ -92,6 +95,6 @@ describe('UpdateAllergyUseCase', () => {
     });
 
     expect(response.isLeft()).toBeTruthy();
-    expect(response.value).toBeNull();
+    expect(response.value).toBeInstanceOf(NotAllowedError);
   });
 });

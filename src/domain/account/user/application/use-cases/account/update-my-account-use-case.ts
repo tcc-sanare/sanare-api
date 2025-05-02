@@ -3,6 +3,7 @@ import { Account } from '../../../enterprise/entities/account';
 import { Injectable } from '@nestjs/common';
 import { AccountRepository } from '../../repositories/account-repository';
 import { Storage } from '@/domain/application/storage';
+import { NotAllowedError } from '@/core/errors/errors/not-allowed-error';
 
 interface UpdateMyAccountUseCaseRequest {
   accountId: string;
@@ -16,7 +17,7 @@ interface UpdateMyAccountUseCaseRequest {
 }
 
 type UpdateMyAccountUseCaseResponse = Either<
-  null,
+  NotAllowedError<UpdateMyAccountUseCaseRequest>,
   {
     account: Account;
   }
@@ -35,7 +36,14 @@ export class UpdateMyAccountUseCase {
     const account = await this.accountRepository.findById(request.accountId);
 
     if (!account) {
-      return left(null);
+      return left(new NotAllowedError<UpdateMyAccountUseCaseRequest>({
+        statusCode: 400,
+        errors: [
+          {
+            message: 'Conta não encontrada',
+          },
+        ],
+      }));
     }
 
     request.name && (account.name = request.name);
