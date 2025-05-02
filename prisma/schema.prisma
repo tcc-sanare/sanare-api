@@ -37,9 +37,9 @@ model Users {
   postSaves            PostSaves[]
   communityNotes       CommunityNotes[]
   communityNoteRatings CommunityNoteRatings[]
-
-  // Medical
+  
   caregiver Caregiver?
+  selfMonitor SelfMonitor?
 
   @@map("users")
 }
@@ -62,12 +62,14 @@ model Caregiver {
 model SelfMonitor {
   id          String  @id @default(uuid())
   caregiverId String?
+  userId      String  @unique
   logInputs   Json
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
   caregiver Caregiver? @relation(fields: [caregiverId], references: [id])
+  user      Users     @relation(fields: [userId], references: [id])
 
   medicalRecord  MedicalRecord?
   medicalLogs    MedicalLogs[]
