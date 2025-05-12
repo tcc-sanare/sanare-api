@@ -39,6 +39,14 @@ export class Allergy extends Entity<AllergyProps> {
     this.update();
   }
 
+  get createdAt() {
+    return this.props.createdAt;
+  }
+
+  get updatedAt() {
+    return this.props.updatedAt;
+  }
+
   private update() {
     this.props.updatedAt = new Date();
   }
