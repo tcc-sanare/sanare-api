@@ -37,8 +37,8 @@ model Users {
   postSaves            PostSaves[]
   communityNotes       CommunityNotes[]
   communityNoteRatings CommunityNoteRatings[]
-  
-  caregiver Caregiver?
+
+  caregiver   Caregiver?
   selfMonitor SelfMonitor?
 
   @@map("users")
@@ -69,7 +69,7 @@ model SelfMonitor {
   updatedAt DateTime @updatedAt
 
   caregiver Caregiver? @relation(fields: [caregiverId], references: [id])
-  user      Users     @relation(fields: [userId], references: [id])
+  user      Users      @relation(fields: [userId], references: [id])
 
   medicalRecord  MedicalRecord?
   medicalLogs    MedicalLogs[]
@@ -90,8 +90,9 @@ model UserPhones {
 }
 
 model VerificationCodes {
-  id   String @id @default(uuid())
-  code String
+  id        String   @id @default(uuid())
+  code      String
+  expiresAt DateTime
 
   type VerificationCodeType
 
@@ -226,6 +227,7 @@ model Allergies {
   id          String  @id @default(uuid())
   name        String
   description String?
+  iconKey     String?
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -250,6 +252,7 @@ model ChronicDiseases {
   id          String  @id @default(uuid())
   name        String
   description String?
+  iconKey     String?
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
