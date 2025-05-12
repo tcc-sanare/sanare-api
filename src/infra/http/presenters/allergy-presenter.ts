@@ -1,0 +1,23 @@
+import { Allergy } from "@/domain/medical/enterprise/entities/allergy";
+
+export interface AllergyHttp {
+  id: string;
+  name: string;
+  description: string;
+  iconKey?: string;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+export class AllergyPresenter {
+  static toHttp(allergy: Allergy) {
+    return {
+      id: allergy.id.toString(),
+      name: allergy.name,
+      description: allergy.description,
+      iconKey: allergy.iconKey,
+      createdAt: allergy.createdAt,
+      updatedAt: allergy.updatedAt,
+    };
+  }
+}
