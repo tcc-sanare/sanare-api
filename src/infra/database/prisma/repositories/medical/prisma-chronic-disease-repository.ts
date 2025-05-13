@@ -60,7 +60,10 @@ export class PrismaChronicDiseaseRepository implements ChronicDiseaseRepository 
   async findByName(name: string): Promise<ChronicDisease[] | null> {
     const chronicDiseases = await this.prisma.chronicDiseases.findMany({
       where: {
-        name,
+        name: {
+          contains: name,
+          mode: "insensitive",
+        }
       },
     });
 
