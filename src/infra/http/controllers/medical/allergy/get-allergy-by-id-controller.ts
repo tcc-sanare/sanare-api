@@ -16,6 +16,8 @@ export class GetAllergyByIdController {
       return result.value.message;
     }
 
-    return AllergyPresenter.toHttp(result.value.allergy);
+    return {
+      allergy: AllergyPresenter.toHttp(result.value.allergy)
+    };
   }
 }

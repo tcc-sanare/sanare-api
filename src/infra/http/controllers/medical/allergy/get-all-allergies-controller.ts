@@ -49,6 +49,8 @@ export class GetAllAllergiesController {
       ? await this.getAllergiesByNameUseCase.execute({ name })
       : await this.getAllAllergiesUseCase.execute();
 
-    return result.value.allergies.map(AllergyPresenter.toHttp);
+    return {
+      allergies: result.value.allergies.map(AllergyPresenter.toHttp)
+    };
   }
 }
