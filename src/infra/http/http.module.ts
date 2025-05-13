@@ -9,18 +9,38 @@ import { CreateAllergyController } from './controllers/medical/allergy/create-al
 import { CreateAllergyUseCase } from '@/domain/medical/application/use-cases/allergy/create-allergy-use-case';
 import { InMemoryStorage } from 'test/storage/in-memory-storage';
 import { Storage } from '@/domain/application/storage';
+import { GetChronicDiseasesController } from './controllers/medical/chronic-disease/get-all-chronic-diseases-controller';
+import { GetAllChronicDiseasesUseCase } from '@/domain/medical/application/use-cases/chronic-disease/get-all-chronic-diseases-use-case';
+import { GetChronicDiseasesByNameUseCase } from '@/domain/medical/application/use-cases/chronic-disease/get-chronic-diseases-by-name-use-case';
+import { GetChronicDiseaseById } from './controllers/medical/chronic-disease/get-chronic-disease-by-id-controller';
+import { GetChronicDiseaseByIdUseCase } from '@/domain/medical/application/use-cases/chronic-disease/get-chronic-disease-by-id-use-case';
+import { CreateChronicDiseaseController } from './controllers/medical/chronic-disease/create-chronic-disease-controller';
+import { CreateChronicDiseaseUseCase } from '@/domain/medical/application/use-cases/chronic-disease/create-chronic-disease-use-case';
 
 @Module({
   controllers: [
-    GetAllAllergiesController,
-    GetAllergyByIdController,
-    CreateAllergyController
+    // Medical
+      // Allergy
+        GetAllAllergiesController,
+        GetAllergyByIdController,
+        CreateAllergyController,
+      // ChronicDisease
+        GetChronicDiseasesController,
+        GetChronicDiseaseById,
+        CreateChronicDiseaseController
   ],
   providers: [
-    GetAllAllergiesUseCase,
-    GetAllergiesByNameUseCase,
-    GetAllergyByIdUseCase,
-    CreateAllergyUseCase,
+    // Medical
+      // Allergy
+        GetAllAllergiesUseCase,
+        GetAllergiesByNameUseCase,
+        GetAllergyByIdUseCase,
+        CreateAllergyUseCase,
+      // ChronicDisease
+        GetAllChronicDiseasesUseCase,
+        GetChronicDiseasesByNameUseCase,
+        GetChronicDiseaseByIdUseCase,
+        CreateChronicDiseaseUseCase,
     {
       provide: Storage,
       useClass: InMemoryStorage
