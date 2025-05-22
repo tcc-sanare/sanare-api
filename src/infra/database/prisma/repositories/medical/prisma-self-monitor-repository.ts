@@ -24,10 +24,10 @@ export class PrismaSelfMonitorRepository implements SelfMonitorRepository {
     return PrismaSelfMonitorMapper.toDomain(selfMonitor);
   }
   
-  async findByUserId(userId: string): Promise<SelfMonitor | null> {
+  async findByAccountId(accountId: string): Promise<SelfMonitor | null> {
     const selfMonitor = await this.prisma.selfMonitor.findFirst({
       where: {
-        userId,
+        userId: accountId,
       },
     });
 

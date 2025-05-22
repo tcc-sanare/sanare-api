@@ -4,6 +4,10 @@ import { AllergyRepository } from '@/domain/medical/application/repositories/all
 import { PrismaAllergyRepository } from './prisma/repositories/medical/prisma-allergy-repository';
 import { ChronicDiseaseRepository } from '@/domain/medical/application/repositories/chronic-disease-repository';
 import { PrismaChronicDiseaseRepository } from './prisma/repositories/medical/prisma-chronic-disease-repository';
+import { AccountRepository } from '@/domain/account/user/application/repositories/account-repository';
+import { PrismaAccountRepository } from './prisma/repositories/account/prisma-account-repository';
+import { SelfMonitorRepository } from '@/domain/medical/application/repositories/self-monitor-repository';
+import { PrismaSelfMonitorRepository } from './prisma/repositories/medical/prisma-self-monitor-repository';
 
 @Module({
   providers: [
@@ -16,6 +20,15 @@ import { PrismaChronicDiseaseRepository } from './prisma/repositories/medical/pr
       {
         provide: ChronicDiseaseRepository,
         useClass: PrismaChronicDiseaseRepository
+      },
+      {
+        provide: SelfMonitorRepository,
+        useClass: PrismaSelfMonitorRepository
+      },
+    // User
+      {
+        provide: AccountRepository,
+        useClass: PrismaAccountRepository
       }
   ],
   controllers: [],
@@ -23,7 +36,9 @@ import { PrismaChronicDiseaseRepository } from './prisma/repositories/medical/pr
   exports: [
     PrismaService,
     AllergyRepository,
-    ChronicDiseaseRepository
+    ChronicDiseaseRepository,
+    SelfMonitorRepository,
+    AccountRepository
   ],
 })
 export class DatabaseModule {}

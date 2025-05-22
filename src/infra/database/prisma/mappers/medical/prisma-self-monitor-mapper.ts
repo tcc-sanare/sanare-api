@@ -6,7 +6,7 @@ export class PrismaSelfMonitorMapper {
   static toDomain(raw: PrismaSelfMonitor): SelfMonitor {
     return SelfMonitor.create({
       logInputs: raw.logInputs as unknown as SelfMonitorLogInput,
-      userId: new UniqueEntityID(raw.userId),
+      accountId: new UniqueEntityID(raw.userId),
       caregiverId: raw.caregiverId ? new UniqueEntityID(raw.caregiverId) : undefined,
       createdAt: raw.createdAt,
       updatedAt: raw.updatedAt,
@@ -16,7 +16,7 @@ export class PrismaSelfMonitorMapper {
   static toPrisma(selfMonitor: SelfMonitor): Prisma.SelfMonitorUncheckedCreateInput {
     return {
       id: selfMonitor.id.toString(),
-      userId: selfMonitor.userId.toString(),
+      userId: selfMonitor.accountId.toString(),
       caregiverId: selfMonitor.caregiverId?.toString(),
       logInputs: selfMonitor.logInputs,
       createdAt: selfMonitor.createdAt,
