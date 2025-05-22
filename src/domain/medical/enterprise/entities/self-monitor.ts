@@ -8,7 +8,7 @@ export type SelfMonitorLogInput = Record<
 >;
 
 export interface SelfMonitorProps {
-  userId: UniqueEntityID;
+  accountId: UniqueEntityID;
   caregiverId?: UniqueEntityID;
   logInputs: SelfMonitorLogInput;
 
@@ -17,8 +17,8 @@ export interface SelfMonitorProps {
 };
 
 export class SelfMonitor extends Entity<SelfMonitorProps> {
-  get userId() {
-    return this.props.userId;
+  get accountId() {
+    return this.props.accountId;
   }
 
   get caregiverId() {
