@@ -6,6 +6,7 @@ import { Controller, Get, UseGuards } from "@nestjs/common";
 
 @Controller("account")
 export class GetAccountController {
+  
   @Get()
   @UseGuards(AuthGuard)
   async handle (
