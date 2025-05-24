@@ -32,6 +32,7 @@ import { CreateSelfMonitorUseCase } from '@/domain/medical/application/use-cases
 import { CreateSelfMonitorController } from './controllers/self-monitor/create-self-monitor-controller';
 import { GetSelfMonitorController } from './controllers/self-monitor/get-self-monitor-controller';
 import { GetSelfMonitorByAccountIdUseCase } from '@/domain/medical/application/use-cases/self-monitor/get-self-monitor-by-account-id-use-case';
+import { GoogleDrive } from '../storage/google-drive';
 
 @Module({
   controllers: [
@@ -91,6 +92,10 @@ import { GetSelfMonitorByAccountIdUseCase } from '@/domain/medical/application/u
     {
       provide: HashComparer,
       useClass: BcryptHasher
+    },
+    {
+      provide: Storage,
+      useClass: GoogleDrive
     }
   ],
   imports: [
