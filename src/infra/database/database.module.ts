@@ -8,6 +8,8 @@ import { AccountRepository } from '@/domain/account/user/application/repositorie
 import { PrismaAccountRepository } from './prisma/repositories/account/prisma-account-repository';
 import { SelfMonitorRepository } from '@/domain/medical/application/repositories/self-monitor-repository';
 import { PrismaSelfMonitorRepository } from './prisma/repositories/medical/prisma-self-monitor-repository';
+import { CaregiverRepository } from '@/domain/medical/application/repositories/caregiver-repository';
+import { PrismaCaregiverRepository } from './prisma/repositories/medical/prisma-caregiver-repository';
 
 @Module({
   providers: [
@@ -25,6 +27,10 @@ import { PrismaSelfMonitorRepository } from './prisma/repositories/medical/prism
         provide: SelfMonitorRepository,
         useClass: PrismaSelfMonitorRepository
       },
+      {
+        provide: CaregiverRepository,
+        useClass: PrismaCaregiverRepository
+      },
     // User
       {
         provide: AccountRepository,
@@ -38,7 +44,8 @@ import { PrismaSelfMonitorRepository } from './prisma/repositories/medical/prism
     AllergyRepository,
     ChronicDiseaseRepository,
     SelfMonitorRepository,
-    AccountRepository
+    AccountRepository,
+    CaregiverRepository
   ],
 })
 export class DatabaseModule {}

@@ -29,10 +29,18 @@ import { AuthenticateAccountUseCase } from '@/domain/account/user/application/us
 import { GetAccountController } from './controllers/account/user/get-account-controller';
 import { GetMyAccountUseCase } from '@/domain/account/user/application/use-cases/account/get-my-account-use-case';
 import { CreateSelfMonitorUseCase } from '@/domain/medical/application/use-cases/self-monitor/create-self-monitor-use-case';
-import { CreateSelfMonitorController } from './controllers/self-monitor/create-self-monitor-controller';
-import { GetSelfMonitorController } from './controllers/self-monitor/get-self-monitor-controller';
+import { CreateSelfMonitorController } from './controllers/medical/self-monitor/create-self-monitor-controller';
+import { GetSelfMonitorController } from './controllers/medical/self-monitor/get-self-monitor-controller';
 import { GetSelfMonitorByAccountIdUseCase } from '@/domain/medical/application/use-cases/self-monitor/get-self-monitor-by-account-id-use-case';
 import { GoogleDrive } from '../storage/google-drive';
+import { UpdateProfilePhotoAccountController } from './controllers/account/user/update-profile-photo-account-controller';
+import { UpdateMyAccountUseCase } from '@/domain/account/user/application/use-cases/account/update-my-account-use-case';
+import { CreateCaregiverController } from './controllers/medical/caregiver/create-caregiver-controller';
+import { CreateCaregiverUseCase } from '@/domain/medical/application/use-cases/caregiver/create-caregiver-use-case';
+import { GetCaregiverByUserIdController } from './controllers/medical/caregiver/get-caregiver-by-id-controller';
+import { GetCaregiverByUserIdUseCase } from '@/domain/medical/application/use-cases/caregiver/get-caregiver-by-user-id-use-case';
+import { GetSelfMonitorByCaregiverIdController } from './controllers/medical/self-monitor/get-self-monitor-by-caregiver-controller';
+import { GetSelfMonitorsByCaregiverIdUseCase } from '@/domain/medical/application/use-cases/self-monitor/get-self-monitors-by-caregiver-id-use-case';
 
 @Module({
   controllers: [
@@ -50,10 +58,15 @@ import { GoogleDrive } from '../storage/google-drive';
         CreateAccountController,
         AuthenticateAccountController,
         GetAccountController,
-
+        UpdateProfilePhotoAccountController,
       //Self Monitor
         CreateSelfMonitorController,
-        GetSelfMonitorController
+        GetSelfMonitorController,
+        GetSelfMonitorByCaregiverIdController,
+      //Caregiver
+        CreateCaregiverController,
+        GetCaregiverByUserIdController
+
   ],
   providers: [
     // Medical
@@ -70,12 +83,17 @@ import { GoogleDrive } from '../storage/google-drive';
       // Self Monitor
         CreateSelfMonitorUseCase,
         GetSelfMonitorByAccountIdUseCase,
+        GetSelfMonitorsByCaregiverIdUseCase,
+      //Caregiver
+        CreateCaregiverUseCase,
+        GetCaregiverByUserIdUseCase,
+        // GetCaregiverByIdUseCase,
     // User
       // Account
         CreateAccountUseCase,
         AuthenticateAccountUseCase,
         GetMyAccountUseCase,
-
+        UpdateMyAccountUseCase,
 
     {
       provide: Storage,
