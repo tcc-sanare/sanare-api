@@ -39,8 +39,23 @@ import { CreateCaregiverController } from './controllers/medical/caregiver/creat
 import { CreateCaregiverUseCase } from '@/domain/medical/application/use-cases/caregiver/create-caregiver-use-case';
 import { GetCaregiverByUserIdController } from './controllers/medical/caregiver/get-caregiver-by-id-controller';
 import { GetCaregiverByUserIdUseCase } from '@/domain/medical/application/use-cases/caregiver/get-caregiver-by-user-id-use-case';
-import { GetSelfMonitorByCaregiverIdController } from './controllers/medical/self-monitor/get-self-monitor-by-caregiver-controller';
+import { GetSelfMonitorByCaregiverIdController } from './controllers/medical/caregiver/get-self-monitor-by-caregiver-controller';
 import { GetSelfMonitorsByCaregiverIdUseCase } from '@/domain/medical/application/use-cases/self-monitor/get-self-monitors-by-caregiver-id-use-case';
+import { GetCaregiverByCaregiverCodeUseCase } from '@/domain/medical/application/use-cases/caregiver/get-caregiver-by-caregiver-code-use-case';
+import { ConnectCaregiverToSelfMonitorController } from './controllers/medical/self-monitor/connect-caregiver-to-self-monitor-controller';
+import { UpdateSelfMonitorUseCase } from '@/domain/medical/application/use-cases/self-monitor/update-self-monitor-use-case';
+import { CreateMedicalRecordUseCase } from '@/domain/medical/application/use-cases/medical-record/create-medical-record-use-case';
+import { CreateaMedicalRecordController } from './controllers/medical/medical-record/create-medical-record-controller';
+import { GetMedicalRecordBySelfMonitorIdUseCase } from '@/domain/medical/application/use-cases/medical-record/get-medical-record-by-self-monitor-id';
+import { GetMedicalRecordController } from './controllers/medical/medical-record/get-medical-record-controller';
+import { UpdateMedicalRecordController } from './controllers/medical/medical-record/update-medical-record-controller';
+import { UpdateMedicalRecordUseCase } from '@/domain/medical/application/use-cases/medical-record/update-medical-record-use-case';
+import { DeleteAllergyController } from './controllers/medical/allergy/delete-allergy-controller';
+import { DeleteAllergyUseCase } from '@/domain/medical/application/use-cases/allergy/delete-allergy-use-case';
+import { DeleteChronicDiseaseUseCase } from '@/domain/medical/application/use-cases/chronic-disease/delete-chronic-disease-use-case';
+import { DeleteChronicDiseaseController } from './controllers/medical/chronic-disease/delete-chronic-disease-controller';
+import { UpdateChronicDiseaseController } from './controllers/medical/chronic-disease/update-chronic-disease-controller';
+import { UpdateChronicDiseaseUseCase } from '@/domain/medical/application/use-cases/chronic-disease/update-chronic-disease-use-case';
 
 @Module({
   controllers: [
@@ -49,10 +64,13 @@ import { GetSelfMonitorsByCaregiverIdUseCase } from '@/domain/medical/applicatio
         GetAllAllergiesController,
         GetAllergyByIdController,
         CreateAllergyController,
+        DeleteAllergyController,
       // ChronicDisease
         GetChronicDiseasesController,
         GetChronicDiseaseById,
         CreateChronicDiseaseController,
+        DeleteChronicDiseaseController,
+        UpdateChronicDiseaseController,
     // User
       // Account
         CreateAccountController,
@@ -63,10 +81,14 @@ import { GetSelfMonitorsByCaregiverIdUseCase } from '@/domain/medical/applicatio
         CreateSelfMonitorController,
         GetSelfMonitorController,
         GetSelfMonitorByCaregiverIdController,
+        ConnectCaregiverToSelfMonitorController,
       //Caregiver
         CreateCaregiverController,
-        GetCaregiverByUserIdController
-
+        GetCaregiverByUserIdController,
+      //MedicalRecord
+        CreateaMedicalRecordController,
+        GetMedicalRecordController,
+        UpdateMedicalRecordController,
   ],
   providers: [
     // Medical
@@ -75,19 +97,27 @@ import { GetSelfMonitorsByCaregiverIdUseCase } from '@/domain/medical/applicatio
         GetAllergiesByNameUseCase,
         GetAllergyByIdUseCase,
         CreateAllergyUseCase,
+        DeleteAllergyUseCase,
       // ChronicDisease
         GetAllChronicDiseasesUseCase,
         GetChronicDiseasesByNameUseCase,
         GetChronicDiseaseByIdUseCase,
         CreateChronicDiseaseUseCase,
+        DeleteChronicDiseaseUseCase,
+        UpdateChronicDiseaseUseCase,
       // Self Monitor
         CreateSelfMonitorUseCase,
         GetSelfMonitorByAccountIdUseCase,
         GetSelfMonitorsByCaregiverIdUseCase,
+        UpdateSelfMonitorUseCase,
       //Caregiver
         CreateCaregiverUseCase,
         GetCaregiverByUserIdUseCase,
-        // GetCaregiverByIdUseCase,
+        GetCaregiverByCaregiverCodeUseCase,
+      //MedicalRecord
+        CreateMedicalRecordUseCase,
+        GetMedicalRecordBySelfMonitorIdUseCase,
+        UpdateMedicalRecordUseCase,
     // User
       // Account
         CreateAccountUseCase,

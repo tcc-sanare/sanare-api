@@ -33,6 +33,27 @@ function bloodTypeToDomain(bloodType: PrismaBloodType): BloodType {
   }
 }
 
+function bloodTypeToPrisma(bloodType: BloodType): PrismaBloodType {
+  switch (bloodType) {
+    case 'a-':
+      return PrismaBloodType.A_MINUS;
+    case 'a+':
+      return PrismaBloodType.A_PLUS;
+    case 'b-':
+      return PrismaBloodType.B_MINUS;
+    case 'b+':
+      return PrismaBloodType.B_PLUS;
+    case 'ab-':
+      return PrismaBloodType.AB_MINUS;
+    case 'ab+':
+      return PrismaBloodType.AB_PLUS;
+    case 'o-':
+      return PrismaBloodType.O_MINUS;
+    case 'o+':
+      return PrismaBloodType.O_PLUS
+  }
+}
+
 export class PrismaMedicalRecordMapper {
   static toDomain(raw: PrismaMedicalRecord & {
     allergies: PrismaMedicalRecordToAllergies[];
@@ -42,11 +63,11 @@ export class PrismaMedicalRecordMapper {
       selfMonitorId: raw.selfMonitorId ? new UniqueEntityID(raw.selfMonitorId) : undefined,
       bloodType: bloodTypeToDomain(raw.bloodType),
       allergies: new MedicalRecordAllergyList(raw.allergies.map(medicalRecordToAllergy => MedicalRecordAllergy.create({
-        allergyId: new UniqueEntityID(medicalRecordToAllergy.medicalRecordId),
+        allergyId: new UniqueEntityID(medicalRecordToAllergy.allergyId),
         medicalRecordId: new UniqueEntityID(medicalRecordToAllergy.medicalRecordId),
       }))),
       chronicDiseases: new MedicalRecordChronicDiseaseList(raw.chronicDiseases.map(medicalRecordToChronicDisease => MedicalRecordChronicDisease.create({
-        chronicDiseaseId: new UniqueEntityID(medicalRecordToChronicDisease.medicalRecordId),
+        chronicDiseaseId: new UniqueEntityID(medicalRecordToChronicDisease.chronicDiseaseId),
         medicalRecordId: new UniqueEntityID(medicalRecordToChronicDisease.medicalRecordId),
       }))),
     }, new UniqueEntityID(raw.id));
@@ -56,7 +77,7 @@ export class PrismaMedicalRecordMapper {
     return {
       id: medicalRecord.id.toString(),
       selfMonitorId: medicalRecord.selfMonitorId?.toString(),
-      bloodType: PrismaBloodType[medicalRecord.bloodType],
+      bloodType: bloodTypeToPrisma(medicalRecord.bloodType),
     };
   }
 }
