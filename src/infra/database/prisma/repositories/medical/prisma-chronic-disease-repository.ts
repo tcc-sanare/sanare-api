@@ -36,6 +36,25 @@ export class PrismaChronicDiseaseRepository implements ChronicDiseaseRepository 
   }
   
   async delete(chronicDisease: ChronicDisease): Promise<void> {
+
+    await this.prisma.medicalRecordToChronicDiseases.findFirst({
+      where: {
+        chronicDiseaseId: chronicDisease.id.toString()
+      }
+    })
+    .then(async (res) => {
+      if (res) {
+        await this.prisma.medicalRecordToChronicDiseases.delete({
+          where: {
+            medicalRecordId_chronicDiseaseId: {
+              medicalRecordId: res.medicalRecordId,
+              chronicDiseaseId: res.chronicDiseaseId
+            }
+          }
+        })
+      }
+    })
+
     await this.prisma.chronicDiseases.delete({
       where: {
         id: chronicDisease.id.toString(),
