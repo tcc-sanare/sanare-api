@@ -36,6 +36,44 @@ export class PrismaAllergyRepository implements AllergyRepository {
   }
   
   async delete(allergy: Allergy): Promise<void> {
+
+
+    // const find = await this.prisma.medicalRecordToAllergies.findFirst({
+    //   where: {
+    //     allergyId: allergy.id.toString()
+    //   }
+    // })
+    // if (find) {
+    //   await this.prisma.medicalRecordToAllergies.delete({
+    //     where: {
+    //       medicalRecordId_allergyId: {
+    //         medicalRecordId: find.medicalRecordId,
+    //         allergyId: find.allergyId
+    //       }
+    //     },
+    //   })
+    // }
+
+    await this.prisma.medicalRecordToAllergies.findFirst({
+      where: {
+        allergyId: allergy.id.toString()
+      }
+    })
+    .then(async (res) => {
+
+      if (res) {
+        await this.prisma.medicalRecordToAllergies.delete({
+          where: {
+            medicalRecordId_allergyId: {
+              medicalRecordId: res.medicalRecordId,
+              allergyId: res.allergyId
+            }
+          }
+        })
+      }
+
+    })
+
     await this.prisma.allergies.delete({
       where: {
         id: allergy.id.toString(),
