@@ -7,14 +7,14 @@ import { AuthGuard } from '@/infra/http/guards/auth-guard';
 import { SelfMonitorPresenter } from '@/infra/http/presenters/self-monitor-presenter';
 import { Controller, UseGuards, Get } from '@nestjs/common';
 
-@Controller('self-monitor')
+@Controller('caregiver/self-monitors')
 export class GetSelfMonitorByCaregiverIdController {
   constructor(
     private getSelfMonitor: GetSelfMonitorsByCaregiverIdUseCase,
     private getCaregiver: GetCaregiverByUserIdUseCase,
   ) {}
 
-  @Get('caregiverId')
+  @Get()
   @UseGuards(AuthGuard)
   async handle(@GetAccount() account: Account) {
     const caregiverId = await this.getCaregiver.execute({
