@@ -56,6 +56,7 @@ import { DeleteChronicDiseaseUseCase } from '@/domain/medical/application/use-ca
 import { DeleteChronicDiseaseController } from './controllers/medical/chronic-disease/delete-chronic-disease-controller';
 import { UpdateChronicDiseaseController } from './controllers/medical/chronic-disease/update-chronic-disease-controller';
 import { UpdateChronicDiseaseUseCase } from '@/domain/medical/application/use-cases/chronic-disease/update-chronic-disease-use-case';
+import { MulterModule } from '@nestjs/platform-express';
 
 @Module({
   controllers: [
@@ -151,7 +152,8 @@ import { UpdateChronicDiseaseUseCase } from '@/domain/medical/application/use-ca
     JwtModule.register({
       global: true,
       secretOrPrivateKey: process.env.JWT_SECRET
-    })
+    }),
+    MulterModule.register()
   ],
 })
 export class HttpModule {}
