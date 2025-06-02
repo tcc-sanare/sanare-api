@@ -1,11 +1,13 @@
+import { StoragedFile } from "@/core/entities/storaged-file";
 import { Storage } from "@/domain/application/storage";
 import { google } from "googleapis";
+import * as path from "node:path";
 import { Readable } from "node:stream";
 
 const GOOGLE_DRIVE_FOLDER = "1lSIoIMpH11F_I2FU3nQbOWXfZmKj7OfJ";
 
 export class GoogleDrive implements Storage {
-  async upload(params: { fileName: string; fileType: string; buffer: Buffer; }): Promise<{ fileKey: string; }> {
+  async upload(params: { fileName: string; fileType: string; buffer: Buffer; }): Promise<StoragedFile> {
     const service = await this.getService();
 
     const bufferStream = new Readable();
@@ -27,7 +29,7 @@ export class GoogleDrive implements Storage {
       throw Error("Erro no upload")
     }
 
-    return { fileKey: response.data.id };
+    return new StoragedFile(response.data.id, this)
   }
 
   async getSignedUrl(key: string): Promise<{ url: string; }> {
@@ -55,7 +57,7 @@ export class GoogleDrive implements Storage {
 
   private async getAuth () {
     return new google.auth.GoogleAuth({
-      keyFile: '../../../google-drive-credentials.json',
+      keyFile: process.cwd() + path.sep + 'google-drive-credentials.json',
       scopes: ['https://www.googleapis.com/auth/drive']
     });
   }

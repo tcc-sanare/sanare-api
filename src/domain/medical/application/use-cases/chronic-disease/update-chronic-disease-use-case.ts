@@ -51,16 +51,6 @@ export class UpdateChronicDiseaseUseCase {
     request.name && (chronicDisease.name = request.name);
     request.description && (chronicDisease.description = request.description);
 
-    if (request.icon !== undefined) {
-      if (!request.icon && chronicDisease.iconKey) {
-        await this.storage.delete(chronicDisease.iconKey);
-      }
-
-      chronicDisease.iconKey = request.icon
-        ? await this.storage.upload(request.icon).then((res) => res.fileKey)
-        : null;
-    }
-
     await this.chronicDiseaseRepository.save(chronicDisease);
 
     return right({ chronicDisease });

@@ -3,11 +3,13 @@ import { Injectable } from "@nestjs/common";
 import { PrismaService } from "../../prisma.service";
 import { Account } from "@/domain/account/user/enterprise/entities/account";
 import { PrismaAccountMapper } from "../../mappers/account/prisma-account-mapper";
+import { Storage } from "@/domain/application/storage";
 
 @Injectable()
 export class PrismaAccountRepository implements AccountRepository {
   constructor (
     private readonly prisma: PrismaService,
+    private storage: Storage
   ) {}
 
   async create(account: Account): Promise<void> {
@@ -52,7 +54,7 @@ export class PrismaAccountRepository implements AccountRepository {
       return null;
     }
 
-    return PrismaAccountMapper.toDomain(account);
+    return PrismaAccountMapper.toDomain(account, this.storage);
   }
 
   async findByEmail(email: string): Promise<Account | null> {
@@ -67,6 +69,6 @@ export class PrismaAccountRepository implements AccountRepository {
       return null;
     }
 
-    return PrismaAccountMapper.toDomain(account);
+    return PrismaAccountMapper.toDomain(account, this.storage);
   }
 }

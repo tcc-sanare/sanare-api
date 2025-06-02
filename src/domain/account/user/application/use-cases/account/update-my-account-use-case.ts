@@ -50,18 +50,17 @@ export class UpdateMyAccountUseCase {
     request.theme && (account.theme = request.theme);
 
     if (request.profilePhoto !== undefined) {
-      if (account.profilePhotoKey) {
-        await this.storage.delete(account.profilePhotoKey);
+      if (account.profilePhoto) {
+        await account.profilePhoto.delete();
       }
 
-      account.profilePhotoKey = request.profilePhoto
+      account.profilePhoto = request.profilePhoto
         ? await this.storage
             .upload({
               fileName: request.profilePhoto.fileName,
               fileType: request.profilePhoto.fileType,
               buffer: request.profilePhoto.buffer,
             })
-            .then((res) => res.fileKey)
         : null;
     }
 

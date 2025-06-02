@@ -33,7 +33,7 @@ export class CreateAccountUseCase {
       email: request.email,
       password: await this.hashGenerator.hash(request.password),
       isVerified: false,
-      profilePhotoKey: null,
+      profilePhoto: null,
     });
 
     if (await this.accountRepository.findByEmail(account.email)) {

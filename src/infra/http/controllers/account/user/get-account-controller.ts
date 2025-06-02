@@ -13,7 +13,7 @@ export class GetAccountController {
     @GetAccount() account: Account
   ) {
     return {
-      account: AccountPresenter.toHttp(account)
+      account: await AccountPresenter.toHttp(account)
     }
   }
 }

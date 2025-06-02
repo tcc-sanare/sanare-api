@@ -12,6 +12,8 @@ import { CaregiverRepository } from '@/domain/medical/application/repositories/c
 import { PrismaCaregiverRepository } from './prisma/repositories/medical/prisma-caregiver-repository';
 import { MedicalRecordRepository } from '@/domain/medical/application/repositories/medical-record-repository';
 import { PrismaMedicalRecordRepository } from './prisma/repositories/medical/prisma-medical-record-repository';
+import { GoogleDrive } from '../storage/google-drive';
+import { Storage } from '@/domain/application/storage';
 
 @Module({
   providers: [
@@ -41,6 +43,10 @@ import { PrismaMedicalRecordRepository } from './prisma/repositories/medical/pri
       {
         provide: AccountRepository,
         useClass: PrismaAccountRepository
+      },
+      {
+        provide: Storage,
+        useClass: GoogleDrive
       }
   ],
   controllers: [],

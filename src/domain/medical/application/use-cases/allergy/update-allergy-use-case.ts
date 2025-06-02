@@ -53,10 +53,6 @@ export class UpdateAllergyUseCase {
 
     request.name && (allergy.name = request.name);
     request.description && (allergy.description = request.description);
-    request.icon &&
-      (allergy.iconKey = await this.storage
-        .upload(request.icon)
-        .then((res) => res.fileKey));
 
     await this.allergyRepository.save(allergy);
 

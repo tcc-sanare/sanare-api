@@ -34,15 +34,6 @@ export class CreateChronicDiseaseUseCase {
     const chronicDisease = ChronicDisease.create({
       name: data.name,
       description: data.description,
-      iconKey: data.icon
-        ? await this.storage
-            .upload({
-              fileName: data.icon.fileName,
-              fileType: data.icon.fileType,
-              buffer: data.icon.buffer,
-            })
-            .then((res) => res.fileKey)
-        : null,
     });
 
     await this.chronicDiseaseRepository.create(chronicDisease);
