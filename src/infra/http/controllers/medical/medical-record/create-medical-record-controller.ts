@@ -11,7 +11,10 @@ import { MedicalRecordPresenter } from "@/infra/http/presenters/medical-record-p
 
 const bodySchema = z.object({
     bloodType: z.enum(['a-' , 'a+' , 'b-' , 'b+' , 'ab-' , 'ab+' , 'o-' , 'o+']),
-    allergies: z.string().array(),
+    allergies: z.array(z.object({
+        allergyId: z.string().uuid(),
+        description: z.string().optional()
+    })),
     chronicDiseases: z.string().array()
 })
 
@@ -43,7 +46,10 @@ export class CreateaMedicalRecordController{
         const result = await this.createMedicalRecord.execute({
             bloodType: data.bloodType,
             selfMonitorId: selfMonitor.id.toString(),
-            allergies: data.allergies,
+            allergies: data.allergies.map(allergy => ({
+                allergyId: allergy.allergyId,
+                description: allergy.description
+            })),
             chronicDiseases: data.chronicDiseases
         })
         .then(res => {
