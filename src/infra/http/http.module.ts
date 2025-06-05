@@ -57,6 +57,7 @@ import { DeleteChronicDiseaseController } from './controllers/medical/chronic-di
 import { UpdateChronicDiseaseController } from './controllers/medical/chronic-disease/update-chronic-disease-controller';
 import { UpdateChronicDiseaseUseCase } from '@/domain/medical/application/use-cases/chronic-disease/update-chronic-disease-use-case';
 import { MulterModule } from '@nestjs/platform-express';
+import { UpdateSelfMonitorController } from './controllers/medical/self-monitor/update-self-monitor-controller';
 
 @Module({
   controllers: [
@@ -83,6 +84,7 @@ import { MulterModule } from '@nestjs/platform-express';
         GetSelfMonitorController,
         GetSelfMonitorByCaregiverIdController,
         ConnectCaregiverToSelfMonitorController,
+        UpdateSelfMonitorController,
       //Caregiver
         CreateCaregiverController,
         GetCaregiverByUserIdController,
