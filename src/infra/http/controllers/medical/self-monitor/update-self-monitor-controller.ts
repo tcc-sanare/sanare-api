@@ -19,7 +19,7 @@ const bodySchema = z.object({
     hydration: z.boolean(),
     bloodPressure: z.boolean(),
     bloodSugar: z.boolean()
-  }).optional()
+  }).nullable().optional()
 });
 
 type BodyDto = z.infer<typeof bodySchema>;
