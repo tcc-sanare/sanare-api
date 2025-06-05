@@ -8,7 +8,7 @@ import { AuthGuard } from "@/infra/http/guards/auth-guard";
 import { ZodValidationPipe } from "@/infra/http/pipes/zod-validation-pipe";
 import { CaregiverPresenter } from "@/infra/http/presenters/caregiver-presenter";
 import { SelfMonitorPresenter } from "@/infra/http/presenters/self-monitor-presenter";
-import { Body, Controller, Post, Query, UseGuards } from "@nestjs/common";
+import { Body, Controller, Post, Put, Query, UseGuards } from "@nestjs/common";
 import { z } from "zod";
 
 const bodySchema = z.object({
@@ -19,21 +19,21 @@ const bodySchema = z.object({
     hydration: z.boolean(),
     bloodPressure: z.boolean(),
     bloodSugar: z.boolean()
-  }).nullable().optional()
+  }).optional()
 });
 
 type BodyDto = z.infer<typeof bodySchema>;
 
 const bodyValidation = new ZodValidationPipe(bodySchema);
 
-@Controller('/self-monitor/caregiver')
+@Controller('/self-monitor')
 export class UpdateSelfMonitorController{
     constructor(
         private updateSelfMonitor: UpdateSelfMonitorUseCase,
         private findSelfMonitor: GetSelfMonitorByAccountIdUseCase,
     ) {}
 
-    @Post()
+    @Put()
     @UseGuards(AuthGuard)
     async handle(
         @Body(bodyValidation) data: BodyDto,
