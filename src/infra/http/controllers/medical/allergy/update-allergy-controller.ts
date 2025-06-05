@@ -1,40 +1,40 @@
-import { UpdateAllergyUseCase } from "@/domain/medical/application/use-cases/allergy/update-allergy-use-case";
-import { ZodValidationPipe } from "@/infra/http/pipes/zod-validation-pipe";
-import { Body, Controller, Put } from "@nestjs/common";
-import { z } from "zod";
+import { UpdateAllergyUseCase } from '@/domain/medical/application/use-cases/allergy/update-allergy-use-case';
+import { CustomHttpException } from '@/infra/http/exceptions/custom-http-exception';
+import { ZodValidationPipe } from '@/infra/http/pipes/zod-validation-pipe';
+import { AllergyPresenter } from '@/infra/http/presenters/allergy-presenter';
+import { Body, Controller, Param, Put } from '@nestjs/common';
+import { z } from 'zod';
 
 const bodySchema = z.object({
-    allergyId: z.string(),
+  name: z.string().optional(),
+  type: z.enum(['antibiotic', 'anti-inflammatory', 'analgesic', 'anticonvulsant']).optional(),
+});
 
-    name: z.string().optional(),
+type BodyDto = z.infer<typeof bodySchema>;
 
-    description: z.string().optional(),
+const bodyValidation = new ZodValidationPipe(bodySchema);
 
-    icon: z.object({
-        fileName: z.string(),
-        fileType: z.string(),
-        buffer: z.instanceof(Buffer)
-    }).nullable()
-    
-})
+@Controller('allergies/:allergyId')
+export class UpdateAllergy {
+  constructor(private updateAllergy: UpdateAllergyUseCase) {}
 
-type BodyDto = z.infer<typeof bodySchema>
-const bodyValidationPipe = new ZodValidationPipe(bodySchema)
+  @Put()
+  async handle(
+    @Body(bodyValidation) data: BodyDto,
+    @Param('allergyId') allergyId: string,
+) {
+    const allergy = await this.updateAllergy.execute({
+        allergyId,
+        name: data?.name,
+        type: data?.type,
+    }).then(result => {
+        if (result.isLeft()) throw new CustomHttpException(result.value);
 
-@Controller('allergies')
-export class UpdateAllergy{
-    constructor(
-        private updateAllergy: UpdateAllergyUseCase
-    ) {}
-    @Put()
-    async handle(
-        @Body(bodyValidationPipe) body: BodyDto
-    ) {
-        // const result = await this.updateAllergy.execute({
-        //     allergyId: body.allergyId,
-        //     name: body?.name,
-        //     description: body?.description,
-        //     icon: body?.icon
-        // })
-    }
+        return result.value.allergy;
+    });
+
+    return {
+      allergy: AllergyPresenter.toHttp(allergy),
+    };
+  }
 }

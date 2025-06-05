@@ -10,6 +10,7 @@ import { createZodDto } from "nestjs-zod";
 import { ZodValidatedQuery } from "@/infra/http/pipes/zod-validated-query";
 import { Allergy } from "@/domain/medical/enterprise/entities/allergy";
 import { makeAllergy } from "test/factories/make-allergy";
+import { CustomHttpException } from "@/infra/http/exceptions/custom-http-exception";
 
 extendZodWithOpenApi(z);
 
@@ -44,10 +45,13 @@ export class GetAllAllergiesController {
   async handle(
     @Query(queryValidation) { name }: QueryDto,
   ) {
-    console.log();
     const result = name
       ? await this.getAllergiesByNameUseCase.execute({ name })
       : await this.getAllAllergiesUseCase.execute();
+
+    if (result.isLeft()) {
+      throw new CustomHttpException(result.value);
+    }
 
     return {
       allergies: result.value.allergies.map(AllergyPresenter.toHttp)

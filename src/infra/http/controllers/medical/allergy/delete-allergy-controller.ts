@@ -20,9 +20,7 @@ export class DeleteAllergyController{
             return res.value.allergy
         })
 
-        return {
-            deletedAllergy: AllergyPresenter.toHttp(result)
-        }
+        return;
     }
 
 }

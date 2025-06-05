@@ -6,7 +6,7 @@ import { z } from "zod";
 
 const createAllergyBodySchema = z.object({
   name: z.string().min(1).max(100),
-  description: z.string().optional(),
+  type: z.enum(["antibiotic", "anti-inflammatory", "analgesic", "anticonvulsant"])
 });
 
 type CreateAllergyDto = z.infer<typeof createAllergyBodySchema>;
@@ -23,12 +23,12 @@ export class CreateAllergyController {
   async handle (
     @Body(bodyValidationPipe) {
       name,
-      description,
+      type,
     }: CreateAllergyDto,
   ) {
     const result = await this.createAllergyUseCase.execute({
       name,
-      description,
+      type,
     });
 
     return {
