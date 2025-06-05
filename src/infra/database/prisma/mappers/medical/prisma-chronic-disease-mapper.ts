@@ -7,7 +7,6 @@ export class PrismaChronicDiseaseMapper {
     return ChronicDisease.create({
       name: raw.name,
       description: raw.description,
-      iconKey: raw.iconKey,
       createdAt: raw.createdAt,
       updatedAt: raw.updatedAt,
     }, new UniqueEntityID(raw.id));
@@ -18,7 +17,6 @@ export class PrismaChronicDiseaseMapper {
       id: chronicDisease.id.toString(),
       name: chronicDisease.name,
       description: chronicDisease.description,
-      iconKey: chronicDisease.iconKey,
       createdAt: chronicDisease.createdAt,
       updatedAt: chronicDisease.updatedAt,
     };

@@ -2,54 +2,31 @@ import { UpdateChronicDiseaseUseCase } from "@/domain/medical/application/use-ca
 import { CustomHttpException } from "@/infra/http/exceptions/custom-http-exception";
 import { ZodValidationPipe } from "@/infra/http/pipes/zod-validation-pipe";
 import { ChronicDiseasePresenter } from "@/infra/http/presenters/chronic-disease-presenter";
-import { Controller, Put, Body } from "@nestjs/common";
+import { Controller, Put, Body, Param } from "@nestjs/common";
 import { z } from "zod";
 
 const bodySchema = z.object({
-    chronicDiseaseId: z.string(),
     name: z.string().optional(),
     description: z.string().optional(),
+});
 
-})
+type BodyDto = z.infer<typeof bodySchema>
 
-interface bodyDto{
-  chronicDiseaseId: string;
-  name?: string;
-  description?: string;
-  icon?: {
-    fileName: string;
-    fileType: string;
-    buffer: Buffer;
-  } | null;
-}
+const bodyValidation = new ZodValidationPipe(bodySchema)
 
-// type BodyDto = z.infer<typeof bodySchema>
-const bodyValidationPipe = new ZodValidationPipe(bodySchema)
-
-@Controller('chronic-diseases')
+@Controller('chronic-diseases/:chronicDiseaseId')
 export class UpdateChronicDiseaseController{
     constructor(
         private updateChronicDisease: UpdateChronicDiseaseUseCase
     ) {}
     @Put()
     async handle(
-        @Body(bodyValidationPipe) body: bodyDto
+        @Param('chronicDiseaseId') chronicDiseaseId: string,
+        @Body(bodyValidation) body: BodyDto
     ) {
-        // let icon: iconType | null | undefined
-
-        // if (body.icon !== undefined) {
-        //     if (body.icon) {
-        //         icon = {
-        //             fileName: body.icon.fileName,
-        //             fileType: body.icon.fileType,
-        //             buffer: body.icon.buffer
-        //         }
-        //     }
-        //     icon = null
-        // }
 
         const result = await this.updateChronicDisease.execute({
-            chronicDiseaseId: body.chronicDiseaseId,
+            chronicDiseaseId: chronicDiseaseId,
             name: body?.name,
             description: body?.description,
         })
@@ -59,7 +36,7 @@ export class UpdateChronicDiseaseController{
         })
 
         return {
-            updatedChronicDisease: ChronicDiseasePresenter.toHttp(result)
+            chronicDisease: ChronicDiseasePresenter.toHttp(result)
         }
     }
 }
