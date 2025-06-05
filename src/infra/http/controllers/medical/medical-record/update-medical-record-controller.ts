@@ -13,7 +13,12 @@ import { z } from "zod";
 const bodySchema = z.object({
     // medicalRecordId: z.string(),
     bloodType: z.enum(['a-' , 'a+' , 'b-' , 'b+' , 'ab-' , 'ab+' , 'o-' , 'o+']).optional(),
-    allergies: z.string().array().optional(),
+    allergies: z.array(
+        z.object({
+            allergyId: z.string(),
+            description: z.string().optional()
+        })
+    ).optional(),
     chronicDiseases: z.string().array().optional()
 
 })
@@ -50,7 +55,10 @@ export class UpdateMedicalRecordController{
         const updatedMedicalRecord = await this.updateMedicalRecord.execute({
             medicalRecordId: medicalRecord.id.toString(),
             bloodType: data?.bloodType,
-            allergies: data?.allergies,
+            allergies: data?.allergies.map(allergy => ({
+                allergyId: allergy.allergyId,
+                description: allergy.description
+            })),
             chronicDiseases: data?.chronicDiseases
         })
         .then(res => {

@@ -14,8 +14,7 @@ export class AllergyPresenter {
     return {
       id: allergy.id.toString(),
       name: allergy.name,
-      description: allergy.description,
-      iconKey: allergy.iconKey,
+      type: allergy.type,
       createdAt: allergy.createdAt,
       updatedAt: allergy.updatedAt,
     };

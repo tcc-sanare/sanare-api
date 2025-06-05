@@ -21,8 +21,8 @@ export class PrismaMedicalRecordRepository implements MedicalRecordRepository {
         allergies: {
           createMany: {
             data: medicalRecord.allergies.currentItems.map(allergy => ({
-              allergyId: allergy.allergyId.toString()
-              // allergyId: "2c758d36-bda2-42ae-814b-3b20a3d355bf"
+              allergyId: allergy.allergyId.toString(),
+              description: allergy.description,
             })),
           }
         },
@@ -41,6 +41,11 @@ export class PrismaMedicalRecordRepository implements MedicalRecordRepository {
   async save(medicalRecord: MedicalRecord): Promise<void> {
     const data = PrismaMedicalRecordMapper.toPrisma(medicalRecord);
 
+    const allergyDescriptionsToUpdate = medicalRecord.allergies.currentItems.filter(allergy => {
+      const existingAllergy = medicalRecord.allergies.getInitialItems().find(initialAllergy => initialAllergy.allergyId.equals(allergy.allergyId));
+      return existingAllergy && existingAllergy.description !== allergy.description;
+    });
+
     await this.prisma.medicalRecord.update({
       where: {
         id: medicalRecord.id.toString(),
@@ -55,7 +60,15 @@ export class PrismaMedicalRecordRepository implements MedicalRecordRepository {
             data: medicalRecord.allergies.getNewItems().map(allergy => ({
               allergyId: allergy.allergyId.toString(),
             })),
-          }
+          },
+          updateMany: allergyDescriptionsToUpdate.map(allergy => ({
+            where: {
+              allergyId: allergy.allergyId.toString(),
+            },
+            data: {
+              description: allergy.description,
+            },
+          })),
         },
         chronicDiseases: {
           deleteMany: medicalRecord.chronicDiseases.getRemovedItems().map(disease => ({

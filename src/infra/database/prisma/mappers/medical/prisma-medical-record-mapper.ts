@@ -65,6 +65,7 @@ export class PrismaMedicalRecordMapper {
       allergies: new MedicalRecordAllergyList(raw.allergies.map(medicalRecordToAllergy => MedicalRecordAllergy.create({
         allergyId: new UniqueEntityID(medicalRecordToAllergy.allergyId),
         medicalRecordId: new UniqueEntityID(medicalRecordToAllergy.medicalRecordId),
+        description: medicalRecordToAllergy.description,
       }))),
       chronicDiseases: new MedicalRecordChronicDiseaseList(raw.chronicDiseases.map(medicalRecordToChronicDisease => MedicalRecordChronicDisease.create({
         chronicDiseaseId: new UniqueEntityID(medicalRecordToChronicDisease.chronicDiseaseId),
