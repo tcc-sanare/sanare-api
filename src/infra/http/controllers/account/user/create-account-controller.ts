@@ -1,4 +1,5 @@
 import { CreateAccountUseCase } from "@/domain/account/user/application/use-cases/account/create-account-use-case";
+import { CustomHttpException } from "@/infra/http/exceptions/custom-http-exception";
 import { ZodValidationPipe } from "@/infra/http/pipes/zod-validation-pipe";
 import { Body, Controller, Post } from "@nestjs/common";
 import { z } from "zod";
@@ -34,7 +35,7 @@ export class CreateAccountController {
     });
 
     if (result.isLeft()) {
-      throw result.value;
+      throw new CustomHttpException(result.value);
     }
 
     return;

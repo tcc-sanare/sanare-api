@@ -1,5 +1,6 @@
 import { GetAllChronicDiseasesUseCase } from "@/domain/medical/application/use-cases/chronic-disease/get-all-chronic-diseases-use-case";
 import { GetChronicDiseasesByNameUseCase } from "@/domain/medical/application/use-cases/chronic-disease/get-chronic-diseases-by-name-use-case";
+import { CustomHttpException } from "@/infra/http/exceptions/custom-http-exception";
 import { ZodValidationPipe } from "@/infra/http/pipes/zod-validation-pipe";
 import { ChronicDiseasePresenter } from "@/infra/http/presenters/chronic-disease-presenter";
 import { Controller, Get, Query } from "@nestjs/common";
@@ -41,7 +42,7 @@ export class GetChronicDiseasesController {
     const result = await this.getChronicDiseasesByNameUseCase.execute({ name });
 
     if (result.isLeft()) {
-      throw result.value;
+      throw new CustomHttpException(result.value);
     }
 
     return {
