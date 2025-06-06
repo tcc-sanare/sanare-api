@@ -10,7 +10,7 @@ import { envSchema } from './env';
   imports: [
     ConfigModule.forRoot({
       validationSchema: {
-        validate: envSchema.parse
+        validate: envSchema.parse,
       }
     })
   ]

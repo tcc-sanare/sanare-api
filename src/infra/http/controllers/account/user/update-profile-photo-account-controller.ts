@@ -38,6 +38,7 @@ export class UpdateProfilePhotoAccountController {
       })
     ) photo?: Express.Multer.File,
 ) {
+  console.log(photo)
     await this.updateAccountUseCase.execute({
       accountId: account.id.toString(),
       profilePhoto: photo ? {
