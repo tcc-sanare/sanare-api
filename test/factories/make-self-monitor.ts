@@ -6,7 +6,7 @@ export function makeSelfMonitor(
 ): SelfMonitor {
   const selfMonitor = SelfMonitor.create(
     {
-      userId: new UniqueEntityID(),
+      accountId: new UniqueEntityID(),
       logInputs: {
         bloodPressure: false,
         bloodSugar: false,

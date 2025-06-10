@@ -23,6 +23,7 @@ export class GetSelfMonitorByAccountIdUseCase {
   async execute({
     accountId,
   }: GetSelfMonitorByAccountIdUseCaseRequest): Promise<GetSelfMonitorByAccountIdUseCaseResponse> {
+    console.log(this.selfMonitorRepository.findByAccountId)
     const selfMonitor = await this.selfMonitorRepository.findByAccountId(accountId.toString());
 
     if (!selfMonitor) {

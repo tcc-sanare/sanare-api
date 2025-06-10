@@ -20,7 +20,15 @@ describe('CreateMedicalRecordUseCase', () => {
     const result = await sut.execute({
       selfMonitorId: medicalRecord.selfMonitorId.toString(),
       bloodType: medicalRecord.bloodType,
-      allergies: ['a', 'c'],
+      allergies: [
+        {
+          allergyId: 'a'
+        },
+        {
+          allergyId: 'c',
+          description: 'description c'
+        }
+      ],
       chronicDiseases: ['b', 'd'],
     });
 
@@ -66,7 +74,15 @@ describe('CreateMedicalRecordUseCase', () => {
     const result = await sut.execute({
       selfMonitorId: medicalRecord.selfMonitorId.toString(),
       bloodType: medicalRecord.bloodType,
-      allergies: ['a', 'c'],
+      allergies: [
+        {
+          allergyId: 'a'
+        },
+        {
+          allergyId: 'b',
+          description: 'description b'
+        }
+      ],
       chronicDiseases: ['b', 'd'],
     });
 
