@@ -36,6 +36,9 @@ export class AuthGuard implements CanActivate {
       throw new UnauthorizedException("Token is invalid");
     }
 
+    request.selfMonitor = result.value.selfMonitor;
+    request.caregiver = result.value.caregiver;
+
     request.account = result.value.account;
 
     return true;

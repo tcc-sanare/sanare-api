@@ -38,6 +38,8 @@ export class CreateAccountController {
       throw new CustomHttpException(result.value);
     }
 
-    return;
+    return {
+      access_token: result.value.access_token,
+    };
   }
 }

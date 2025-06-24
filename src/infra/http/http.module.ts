@@ -153,7 +153,7 @@ import { UpdateSelfMonitorController } from './controllers/medical/self-monitor/
     DatabaseModule,
     JwtModule.register({
       global: true,
-      secretOrPrivateKey: process.env.JWT_SECRET
+      secret: process.env.JWT_SECRET
     }),
     MulterModule.register()
   ],

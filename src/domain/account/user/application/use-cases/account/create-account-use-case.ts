@@ -4,6 +4,7 @@ import { AccountRepository } from '../../repositories/account-repository';
 import { Injectable } from '@nestjs/common';
 import { HashGenerator } from '../../../../cryptography/hash-generetor';
 import { EmailAlreadyExistsError } from './errors/email-already-exists-error';
+import { Encrypter } from '@/domain/account/cryptography/encrypter';
 
 interface CreateAccountUseCaseRequest {
   name: string;
@@ -15,6 +16,7 @@ type CreateAccountUseCaseResponse = Either<
   EmailAlreadyExistsError,
   {
     account: Account;
+    access_token: string;
   }
 >;
 
@@ -23,6 +25,7 @@ export class CreateAccountUseCase {
   constructor(
     private accountRepository: AccountRepository,
     private hashGenerator: HashGenerator,
+    private encrypter: Encrypter
   ) {}
 
   async execute(
@@ -42,8 +45,13 @@ export class CreateAccountUseCase {
 
     await this.accountRepository.create(account);
 
+    const accessToken = await this.encrypter.encrypt({
+      sub: account.id.toString(),
+    });
+
     return right({
       account,
+      access_token: accessToken
     });
   }
 }
