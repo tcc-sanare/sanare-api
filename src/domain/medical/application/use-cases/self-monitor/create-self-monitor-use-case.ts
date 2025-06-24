@@ -6,7 +6,7 @@ import { UniqueEntityID } from "@/core/entities/unique-entity-id";
 import { NotAllowedError } from "@/core/errors/errors/not-allowed-error";
 
 interface CreateSelfMonitorUseCaseRequest {
-  userId: string;
+  accountId: UniqueEntityID;
 }
 
 type CreateSelfMonitorUseCaseResponse = Either<
@@ -23,21 +23,14 @@ export class CreateSelfMonitorUseCase {
   ) {}
 
   async execute({
-    userId,
+    accountId,
   }: CreateSelfMonitorUseCaseRequest): Promise<CreateSelfMonitorUseCaseResponse> {
     const selfMonitor = SelfMonitor.create({
-      userId: new UniqueEntityID(userId),
-      logInputs: {
-        bloodPressure: false,
-        bloodSugar: false,
-        hydration: false,
-        imc: false,
-        mood: false,
-        symptoms: false,
-      }
+      accountId: new UniqueEntityID(accountId.toString()),
+      logInputs: null
     });
 
-    if (await this.selfMonitorRepository.findByUserId(userId)) {
+    if (await this.selfMonitorRepository.findByAccountId(accountId.toString())) {
       return left(new NotAllowedError<CreateSelfMonitorUseCaseRequest>({
         statusCode: 400,
         errors: [

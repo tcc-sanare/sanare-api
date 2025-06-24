@@ -4,12 +4,13 @@ import { Optional } from '@/core/types/optional';
 
 export interface AllergyProps {
   name: string;
-  description?: string;
-  iconKey?: string;
+  type: 'antibiotic' | 'anti-inflammatory' | 'analgesic' | 'anticonvulsant';
 
   createdAt: Date;
   updatedAt?: Date;
 }
+
+export type AllergyType = AllergyProps['type'];
 
 export class Allergy extends Entity<AllergyProps> {
   get name() {
@@ -21,22 +22,21 @@ export class Allergy extends Entity<AllergyProps> {
     this.update();
   }
 
-  get description() {
-    return this.props.description;
+  get type() {
+    return this.props.type;
   }
 
-  set description(description: string) {
-    this.props.description = description;
+  set type(type: AllergyType) {
+    this.props.type = type;
     this.update();
   }
 
-  get iconKey() {
-    return this.props.iconKey;
+  get createdAt() {
+    return this.props.createdAt;
   }
 
-  set iconKey(iconKey: string) {
-    this.props.iconKey = iconKey;
-    this.update();
+  get updatedAt() {
+    return this.props.updatedAt;
   }
 
   private update() {

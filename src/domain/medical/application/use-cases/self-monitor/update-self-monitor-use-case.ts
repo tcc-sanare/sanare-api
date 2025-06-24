@@ -1,5 +1,5 @@
 import { Either, left, right } from "@/core/either";
-import { SelfMonitor } from "@/domain/medical/enterprise/entities/self-monitor";
+import { SelfMonitor, SelfMonitorLogInput } from "@/domain/medical/enterprise/entities/self-monitor";
 import { Injectable } from "@nestjs/common";
 import { SelfMonitorRepository } from "../../repositories/self-monitor-repository";
 import { UniqueEntityID } from "@/core/entities/unique-entity-id";
@@ -8,6 +8,7 @@ import { NotAllowedError } from "@/core/errors/errors/not-allowed-error";
 interface UpdateSelfMonitorUseCaseRequest {
   selfMonitorId: string;
   caregiverId?: string;
+  logInputs?: SelfMonitorLogInput | null;
 }
 
 type UpdateSelfMonitorUseCaseResponse = Either<
@@ -26,6 +27,7 @@ export class UpdateSelfMonitorUseCase {
   async execute({
     selfMonitorId,
     caregiverId,
+    logInputs
   }: UpdateSelfMonitorUseCaseRequest): Promise<UpdateSelfMonitorUseCaseResponse> {
     const selfMonitor = await this.selfMonitorRepository.findById(selfMonitorId);
 
@@ -43,6 +45,10 @@ export class UpdateSelfMonitorUseCase {
     caregiverId && (
       selfMonitor.caregiverId = new UniqueEntityID(caregiverId)
     )
+
+    if (logInputs !== undefined) {
+      selfMonitor.logInputs = logInputs;
+    }
 
     await this.selfMonitorRepository.save(selfMonitor);
 

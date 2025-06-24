@@ -37,8 +37,8 @@ model Users {
   postSaves            PostSaves[]
   communityNotes       CommunityNotes[]
   communityNoteRatings CommunityNoteRatings[]
-  
-  caregiver Caregiver?
+
+  caregiver   Caregiver?
   selfMonitor SelfMonitor?
 
   @@map("users")
@@ -69,7 +69,7 @@ model SelfMonitor {
   updatedAt DateTime @updatedAt
 
   caregiver Caregiver? @relation(fields: [caregiverId], references: [id])
-  user      Users     @relation(fields: [userId], references: [id])
+  user      Users      @relation(fields: [userId], references: [id])
 
   medicalRecord  MedicalRecord?
   medicalLogs    MedicalLogs[]
@@ -90,8 +90,9 @@ model UserPhones {
 }
 
 model VerificationCodes {
-  id   String @id @default(uuid())
-  code String
+  id        String   @id @default(uuid())
+  code      String
+  expiresAt DateTime
 
   type VerificationCodeType
 
@@ -223,9 +224,9 @@ model MedicalRecord {
 }
 
 model Allergies {
-  id          String  @id @default(uuid())
-  name        String
-  description String?
+  id   String      @id @default(uuid())
+  name String
+  type AllergyType
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -238,6 +239,7 @@ model Allergies {
 model MedicalRecordToAllergies {
   medicalRecordId String
   allergyId       String
+  description     String?
 
   medicalRecord MedicalRecord @relation(fields: [medicalRecordId], references: [id])
   allergy       Allergies     @relation(fields: [allergyId], references: [id])
@@ -431,4 +433,11 @@ enum LogInput {
   HYDRATION      @map("hydration")
   BLOOD_PRESSURE @map("bloodPressure")
   BLOOD_SUGAR    @map("bloodSugar")
+}
+
+enum AllergyType {
+  ANTIBIOTIC        @map("antibiotic")
+  ANTI_INFLAMMATORY @map("anti-inflammatory")
+  ANALGESIC         @map("analgesic")
+  ANTICONVULSANT    @map("anticonvulsant")
 }

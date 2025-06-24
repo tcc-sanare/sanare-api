@@ -15,7 +15,10 @@ import { NotAllowedError } from '@/core/errors/errors/not-allowed-error';
 interface CreateMedicalRecordUseCaseRequest {
   bloodType: BloodType;
   selfMonitorId: string;
-  allergies: string[];
+  allergies: {
+    allergyId: string;
+    description?: string;
+  }[];
   chronicDiseases: string[];
 }
 
@@ -56,7 +59,8 @@ export class CreateMedicalRecordUseCase {
     const medicalRecordAllergies = data.allergies.map((allergy) =>
       MedicalRecordAllergy.create({
         medicalRecordId: medicalRecord.id,
-        allergyId: new UniqueEntityID(allergy),
+        allergyId: new UniqueEntityID(allergy.allergyId),
+        description: allergy.description
       }),
     );
 

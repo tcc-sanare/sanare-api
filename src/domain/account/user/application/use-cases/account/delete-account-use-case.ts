@@ -3,8 +3,6 @@ import { Account } from '../../../enterprise/entities/account';
 import { Injectable } from '@nestjs/common';
 import { AccountRepository } from '../../repositories/account-repository';
 import { NotAllowedError } from '@/core/errors/errors/not-allowed-error';
-import { D } from 'vitest/dist/chunks/reporters.66aFHiyX';
-
 interface DeleteAccountUseCaseRequest {
   accountId: string;
 }

@@ -25,6 +25,10 @@ export abstract class WatchedList<T> {
     return this.removed;
   }
 
+  public getInitialItems(): T[] {
+    return this.initial;
+  }
+
   private isCurrentItem(item: T): boolean {
     return (
       this.currentItems.filter((v: T) => this.compareItems(item, v)).length !==

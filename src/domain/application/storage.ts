@@ -1,3 +1,5 @@
+import { StoragedFile } from "@/core/entities/storaged-file";
+
 interface StorageParams {
   fileName: string;
   fileType: string;
@@ -5,7 +7,7 @@ interface StorageParams {
 }
 
 export abstract class Storage {
-  abstract upload(params: StorageParams): Promise<{ fileKey: string }>;
+  abstract upload(params: StorageParams): Promise<StoragedFile>;
 
   abstract delete(fileKey: string): Promise<void>;
 

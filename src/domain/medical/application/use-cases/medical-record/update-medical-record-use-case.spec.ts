@@ -21,7 +21,15 @@ describe('UpdateMedicalRecordUseCase', () => {
     const result = await sut.execute({
       medicalRecordId: medicalRecord.id.toString(),
       bloodType: 'o+',
-      allergies: ['a', 'b'],
+      allergies: [
+        {
+          allergyId: 'a'
+        },
+        {
+          allergyId: 'b',
+          description: 'description b'
+        }
+      ],
       chronicDiseases: ['c', 'd'],
     });
 
@@ -89,7 +97,15 @@ describe('UpdateMedicalRecordUseCase', () => {
     const result = await sut.execute({
       medicalRecordId: 'non-existing-id',
       bloodType: 'o+',
-      allergies: ['a', 'b'],
+      allergies: [
+        {
+          allergyId: 'a'
+        },
+        {
+          allergyId: 'b',
+          description: 'description b'
+        }
+      ],
       chronicDiseases: ['c', 'd'],
     });
 

@@ -1,4 +1,5 @@
 import { Entity } from '@/core/entities/entity';
+import { StoragedFile } from '@/core/entities/storaged-file';
 import { UniqueEntityID } from '@/core/entities/unique-entity-id';
 import { Optional } from '@/core/types/optional';
 
@@ -6,7 +7,7 @@ export interface AccountProps {
   name: string;
   email: string;
   password: string;
-  profilePhotoKey: string | null;
+  profilePhoto: StoragedFile | null;
   isVerified: boolean;
   theme: 'LIGHT' | 'DARK';
 
@@ -51,12 +52,12 @@ export class Account extends Entity<AccountProps> {
     this.update();
   }
 
-  get profilePhotoKey() {
-    return this.props.profilePhotoKey;
+  get profilePhoto() {
+    return this.props.profilePhoto;
   }
 
-  set profilePhotoKey(profilePhotoKey: string | null) {
-    this.props.profilePhotoKey = profilePhotoKey;
+  set profilePhoto(profilePhoto: StoragedFile | null) {
+    this.props.profilePhoto = profilePhoto;
     this.update();
   }
 

@@ -12,7 +12,12 @@ export function makeAllergy(
   const allergy = Allergy.create(
     {
       name: faker.lorem.words({ min: 1, max: 3 }),
-      description: faker.lorem.paragraph(),
+      type: faker.helpers.arrayElement([
+        'antibiotic',
+        'anti-inflammatory',
+        'analgesic',
+        'anticonvulsant',
+      ]),
       ...override,
     },
     id,

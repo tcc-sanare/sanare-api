@@ -1,17 +1,11 @@
 import { Either, left, right } from '@/core/either';
-import { Allergy } from '../../../enterprise/entities/allergy';
+import { Allergy, AllergyType } from '../../../enterprise/entities/allergy';
 import { Injectable } from '@nestjs/common';
 import { AllergyRepository } from '../../repositories/allergy-repository';
-import { Storage } from '@/domain/application/storage';
 
 interface CreateAllergyUseCaseRequest {
   name: string;
-  description?: string;
-  icon?: {
-    fileName: string;
-    fileType: string;
-    buffer: Buffer;
-  } | null;
+  type: AllergyType;
 }
 
 type CreateAllergyUseCaseResponse = Either<
@@ -25,7 +19,6 @@ type CreateAllergyUseCaseResponse = Either<
 export class CreateAllergyUseCase {
   constructor(
     private allergyRepository: AllergyRepository,
-    private storage: Storage,
   ) {}
 
   async execute(
@@ -33,10 +26,7 @@ export class CreateAllergyUseCase {
   ): Promise<CreateAllergyUseCaseResponse> {
     const allergy = Allergy.create({
       name: data.name,
-      description: data.description,
-      iconKey:
-        data.icon &&
-        (await this.storage.upload(data.icon).then((res) => res.fileKey)),
+      type: data.type,
     });
     
     await this.allergyRepository.create(allergy);

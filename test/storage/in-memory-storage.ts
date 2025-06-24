@@ -1,3 +1,4 @@
+import { StoragedFile } from '@/core/entities/storaged-file';
 import { Storage } from '@/domain/application/storage';
 import { Blob } from 'buffer';
 import { randomUUID } from 'crypto';
@@ -17,7 +18,7 @@ export class InMemoryStorage implements Storage {
     this.items = [];
   }
 
-  async upload(params: StorageParams): Promise<{ fileKey: string }> {
+  async upload(params: StorageParams): Promise<StoragedFile> {
     const fileKey = `${randomUUID()}-${params.fileName}`;
 
     this.items.push({
@@ -25,7 +26,7 @@ export class InMemoryStorage implements Storage {
       file: new Blob([params.buffer], { type: params.fileType }),
     });
 
-    return { fileKey };
+    return new StoragedFile(fileKey, this);
   }
   async delete(fileKey: string): Promise<void> {
     const file = this.items.find((item) => item.fileKey === fileKey);

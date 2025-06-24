@@ -21,7 +21,7 @@ describe('UpdateMyAccountUseCase', () => {
   });
 
   it('should update an account name', async () => {
-    const account = await makeAccount();
+    const account = makeAccount();
 
     await inMemoryAccountRepository.create(account);
 
@@ -53,7 +53,7 @@ describe('UpdateMyAccountUseCase', () => {
   });
 
   it('should update an account profile photo', async () => {
-    const account = await makeAccount();
+    const account = makeAccount();
 
     await inMemoryAccountRepository.create(account);
 
@@ -81,9 +81,9 @@ describe('UpdateMyAccountUseCase', () => {
     expect(response.isRight()).toBeTruthy();
     if (!response.isRight()) return;
     expect(response.value.account).toBeInstanceOf(Account);
-    expect(response.value.account.profilePhotoKey).not.toBeNull();
+    expect(response.value.account.profilePhoto).not.toBeNull();
     expect(inMemoryStorage.items[0].fileKey).toBe(
-      response.value.account.profilePhotoKey,
+      response.value.account.profilePhoto.key,
     );
   });
 
@@ -99,13 +99,12 @@ describe('UpdateMyAccountUseCase', () => {
       'profile-photo.webp',
     );
 
-    account.profilePhotoKey = await inMemoryStorage
+    account.profilePhoto = await inMemoryStorage
       .upload({
         fileName: file.name,
         fileType: file.type,
         buffer: Buffer.from(await file.arrayBuffer()),
-      })
-      .then((res) => res.fileKey);
+      });
 
     await inMemoryAccountRepository.create(account);
 
@@ -117,7 +116,7 @@ describe('UpdateMyAccountUseCase', () => {
     expect(response.isRight()).toBeTruthy();
     if (!response.isRight()) return;
     expect(response.value.account).toBeInstanceOf(Account);
-    expect(response.value.account.profilePhotoKey).toBeNull();
+    expect(response.value.account.profilePhoto).toBeNull();
     expect(inMemoryStorage.items.length).toBe(0);
   });
 

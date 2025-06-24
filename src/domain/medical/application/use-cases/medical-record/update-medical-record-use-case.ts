@@ -13,7 +13,10 @@ import { NotAllowedError } from '@/core/errors/errors/not-allowed-error';
 interface UpdateMedicalRecordUseCaseRequest {
   medicalRecordId: string;
   bloodType?: BloodType;
-  allergies?: string[];
+  allergies?: {
+    allergyId: string;
+    description?: string;
+  }[];
   chronicDiseases?: string[];
 }
 
@@ -55,10 +58,13 @@ export class UpdateMedicalRecordUseCase {
         data.allergies.map((allergy) =>
           MedicalRecordAllergy.create({
             medicalRecordId: medicalRecord.id,
-            allergyId: new UniqueEntityID(allergy),
+            allergyId: new UniqueEntityID(allergy.allergyId),
+            description: allergy.description,
           }),
         ),
       );
+      
+      console.log(JSON.stringify(medicalRecord.allergies.currentItems, null, 2));
     }
 
     if (data.chronicDiseases) {

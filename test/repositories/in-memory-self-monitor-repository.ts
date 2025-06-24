@@ -12,8 +12,8 @@ export class InMemorySelfMonitorRepository implements SelfMonitorRepository {
     return this.items.find(item => item.id.toString() === id) || null;
   }
 
-  async findByUserId(userId: string): Promise<SelfMonitor | null> {
-    return this.items.find(item => item.userId.toString() === userId) || null;
+  async findByAccountId(accountId: string): Promise<SelfMonitor | null> {
+    return this.items.find(item => item.accountId.toString() === accountId) || null;
   }
 
   async findByCaregiverId(caregiverId: string): Promise<SelfMonitor[] | null> {

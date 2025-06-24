@@ -16,15 +16,15 @@ describe('CreateSelfMonitorUseCase', () => {
 
   it('should be able to create a self monitor', async () => {
     const result = await sut.execute({
-      userId: 'user-1',
+      accountId: new UniqueEntityID('user-1'),
     });
 
     expect(result.isRight()).toBeTruthy();
     if (!result.isRight()) return;
     expect(result.value.selfMonitor).toBeInstanceOf(SelfMonitor);
-    expect(result.value.selfMonitor.userId.toString()).toEqual('user-1');
+    expect(result.value.selfMonitor.accountId.toString()).toEqual('user-1');
     expect(result.value.selfMonitor.caregiverId).toBeUndefined();
-    expect(inMemorySelfMonitorRepository.items[0].userId.toString()).toEqual('user-1');
+    expect(inMemorySelfMonitorRepository.items[0].accountId.toString()).toEqual('user-1');
   });
 
   it('should not be able to create a self monitor if it already exists', async () => {
@@ -33,7 +33,7 @@ describe('CreateSelfMonitorUseCase', () => {
     inMemorySelfMonitorRepository.items.push(selfMonitor);
 
     const result = await sut.execute({
-      userId: selfMonitor.userId.toString(),
+      accountId: selfMonitor.accountId,
     });
 
     expect(result.isLeft()).toBeTruthy();
