@@ -54,7 +54,8 @@ model Caregiver {
 
   user Users @relation(fields: [userId], references: [id])
 
-  selfMonitors SelfMonitor[]
+  selfMonitors      SelfMonitor[]
+  caregiverRequests CaregiverRequest[]
 
   @@map("caregivers")
 }
@@ -71,13 +72,30 @@ model SelfMonitor {
   caregiver Caregiver? @relation(fields: [caregiverId], references: [id])
   user      Users      @relation(fields: [userId], references: [id])
 
-  medicalRecord  MedicalRecord?
-  medicalLogs    MedicalLogs[]
-  reports        MedicalReports[]
-  medicineAlarms MedicineAlarms[]
-  aiChats        AiChats[]
+  medicalRecord     MedicalRecord?
+  medicalLogs       MedicalLogs[]
+  reports           MedicalReports[]
+  medicineAlarms    MedicineAlarms[]
+  aiChats           AiChats[]
+  caregiverRequests CaregiverRequest[]
 
   @@map("self_monitors")
+}
+
+model CaregiverRequest {
+  id            String @id @default(uuid())
+  selfMonitorId String
+  caregiverId   String
+
+  status String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  selfMonitor SelfMonitor @relation(fields: [selfMonitorId], references: [id])
+  caregiver   Caregiver   @relation(fields: [caregiverId], references: [id])
+
+  @@map("caregiver_requests")
 }
 
 model UserPhones {
