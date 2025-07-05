@@ -58,6 +58,35 @@ import { UpdateChronicDiseaseController } from './controllers/medical/chronic-di
 import { UpdateChronicDiseaseUseCase } from '@/domain/medical/application/use-cases/chronic-disease/update-chronic-disease-use-case';
 import { MulterModule } from '@nestjs/platform-express';
 import { UpdateSelfMonitorController } from './controllers/medical/self-monitor/update-self-monitor-controller';
+import { CreateSymptomUseCase } from '@/domain/medical/application/use-cases/symptom/create-symptom-use-case';
+import { DeleteSymptomUseCase } from '@/domain/medical/application/use-cases/symptom/delete-symptom-use-case';
+import { GetAllSymptomsUseCase } from '@/domain/medical/application/use-cases/symptom/get-all-symptoms-use-case';
+import { GetSymptomByIdUseCase } from '@/domain/medical/application/use-cases/symptom/get-symptom-by-id-use-case';
+import { GetSymptomByNameUseCase } from '@/domain/medical/application/use-cases/symptom/get-symptoms-by-name-use-case';
+import { CreateDiseaseUseCase } from '@/domain/medical/application/use-cases/disease/create-disease-use-case';
+import { DeleteDiseaseUseCase } from '@/domain/medical/application/use-cases/disease/delete-disease-use-case';
+import { GetAllDiseasesUseCase } from '@/domain/medical/application/use-cases/disease/get-all-disease-use-case';
+import { GetDiseaseByIdUseCase } from '@/domain/medical/application/use-cases/disease/get-disease-by-id-use-case';
+import { GetDiseasesByNameUseCase } from '@/domain/medical/application/use-cases/disease/get-diseases-by-name-use-case';
+import { CreateMedicalLogUseCase } from '@/domain/medical/application/use-cases/medical-log/create-medical-log-use-case';
+import { UpdateSymptomUsecase } from '@/domain/medical/application/use-cases/symptom/update-symptom-use-case';
+import { UpdateDiseaseUseCase } from '@/domain/medical/application/use-cases/disease/update-disease-use-case';
+import { GetMedicalLogBySelfMonitorIdUseCase } from '@/domain/medical/application/use-cases/medical-log/get-medical-log-by-self-monitor-id-use-case';
+import { UpdateMedicalLogUseCase } from '@/domain/medical/application/use-cases/medical-log/update-medical-log-use-case';
+import { GetMedicalLogByIdUseCase } from '@/domain/medical/application/use-cases/medical-log/get-medical-log-by-id-use-case';
+import { CreateSymptomController } from './controllers/medical/symptom/create-symptom-controller';
+import { DeleteSymptomController } from './controllers/medical/symptom/delete-symptom-controller';
+import { GetAllSymptomsController } from './controllers/medical/symptom/get-all-symptoms-controller';
+import { GetSymptomByIdController } from './controllers/medical/symptom/get-symptom-by-id-controller';
+import { UpdateSymptomController } from './controllers/medical/symptom/update-symptom-controller';
+import { CrerateDiseaseController } from './controllers/medical/disease/create-disease-controller';
+import { DeleteDiseaseController } from './controllers/medical/disease/delete-disease-controller';
+import { GetAllDiseasesController } from './controllers/medical/disease/get-all-diseases-controller';
+import { GetDiseaseByIdController } from './controllers/medical/disease/get-disease-by-id-controller';
+import { UpdateDiseaseController } from './controllers/medical/disease/update-disease-controller';
+import { CreateMedicalLogController } from './controllers/medical/medical-log/create-medical-log-controller';
+import { GetMedicalLogsController } from './controllers/medical/medical-log/get-medical-logs-controller';
+import { UpdateMedicalLogController } from './controllers/medical/medical-log/update-medical-log-controller';
 
 @Module({
   controllers: [
@@ -92,6 +121,22 @@ import { UpdateSelfMonitorController } from './controllers/medical/self-monitor/
         CreateaMedicalRecordController,
         GetMedicalRecordController,
         UpdateMedicalRecordController,
+      //Symptom
+        CreateSymptomController,
+        DeleteSymptomController,
+        GetAllSymptomsController,
+        GetSymptomByIdController,
+        UpdateSymptomController,
+      //Disease
+        CrerateDiseaseController,
+        DeleteDiseaseController,
+        GetAllDiseasesController,
+        GetDiseaseByIdController,
+        UpdateDiseaseController,
+      //MedicalLog
+        CreateMedicalLogController,
+        GetMedicalLogsController,
+        UpdateMedicalLogController
   ],
   providers: [
     // Medical
@@ -121,6 +166,27 @@ import { UpdateSelfMonitorController } from './controllers/medical/self-monitor/
         CreateMedicalRecordUseCase,
         GetMedicalRecordBySelfMonitorIdUseCase,
         UpdateMedicalRecordUseCase,
+      //Symptom
+        CreateSymptomUseCase,
+        DeleteSymptomUseCase,
+        GetAllSymptomsUseCase,
+        GetSymptomByIdUseCase,
+        GetSymptomByNameUseCase,
+        UpdateSymptomUsecase,
+      //Disease
+        CreateDiseaseUseCase,
+        DeleteDiseaseUseCase,
+        GetAllDiseasesUseCase,
+        GetDiseaseByIdUseCase,
+        GetDiseasesByNameUseCase,
+        UpdateDiseaseUseCase,
+      //MedicalLog
+        CreateMedicalLogUseCase,
+        CreateMedicalLogUseCase,
+        GetMedicalLogBySelfMonitorIdUseCase,
+        UpdateMedicalLogUseCase,
+        GetMedicalLogByIdUseCase,
+        
     // User
       // Account
         CreateAccountUseCase,
@@ -153,7 +219,7 @@ import { UpdateSelfMonitorController } from './controllers/medical/self-monitor/
     DatabaseModule,
     JwtModule.register({
       global: true,
-      secret: process.env.JWT_SECRET
+      secretOrPrivateKey: process.env.JWT_SECRET
     }),
     MulterModule.register()
   ],

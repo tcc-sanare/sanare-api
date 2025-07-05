@@ -276,7 +276,7 @@ model MedicalLogs {
   id            String  @id @default(uuid())
   bloodPressure String?
   heartRate     Int?
-  mood          String?
+  mood          MoodType?
   hydration     Int?
   bloodSugar    Int?
 
@@ -424,6 +424,18 @@ enum BloodType {
   AB_PLUS  @map("ab+")
   O_MINUS  @map("o-")
   O_PLUS   @map("o+")
+}
+
+enum MoodType {
+  CALM @map("calm")
+  HAPPY @map("happy")
+  ENERGIZED @map("energized")
+  ANGRY @map("angry")
+  LOW_ENERGY @map("low-energy")
+  DISORIENTED @map("disoriented")
+  DISCOURAGED @map("discouraged")
+  ANXIOUS @map("anxious")
+  MOOD_CHANGES @map("mood-changes")
 }
 
 enum LogInput {
