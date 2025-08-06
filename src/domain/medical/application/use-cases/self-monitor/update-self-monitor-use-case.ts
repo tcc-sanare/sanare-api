@@ -6,8 +6,8 @@ import { UniqueEntityID } from "@/core/entities/unique-entity-id";
 import { NotAllowedError } from "@/core/errors/errors/not-allowed-error";
 
 interface UpdateSelfMonitorUseCaseRequest {
-  selfMonitorId: string;
-  caregiverId?: string;
+  selfMonitorId: UniqueEntityID;
+  caregiverId?: UniqueEntityID;
   logInputs?: SelfMonitorLogInput | null;
 }
 
@@ -29,7 +29,7 @@ export class UpdateSelfMonitorUseCase {
     caregiverId,
     logInputs
   }: UpdateSelfMonitorUseCaseRequest): Promise<UpdateSelfMonitorUseCaseResponse> {
-    const selfMonitor = await this.selfMonitorRepository.findById(selfMonitorId);
+    const selfMonitor = await this.selfMonitorRepository.findById(selfMonitorId.toString());
 
     if (!selfMonitor) {
       return left(new NotAllowedError<UpdateSelfMonitorUseCaseRequest>({
@@ -42,8 +42,8 @@ export class UpdateSelfMonitorUseCase {
       }));
     }
 
-    caregiverId && (
-      selfMonitor.caregiverId = new UniqueEntityID(caregiverId)
+    caregiverId !== undefined && (
+      selfMonitor.caregiverId = caregiverId ? new UniqueEntityID(caregiverId.toString()) : null
     )
 
     if (logInputs !== undefined) {

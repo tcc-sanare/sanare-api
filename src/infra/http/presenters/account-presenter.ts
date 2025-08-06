@@ -1,7 +1,7 @@
 import { Account } from "@/domain/account/user/enterprise/entities/account";
 
 export class AccountPresenter {
-  static async toHttp(account: Account) {
+  static async toHTTP(account: Account) {
     const {
       id,
       createdAt,

@@ -52,21 +52,21 @@ export class UpdateCaregiverRequestUseCase {
         selfMonitorId: caregiverRequest.caregiverId.toString(),
       }).then(result => {
         if (result.isLeft()) {
-          throw new NotAllowedError({
+          return left(new NotAllowedError({
             statusCode: 404,
             errors: [
               {
                 message: "Caregiver not found.",
               },
             ],
-          });
+          }));
         }
         return result.value.selfMonitor;
       });
 
       await this.updateSelfMonitorUseCase.execute({
-        selfMonitorId: caregiverRequest.selfMonitorId.toString(),
-        caregiverId: caregiverRequest.caregiverId.toString(),
+        selfMonitorId: caregiverRequest.selfMonitorId,
+        caregiverId: caregiverRequest.caregiverId,
       }).then(result => {
         if (result.isLeft()) {
           return left(result.value);

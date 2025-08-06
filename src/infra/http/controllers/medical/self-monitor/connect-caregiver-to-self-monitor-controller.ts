@@ -16,7 +16,8 @@ export class ConnectCaregiverToSelfMonitorController{
     constructor(
         private createCaregiverRequest: CreateCaregiverRequestUseCase,
         private findSelfMonitor: GetSelfMonitorByAccountIdUseCase,
-        private findCaregiverByCode: GetCaregiverByCaregiverCodeUseCase
+        private findCaregiverByCode: GetCaregiverByCaregiverCodeUseCase,
+        private updateSelfMonitor: UpdateSelfMonitorUseCase
     ) {}
     @Post()
     @UseGuards(AuthGuard)
@@ -25,20 +26,33 @@ export class ConnectCaregiverToSelfMonitorController{
         @GetAccount() account: Account
     ) {
 
-        const caregiver = await this.findCaregiverByCode.execute({
-            caregiverCode: code
-        })
-        .then(result => {
-            if (result.isLeft()) throw new CustomHttpException(result.value)
-            return result.value.caregiver
-        })
-
         const selfMonitor =  await this.findSelfMonitor.execute({
             accountId: account.id
         })
         .then(result => {
             if (result.isLeft()) throw new CustomHttpException(result.value)
             return result.value.selfMonitor
+        });
+
+        if (!code) {
+            return await this.updateSelfMonitor.execute({
+                selfMonitorId: selfMonitor.id,
+                caregiverId: null
+            })
+              .then(res => {
+                if (res.isLeft()) {
+                    throw new CustomHttpException(res.value)
+                }
+                return SelfMonitorPresenter.toHTTP(selfMonitor);
+              });
+        }
+
+        const caregiver = await this.findCaregiverByCode.execute({
+            caregiverCode: code
+        })
+        .then(result => {
+            if (result.isLeft()) throw new CustomHttpException(result.value)
+            return result.value.caregiver
         })
 
         if (selfMonitor.accountId.equals(caregiver.userId)) {

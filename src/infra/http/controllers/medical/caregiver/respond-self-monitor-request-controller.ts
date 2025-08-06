@@ -1,3 +1,4 @@
+import { UniqueEntityID } from "@/core/entities/unique-entity-id";
 import { UseCaseError } from "@/core/errors/use-case-error";
 import { UpdateCaregiverRequestUseCase } from "@/domain/medical/application/use-cases/caregiver-request/update-caregiver-request-use-case";
 import { Caregiver } from "@/domain/medical/enterprise/entities/caregiver";
@@ -6,7 +7,7 @@ import { CustomHttpException } from "@/infra/http/exceptions/custom-http-excepti
 import { AuthGuard } from "@/infra/http/guards/auth-guard";
 import { ZodValidationPipe } from "@/infra/http/pipes/zod-validation-pipe";
 import { CaregiverRequestPresenter } from "@/infra/http/presenters/caregiver-request-presenter";
-import { Body, Controller, Post, UseGuards } from "@nestjs/common";
+import { Body, Controller, Param, Post, UseGuards } from "@nestjs/common";
 import { z } from "zod";
 
 const bodySchema = z.object({
@@ -17,7 +18,7 @@ type BodySchema = z.infer<typeof bodySchema>;
 
 const bodyValidation = new ZodValidationPipe(bodySchema);
 
-@Controller("self-monitor/caregiver-request")
+@Controller("caregiver/requests/:requestId")
 export class RespondSelfMonitorRequestController {
   constructor(
     private updateCaregiverRequestUseCase: UpdateCaregiverRequestUseCase,
@@ -27,6 +28,7 @@ export class RespondSelfMonitorRequestController {
   @UseGuards(AuthGuard)
   async handle(
     @GetCaregiver() caregiver: Caregiver,
+    @Param("requestId") requestId: string,
     @Body(bodyValidation) body: BodySchema,
   ) {
     if (!caregiver) {
@@ -43,7 +45,7 @@ export class RespondSelfMonitorRequestController {
     const { accept } = body;
 
     const result = await this.updateCaregiverRequestUseCase.execute({
-      caregiverRequestId: caregiver.id, // Assuming caregiver.id is the request ID
+      caregiverRequestId: new UniqueEntityID(requestId),
       status: accept ? "accepted" : "rejected",
     });
 

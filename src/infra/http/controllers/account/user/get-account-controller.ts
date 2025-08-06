@@ -21,8 +21,8 @@ export class GetAccountController {
     @GetCaregiver() caregiver: Caregiver | null
   ) {
     return {
-      account: await AccountPresenter.toHttp(account),
-      selfMonitor: selfMonitor ? SelfMonitorPresenter.toHttp(selfMonitor) : null,
+      account: await AccountPresenter.toHTTP(account),
+      selfMonitor: selfMonitor ? SelfMonitorPresenter.toHTTP(selfMonitor) : null,
       caregiver: caregiver ? CaregiverPresenter.toHttp(caregiver) : null
     };
   }

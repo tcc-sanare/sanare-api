@@ -33,10 +33,6 @@ export class PrismaCaregiverRequestRepository implements CaregiverRequestReposit
       where: { caregiverId },
     });
 
-    if (caregiverRequests.length === 0) {
-      return null;
-    }
-
     return caregiverRequests.map(PrismaCaregiverRequestMapper.toDomain);
   }
 
@@ -44,10 +40,6 @@ export class PrismaCaregiverRequestRepository implements CaregiverRequestReposit
     const caregiverRequests = await this.prisma.caregiverRequest.findMany({
       where: { selfMonitorId },
     });
-
-    if (caregiverRequests.length === 0) {
-      return null;
-    }
 
     return caregiverRequests.map(PrismaCaregiverRequestMapper.toDomain);
   }
