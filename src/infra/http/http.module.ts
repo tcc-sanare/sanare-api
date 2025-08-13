@@ -58,6 +58,16 @@ import { UpdateChronicDiseaseController } from './controllers/medical/chronic-di
 import { UpdateChronicDiseaseUseCase } from '@/domain/medical/application/use-cases/chronic-disease/update-chronic-disease-use-case';
 import { MulterModule } from '@nestjs/platform-express';
 import { UpdateSelfMonitorController } from './controllers/medical/self-monitor/update-self-monitor-controller';
+import { CreateCaregiverRequestUseCase } from '@/domain/medical/application/use-cases/caregiver-request/create-caregiver-request-use-case';
+import { GetCaregiverRequestBySelfMonitorUseCase } from '@/domain/medical/application/use-cases/caregiver-request/get-caregiver-request-by-self-monitor-use-case';
+import { GetCaregiverRequestsByCaregiverUseCase } from '@/domain/medical/application/use-cases/caregiver-request/get-caregiver-requests-by-caregiver-use-case';
+import { UpdateCaregiverRequestUseCase } from '@/domain/medical/application/use-cases/caregiver-request/update-caregiver-request-use-case';
+import { GetSelfMonitorRequestsController } from './controllers/medical/caregiver/get-self-monitor-requests-controller';
+import { GetCaregiverRequestsController } from './controllers/medical/self-monitor/get-caregiver-requests-controller';
+import { RespondSelfMonitorRequestController } from './controllers/medical/caregiver/respond-self-monitor-request-controller';
+import { DeleteCaregiverRequestUseCase } from '@/domain/medical/application/use-cases/caregiver-request/delete-caregiver-request-use-case';
+import { CancelCaregiverRequestController } from './controllers/medical/self-monitor/cancel-caregiver-request-controller';
+import { GetSelfMonitorByIdUseCase } from '@/domain/medical/application/use-cases/self-monitor/get-self-monitor-by-id-use-case';
 
 @Module({
   controllers: [
@@ -85,13 +95,18 @@ import { UpdateSelfMonitorController } from './controllers/medical/self-monitor/
         GetSelfMonitorByCaregiverIdController,
         ConnectCaregiverToSelfMonitorController,
         UpdateSelfMonitorController,
+        GetCaregiverRequestsController,
+        CancelCaregiverRequestController,
       //Caregiver
         CreateCaregiverController,
         GetCaregiverByUserIdController,
+        RespondSelfMonitorRequestController,
+        GetSelfMonitorRequestsController,
       //MedicalRecord
         CreateaMedicalRecordController,
         GetMedicalRecordController,
         UpdateMedicalRecordController,
+      
   ],
   providers: [
     // Medical
@@ -112,6 +127,7 @@ import { UpdateSelfMonitorController } from './controllers/medical/self-monitor/
         CreateSelfMonitorUseCase,
         GetSelfMonitorByAccountIdUseCase,
         GetSelfMonitorsByCaregiverIdUseCase,
+        GetSelfMonitorByIdUseCase,
         UpdateSelfMonitorUseCase,
       //Caregiver
         CreateCaregiverUseCase,
@@ -121,6 +137,12 @@ import { UpdateSelfMonitorController } from './controllers/medical/self-monitor/
         CreateMedicalRecordUseCase,
         GetMedicalRecordBySelfMonitorIdUseCase,
         UpdateMedicalRecordUseCase,
+      //CaregiverRequest
+        CreateCaregiverRequestUseCase,
+        GetCaregiverRequestBySelfMonitorUseCase,
+        GetCaregiverRequestsByCaregiverUseCase,
+        UpdateCaregiverRequestUseCase,
+        DeleteCaregiverRequestUseCase,
     // User
       // Account
         CreateAccountUseCase,

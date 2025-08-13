@@ -1,7 +1,7 @@
 import { SelfMonitor } from "@/domain/medical/enterprise/entities/self-monitor";
 
 export class SelfMonitorPresenter{
-    static toHttp(selfMonitor: SelfMonitor){
+    static toHTTP(selfMonitor: SelfMonitor){
         return {
             id: selfMonitor.id.toString(),
             accountId: selfMonitor.accountId.toString(),

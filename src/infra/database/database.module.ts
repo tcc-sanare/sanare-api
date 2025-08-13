@@ -14,6 +14,8 @@ import { MedicalRecordRepository } from '@/domain/medical/application/repositori
 import { PrismaMedicalRecordRepository } from './prisma/repositories/medical/prisma-medical-record-repository';
 import { GoogleDrive } from '../storage/google-drive';
 import { Storage } from '@/domain/application/storage';
+import { CaregiverRequestRepository } from '@/domain/medical/application/repositories/caregiver-request-repository';
+import { PrismaCaregiverRequestRepository } from './prisma/repositories/medical/prisma-caregiver-request-repository';
 
 @Module({
   providers: [
@@ -39,6 +41,10 @@ import { Storage } from '@/domain/application/storage';
         provide: MedicalRecordRepository,
         useClass: PrismaMedicalRecordRepository
       },
+      {
+        provide: CaregiverRequestRepository,
+        useClass: PrismaCaregiverRequestRepository
+      },
     // User
       {
         provide: AccountRepository,
@@ -58,7 +64,8 @@ import { Storage } from '@/domain/application/storage';
     SelfMonitorRepository,
     AccountRepository,
     CaregiverRepository,
-    MedicalRecordRepository
+    MedicalRecordRepository,
+    CaregiverRequestRepository
   ],
 })
 export class DatabaseModule {}
