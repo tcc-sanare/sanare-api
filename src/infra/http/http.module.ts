@@ -68,6 +68,8 @@ import { RespondSelfMonitorRequestController } from './controllers/medical/careg
 import { DeleteCaregiverRequestUseCase } from '@/domain/medical/application/use-cases/caregiver-request/delete-caregiver-request-use-case';
 import { CancelCaregiverRequestController } from './controllers/medical/self-monitor/cancel-caregiver-request-controller';
 import { GetSelfMonitorByIdUseCase } from '@/domain/medical/application/use-cases/self-monitor/get-self-monitor-by-id-use-case';
+import { CheckExistingEmailUseCase } from '@/domain/account/user/application/use-cases/account/check-existing-email-use-case';
+import { CheckExistingEmailController } from './controllers/account/user/check-existing-email-controller';
 
 @Module({
   controllers: [
@@ -88,6 +90,7 @@ import { GetSelfMonitorByIdUseCase } from '@/domain/medical/application/use-case
         CreateAccountController,
         AuthenticateAccountController,
         GetAccountController,
+        CheckExistingEmailController,
         UpdateProfilePhotoAccountController,
       //Self Monitor
         CreateSelfMonitorController,
@@ -148,6 +151,7 @@ import { GetSelfMonitorByIdUseCase } from '@/domain/medical/application/use-case
         CreateAccountUseCase,
         AuthenticateAccountUseCase,
         GetMyAccountUseCase,
+        CheckExistingEmailUseCase,
         UpdateMyAccountUseCase,
 
     {
