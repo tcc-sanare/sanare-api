@@ -11,7 +11,7 @@ type BodyDTO = z.infer<typeof bodySchema>;
 
 const bodyValidation = new ZodValidationPipe(bodySchema);
 
-@Controller("users/check-email")
+@Controller("accounts/check-email")
 export class CheckExistingEmailController {
   constructor(
     private checkExistingEmailUseCase: CheckExistingEmailUseCase
