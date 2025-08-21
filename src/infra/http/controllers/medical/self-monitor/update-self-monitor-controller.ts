@@ -49,7 +49,7 @@ export class UpdateSelfMonitorController{
         })
 
         const updatedSelfMonitor = await this.updateSelfMonitor.execute({
-            selfMonitorId: selfMonitor.id.toString(),
+            selfMonitorId: selfMonitor.id,
             logInputs: {
               bloodPressure: data.logInputs.bloodPressure,
               bloodSugar: data.logInputs.bloodSugar,
@@ -65,7 +65,7 @@ export class UpdateSelfMonitorController{
         })
 
         return {
-          selfMonitor: SelfMonitorPresenter.toHttp(updatedSelfMonitor)
+          selfMonitor: SelfMonitorPresenter.toHTTP(updatedSelfMonitor)
         }
 
     }

@@ -87,6 +87,18 @@ import { UpdateDiseaseController } from './controllers/medical/disease/update-di
 import { CreateMedicalLogController } from './controllers/medical/medical-log/create-medical-log-controller';
 import { GetMedicalLogsController } from './controllers/medical/medical-log/get-medical-logs-controller';
 import { UpdateMedicalLogController } from './controllers/medical/medical-log/update-medical-log-controller';
+import { CreateCaregiverRequestUseCase } from '@/domain/medical/application/use-cases/caregiver-request/create-caregiver-request-use-case';
+import { GetCaregiverRequestBySelfMonitorUseCase } from '@/domain/medical/application/use-cases/caregiver-request/get-caregiver-request-by-self-monitor-use-case';
+import { GetCaregiverRequestsByCaregiverUseCase } from '@/domain/medical/application/use-cases/caregiver-request/get-caregiver-requests-by-caregiver-use-case';
+import { UpdateCaregiverRequestUseCase } from '@/domain/medical/application/use-cases/caregiver-request/update-caregiver-request-use-case';
+import { GetSelfMonitorRequestsController } from './controllers/medical/caregiver/get-self-monitor-requests-controller';
+import { GetCaregiverRequestsController } from './controllers/medical/self-monitor/get-caregiver-requests-controller';
+import { RespondSelfMonitorRequestController } from './controllers/medical/caregiver/respond-self-monitor-request-controller';
+import { DeleteCaregiverRequestUseCase } from '@/domain/medical/application/use-cases/caregiver-request/delete-caregiver-request-use-case';
+import { CancelCaregiverRequestController } from './controllers/medical/self-monitor/cancel-caregiver-request-controller';
+import { GetSelfMonitorByIdUseCase } from '@/domain/medical/application/use-cases/self-monitor/get-self-monitor-by-id-use-case';
+import { CheckExistingEmailUseCase } from '@/domain/account/user/application/use-cases/account/check-existing-email-use-case';
+import { CheckExistingEmailController } from './controllers/account/user/check-existing-email-controller';
 
 @Module({
   controllers: [
@@ -107,6 +119,7 @@ import { UpdateMedicalLogController } from './controllers/medical/medical-log/up
         CreateAccountController,
         AuthenticateAccountController,
         GetAccountController,
+        CheckExistingEmailController,
         UpdateProfilePhotoAccountController,
       //Self Monitor
         CreateSelfMonitorController,
@@ -114,9 +127,13 @@ import { UpdateMedicalLogController } from './controllers/medical/medical-log/up
         GetSelfMonitorByCaregiverIdController,
         ConnectCaregiverToSelfMonitorController,
         UpdateSelfMonitorController,
+        GetCaregiverRequestsController,
+        CancelCaregiverRequestController,
       //Caregiver
         CreateCaregiverController,
         GetCaregiverByUserIdController,
+        RespondSelfMonitorRequestController,
+        GetSelfMonitorRequestsController,
       //MedicalRecord
         CreateaMedicalRecordController,
         GetMedicalRecordController,
@@ -157,6 +174,7 @@ import { UpdateMedicalLogController } from './controllers/medical/medical-log/up
         CreateSelfMonitorUseCase,
         GetSelfMonitorByAccountIdUseCase,
         GetSelfMonitorsByCaregiverIdUseCase,
+        GetSelfMonitorByIdUseCase,
         UpdateSelfMonitorUseCase,
       //Caregiver
         CreateCaregiverUseCase,
@@ -187,11 +205,18 @@ import { UpdateMedicalLogController } from './controllers/medical/medical-log/up
         UpdateMedicalLogUseCase,
         GetMedicalLogByIdUseCase,
         
+      //CaregiverRequest
+        CreateCaregiverRequestUseCase,
+        GetCaregiverRequestBySelfMonitorUseCase,
+        GetCaregiverRequestsByCaregiverUseCase,
+        UpdateCaregiverRequestUseCase,
+        DeleteCaregiverRequestUseCase,
     // User
       // Account
         CreateAccountUseCase,
         AuthenticateAccountUseCase,
         GetMyAccountUseCase,
+        CheckExistingEmailUseCase,
         UpdateMyAccountUseCase,
 
     {

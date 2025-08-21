@@ -20,7 +20,7 @@ export class GetSelfMonitorController {
     if (result.isLeft()) throw new CustomHttpException(result.value);
 
     return {
-      selfMonitor: SelfMonitorPresenter.toHttp(result.value.selfMonitor),
+      selfMonitor: SelfMonitorPresenter.toHTTP(result.value.selfMonitor),
     };
   }
 }

@@ -55,7 +55,7 @@ export class UpdateMedicalRecordController{
         const updatedMedicalRecord = await this.updateMedicalRecord.execute({
             medicalRecordId: medicalRecord.id.toString(),
             bloodType: data?.bloodType,
-            allergies: data?.allergies.map(allergy => ({
+            allergies: data?.allergies?.map(allergy => ({
                 allergyId: allergy.allergyId,
                 description: allergy.description
             })),

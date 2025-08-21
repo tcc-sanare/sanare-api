@@ -20,6 +20,8 @@ import { DiseaseRepository } from '@/domain/medical/application/repositories/dis
 import { MedicalLogRepository } from '@/domain/medical/application/repositories/medical-log-repository';
 import { PrismaDiseaseRepository } from './prisma/repositories/medical/prisma-disease-repository';
 import { PrismaMedicalLogRepository } from './prisma/repositories/medical/prisma-medical-log-repository';
+import { CaregiverRequestRepository } from '@/domain/medical/application/repositories/caregiver-request-repository';
+import { PrismaCaregiverRequestRepository } from './prisma/repositories/medical/prisma-caregiver-request-repository';
 
 @Module({
   providers: [
@@ -56,6 +58,8 @@ import { PrismaMedicalLogRepository } from './prisma/repositories/medical/prisma
       {
         provide: MedicalLogRepository,
         useClass: PrismaMedicalLogRepository
+        provide: CaregiverRequestRepository,
+        useClass: PrismaCaregiverRequestRepository
       },
     // User
       {
@@ -80,6 +84,7 @@ import { PrismaMedicalLogRepository } from './prisma/repositories/medical/prisma
     SymptomRepository,
     DiseaseRepository,
     MedicalLogRepository
+    CaregiverRequestRepository
   ],
 })
 export class DatabaseModule {}

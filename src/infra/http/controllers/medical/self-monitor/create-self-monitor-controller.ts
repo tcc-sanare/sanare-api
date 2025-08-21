@@ -21,7 +21,7 @@ export class CreateSelfMonitorController {
     }
 
     return {
-      selfMonitor: SelfMonitorPresenter.toHttp(result.value.selfMonitor),
+      selfMonitor: SelfMonitorPresenter.toHTTP(result.value.selfMonitor),
     };
   }
 }
