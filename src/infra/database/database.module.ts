@@ -14,6 +14,12 @@ import { MedicalRecordRepository } from '@/domain/medical/application/repositori
 import { PrismaMedicalRecordRepository } from './prisma/repositories/medical/prisma-medical-record-repository';
 import { GoogleDrive } from '../storage/google-drive';
 import { Storage } from '@/domain/application/storage';
+import { SymptomRepository } from '@/domain/medical/application/repositories/symptom-repository';
+import { PrismaSymptomRepository } from './prisma/repositories/medical/prisma-symptom-repository';
+import { DiseaseRepository } from '@/domain/medical/application/repositories/disease-repository';
+import { MedicalLogRepository } from '@/domain/medical/application/repositories/medical-log-repository';
+import { PrismaDiseaseRepository } from './prisma/repositories/medical/prisma-disease-repository';
+import { PrismaMedicalLogRepository } from './prisma/repositories/medical/prisma-medical-log-repository';
 import { CaregiverRequestRepository } from '@/domain/medical/application/repositories/caregiver-request-repository';
 import { PrismaCaregiverRequestRepository } from './prisma/repositories/medical/prisma-caregiver-request-repository';
 
@@ -42,6 +48,16 @@ import { PrismaCaregiverRequestRepository } from './prisma/repositories/medical/
         useClass: PrismaMedicalRecordRepository
       },
       {
+        provide: SymptomRepository,
+        useClass: PrismaSymptomRepository
+      },
+      {
+        provide: DiseaseRepository,
+        useClass: PrismaDiseaseRepository
+      },
+      {
+        provide: MedicalLogRepository,
+        useClass: PrismaMedicalLogRepository
         provide: CaregiverRequestRepository,
         useClass: PrismaCaregiverRequestRepository
       },
@@ -65,6 +81,9 @@ import { PrismaCaregiverRequestRepository } from './prisma/repositories/medical/
     AccountRepository,
     CaregiverRepository,
     MedicalRecordRepository,
+    SymptomRepository,
+    DiseaseRepository,
+    MedicalLogRepository
     CaregiverRequestRepository
   ],
 })
