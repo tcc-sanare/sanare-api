@@ -57,7 +57,9 @@ import { PrismaCaregiverRequestRepository } from './prisma/repositories/medical/
       },
       {
         provide: MedicalLogRepository,
-        useClass: PrismaMedicalLogRepository
+        useClass: PrismaMedicalLogRepository,
+      },
+      {
         provide: CaregiverRequestRepository,
         useClass: PrismaCaregiverRequestRepository
       },
@@ -83,7 +85,7 @@ import { PrismaCaregiverRequestRepository } from './prisma/repositories/medical/
     MedicalRecordRepository,
     SymptomRepository,
     DiseaseRepository,
-    MedicalLogRepository
+    MedicalLogRepository,
     CaregiverRequestRepository
   ],
 })
