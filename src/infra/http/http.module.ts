@@ -99,6 +99,8 @@ import { CancelCaregiverRequestController } from './controllers/medical/self-mon
 import { GetSelfMonitorByIdUseCase } from '@/domain/medical/application/use-cases/self-monitor/get-self-monitor-by-id-use-case';
 import { CheckExistingEmailUseCase } from '@/domain/account/user/application/use-cases/account/check-existing-email-use-case';
 import { CheckExistingEmailController } from './controllers/account/user/check-existing-email-controller';
+import { UpdateAccountEmailUseCase } from '@/domain/account/user/application/use-cases/account/update-account-email-use-case';
+import { UpdateAccountController } from './controllers/account/user/update-account-controller';
 
 @Module({
   controllers: [
@@ -121,6 +123,7 @@ import { CheckExistingEmailController } from './controllers/account/user/check-e
         GetAccountController,
         CheckExistingEmailController,
         UpdateProfilePhotoAccountController,
+        UpdateAccountController,
       //Self Monitor
         CreateSelfMonitorController,
         GetSelfMonitorController,
@@ -218,6 +221,7 @@ import { CheckExistingEmailController } from './controllers/account/user/check-e
         GetMyAccountUseCase,
         CheckExistingEmailUseCase,
         UpdateMyAccountUseCase,
+        UpdateAccountEmailUseCase,
 
     {
       provide: Storage,

@@ -47,7 +47,7 @@ export class CreateMedicalLogUseCase {
       selfMonitorId: new UniqueEntityID(request.selfMonitorId),
     });
 
-    const medicalLogDiseases = request.diseases.map((disease) =>
+    const medicalLogDiseases = request.diseases?.map((disease) =>
       MedicalLogDisease.create({
         medicalLogId: medicalLog.id,
         diseaseId: new UniqueEntityID(disease),
@@ -57,7 +57,7 @@ export class CreateMedicalLogUseCase {
     medicalLog.diseases = new MedicalLogDiseaseList(medicalLogDiseases);
     
 
-    const medicalLogSymptoms = request.symptoms.map((symptom) =>
+    const medicalLogSymptoms = request.symptoms?.map((symptom) =>
       MedicalLogSymptom.create({
         medicalLogId: medicalLog.id,
         symptomId: new UniqueEntityID(symptom),
