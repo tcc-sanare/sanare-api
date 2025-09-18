@@ -379,7 +379,9 @@ model MedicineAlarms {
   name      String
   weekDays  String[]
   times     String[]
-  expiresAt DateTime
+  type      String
+  expiresAt DateTime?
+  active    Boolean
 
   selfMonitorId String
 

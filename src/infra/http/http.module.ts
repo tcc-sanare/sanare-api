@@ -101,6 +101,16 @@ import { CheckExistingEmailUseCase } from '@/domain/account/user/application/use
 import { CheckExistingEmailController } from './controllers/account/user/check-existing-email-controller';
 import { UpdateAccountEmailUseCase } from '@/domain/account/user/application/use-cases/account/update-account-email-use-case';
 import { UpdateAccountController } from './controllers/account/user/update-account-controller';
+import { CreateMedicineAlarmController } from './controllers/medical/medicine-alarms/create-medicine-alarm-controller';
+import { GetMedicineAlarmByIdController } from './controllers/medical/medicine-alarms/get-medicine-alarm-by-id-controller';
+import { GetMedicineAlarmsController } from './controllers/medical/medicine-alarms/get-medicine-alarms-controller';
+import { UpdateMedicineAlarmController } from './controllers/medical/medicine-alarms/update-medicine-alarm-controller';
+import { DeleteMedicineAlarmController } from './controllers/medical/medicine-alarms/delete-medicine-alarm-controller';
+import { CreateMedicineAlarmUseCase } from '@/domain/medical/application/use-cases/medicine-alarm/create-medicine-alarm-use-case';
+import { GetMedicineAlarmByIdUseCase } from '@/domain/medical/application/use-cases/medicine-alarm/get-medicine-alarm-by-id-use-case';
+import { GetMedicineAlarmsBySelfMonitorIdUseCase } from '@/domain/medical/application/use-cases/medicine-alarm/get-medicine-alarms-by-self-monitor-id-use-case';
+import { UpdateMedicineAlarmUseCase } from '@/domain/medical/application/use-cases/medicine-alarm/update-medicine-alarm-use-case';
+import { DeleteMedicineAlarmUseCase } from '@/domain/medical/application/use-cases/medicine-alarm/delete-medicine-alarm-use-case';
 
 @Module({
   controllers: [
@@ -156,7 +166,13 @@ import { UpdateAccountController } from './controllers/account/user/update-accou
       //MedicalLog
         CreateMedicalLogController,
         GetMedicalLogsController,
-        UpdateMedicalLogController
+        UpdateMedicalLogController,
+      //MedicineAlarm
+        CreateMedicineAlarmController,
+        GetMedicineAlarmByIdController,
+        GetMedicineAlarmsController,
+        UpdateMedicineAlarmController,
+        DeleteMedicineAlarmController
   ],
   providers: [
     // Medical
@@ -214,6 +230,13 @@ import { UpdateAccountController } from './controllers/account/user/update-accou
         GetCaregiverRequestsByCaregiverUseCase,
         UpdateCaregiverRequestUseCase,
         DeleteCaregiverRequestUseCase,
+
+      //MedicineAlarm
+        CreateMedicineAlarmUseCase,
+        GetMedicineAlarmByIdUseCase,
+        GetMedicineAlarmsBySelfMonitorIdUseCase,
+        UpdateMedicineAlarmUseCase,
+        DeleteMedicineAlarmUseCase,
     // User
       // Account
         CreateAccountUseCase,

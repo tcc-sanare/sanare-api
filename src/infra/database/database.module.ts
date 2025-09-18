@@ -22,6 +22,8 @@ import { PrismaDiseaseRepository } from './prisma/repositories/medical/prisma-di
 import { PrismaMedicalLogRepository } from './prisma/repositories/medical/prisma-medical-log-repository';
 import { CaregiverRequestRepository } from '@/domain/medical/application/repositories/caregiver-request-repository';
 import { PrismaCaregiverRequestRepository } from './prisma/repositories/medical/prisma-caregiver-request-repository';
+import { MedicineAlarmRepository } from '@/domain/medical/application/repositories/medicine-alarm-repository';
+import { PrismaMedicineAlarmRepository } from './prisma/repositories/medical/prisma-medicine-alarm-repository';
 
 @Module({
   providers: [
@@ -63,6 +65,10 @@ import { PrismaCaregiverRequestRepository } from './prisma/repositories/medical/
         provide: CaregiverRequestRepository,
         useClass: PrismaCaregiverRequestRepository
       },
+      {
+        provide: MedicineAlarmRepository,
+        useClass: PrismaMedicineAlarmRepository
+      },
     // User
       {
         provide: AccountRepository,
@@ -86,7 +92,8 @@ import { PrismaCaregiverRequestRepository } from './prisma/repositories/medical/
     SymptomRepository,
     DiseaseRepository,
     MedicalLogRepository,
-    CaregiverRequestRepository
+    CaregiverRequestRepository,
+    MedicineAlarmRepository
   ],
 })
 export class DatabaseModule {}
