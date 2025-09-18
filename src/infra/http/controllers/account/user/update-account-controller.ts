@@ -60,7 +60,7 @@ export class UpdateAccountController {
     });
 
     return {
-      account: AccountPresenter.toHTTP(accountUpdated)
+      account: await AccountPresenter.toHTTP(accountUpdated)
     }
   }
 }
