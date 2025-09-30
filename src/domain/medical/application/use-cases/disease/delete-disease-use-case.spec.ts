@@ -1,4 +1,4 @@
-import { InMemoryDiseaseRepository } from "test/repositories/in-memory-disease-repositoy"
+import { InMemoryDiseaseRepository } from "test/repositories/in-memory-disease-repository"
 import { DeleteDiseaseUseCase } from "./delete-disease-use-case"
 import { makeDisease } from "test/factories/make-disease"
 import { NotAllowedError } from "@/core/errors/errors/not-allowed-error"

@@ -5,16 +5,19 @@ import { Account } from '../../../enterprise/entities/account';
 import { FakeHasher } from 'test/cryptography/fake-hasher';
 import { NotAllowedError } from '@/core/errors/errors/not-allowed-error';
 import { EmailAlreadyExistsError } from './errors/email-already-exists-error';
+import { FakeEncrypter } from 'test/cryptography/fake-encrypter';
 
 let inMemoryAccountRepository: InMemoryAccountRepository;
 let fakeHasher: FakeHasher;
+let fakeEncrypter: FakeEncrypter;
 let sut: CreateAccountUseCase;
 
 describe('CreateAccountUseCase', () => {
   beforeEach(() => {
     inMemoryAccountRepository = new InMemoryAccountRepository();
     fakeHasher = new FakeHasher();
-    sut = new CreateAccountUseCase(inMemoryAccountRepository, fakeHasher);
+    fakeEncrypter = new FakeEncrypter();
+    sut = new CreateAccountUseCase(inMemoryAccountRepository, fakeHasher, fakeEncrypter);
   });
 
   it('should create a new account', async () => {

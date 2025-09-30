@@ -2,14 +2,28 @@ import { InMemoryAccountRepository } from 'test/repositories/in-memory-account-r
 import { GetMyAccountUseCase } from './get-my-account-use-case';
 import { makeAccount } from 'test/factories/make-account';
 import { ResourceNotFoundError } from '@/core/errors/errors/resource-not-found-error';
+import { GetSelfMonitorByAccountIdUseCase } from '@/domain/medical/application/use-cases/self-monitor/get-self-monitor-by-account-id-use-case';
+import { GetCaregiverByUserIdUseCase } from '@/domain/medical/application/use-cases/caregiver/get-caregiver-by-user-id-use-case';
+import { InMemoryCaregiverRepository } from 'test/repositories/in-memory-caregiver-repository';
+import { InMemorySelfMonitorRepository } from 'test/repositories/in-memory-self-monitor-repository';
 
 describe('GetMyAccountUseCase', () => {
   let getMyAccountUseCase: GetMyAccountUseCase;
+  let getSelfMonitorbyAccountId: GetSelfMonitorByAccountIdUseCase;
+  let getCaregiverByAccountId: GetCaregiverByUserIdUseCase;
+
   let inMemoryAccountRepository: InMemoryAccountRepository;
+  let inMemorySelfMonitorRepository: InMemorySelfMonitorRepository;
+  let inMemoryCaregiverRepository: InMemoryCaregiverRepository;
 
   beforeEach(() => {
     inMemoryAccountRepository = new InMemoryAccountRepository();
-    getMyAccountUseCase = new GetMyAccountUseCase(inMemoryAccountRepository);
+    inMemorySelfMonitorRepository = new InMemorySelfMonitorRepository();
+    inMemoryCaregiverRepository = new InMemoryCaregiverRepository();
+
+    getSelfMonitorbyAccountId = new GetSelfMonitorByAccountIdUseCase(inMemorySelfMonitorRepository);
+    getCaregiverByAccountId = new GetCaregiverByUserIdUseCase(inMemoryCaregiverRepository);
+    getMyAccountUseCase = new GetMyAccountUseCase(inMemoryAccountRepository, getSelfMonitorbyAccountId, getCaregiverByAccountId);
   });
 
   it('should return an account', async () => {

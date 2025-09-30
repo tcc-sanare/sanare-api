@@ -1,4 +1,4 @@
-import { InMemoryDiseaseRepository } from "test/repositories/in-memory-disease-repositoy"
+import { InMemoryDiseaseRepository } from "test/repositories/in-memory-disease-repository"
 import { GetDiseaseByIdUseCase } from "./get-disease-by-id-use-case"
 import { makeDisease } from "test/factories/make-disease"
 import { ResourceNotFoundError } from "@/core/errors/errors/resource-not-found-error"

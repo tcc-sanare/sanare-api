@@ -51,7 +51,7 @@ export class GetSelfMonitorRequestsController {
             throw new CustomHttpException(res.value);
           }
 
-          return res.value.selfMonitor
+          return res.value.selfMonitor;
         });
 
         const selfMonitorAccount = await this.getAccountById.execute({
