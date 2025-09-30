@@ -1,4 +1,5 @@
 import { UseCaseError } from "@/core/errors/use-case-error";
+import { GetMyAccountUseCase } from "@/domain/account/user/application/use-cases/account/get-my-account-use-case";
 import { Account } from "@/domain/account/user/enterprise/entities/account";
 import { CreateCaregiverRequestUseCase } from "@/domain/medical/application/use-cases/caregiver-request/create-caregiver-request-use-case";
 import { GetCaregiverByCaregiverCodeUseCase } from "@/domain/medical/application/use-cases/caregiver/get-caregiver-by-caregiver-code-use-case";
@@ -7,6 +8,7 @@ import { UpdateSelfMonitorUseCase } from "@/domain/medical/application/use-cases
 import { GetAccount } from "@/infra/http/decorators/get-account";
 import { CustomHttpException } from "@/infra/http/exceptions/custom-http-exception";
 import { AuthGuard } from "@/infra/http/guards/auth-guard";
+import { AccountPresenter } from "@/infra/http/presenters/account-presenter";
 import { CaregiverPresenter } from "@/infra/http/presenters/caregiver-presenter";
 import { SelfMonitorPresenter } from "@/infra/http/presenters/self-monitor-presenter";
 import { Controller, Post, Query, UseGuards } from "@nestjs/common";
@@ -17,7 +19,8 @@ export class ConnectCaregiverToSelfMonitorController{
         private createCaregiverRequest: CreateCaregiverRequestUseCase,
         private findSelfMonitor: GetSelfMonitorByAccountIdUseCase,
         private findCaregiverByCode: GetCaregiverByCaregiverCodeUseCase,
-        private updateSelfMonitor: UpdateSelfMonitorUseCase
+        private updateSelfMonitor: UpdateSelfMonitorUseCase,
+        private getAccountById: GetMyAccountUseCase
     ) {}
     @Post()
     @UseGuards(AuthGuard)
@@ -78,7 +81,18 @@ export class ConnectCaregiverToSelfMonitorController{
             }
         });
 
-        return;
+        const caregiverAccount = await this.getAccountById.execute({
+            accountId: caregiver.userId.toString()
+        })
+        .then(result => {
+            if (result.isLeft()) throw new CustomHttpException(result.value)
+            return result.value.account
+        })
+
+        return { caregiver: {
+            ...CaregiverPresenter.toHttp(caregiver),
+            account: await AccountPresenter.toHTTP(caregiverAccount)
+        } };
     }
 }
 
