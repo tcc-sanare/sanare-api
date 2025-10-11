@@ -8,6 +8,7 @@ export const envSchema = z.object({
   GOOGLE_DRIVE_CLIENT_SECRET: z.string(),
   GOOGLE_DRIVE_REDIRECT_URI: z.string().url().default('http://localhost:3000/auth/google/callback'),
   GOOGLE_DRIVE_REFRESH_TOKEN: z.string(),
+  NODE_ENV: z.enum(['development', 'production', 'test']).default('development'),
 });
 
 export type Env = z.infer<typeof envSchema>;

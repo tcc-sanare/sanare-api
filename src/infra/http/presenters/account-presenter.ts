@@ -1,7 +1,7 @@
 import { Account } from "@/domain/account/user/enterprise/entities/account";
 
 export class AccountPresenter {
-  static async toHTTP(account: Account) {
+  static toHTTP(account: Account) {
     const {
       id,
       createdAt,
@@ -18,7 +18,7 @@ export class AccountPresenter {
       name,
       email,
       theme,
-      profilePhotoUrl: await profilePhoto?.getSignedUrl(),
+      profilePhotoUrl: profilePhoto?.getSignedUrl(),
       isVerified,
       createdAt,
       updatedAt

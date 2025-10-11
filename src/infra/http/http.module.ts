@@ -120,9 +120,12 @@ import { ChangeProfileController } from './controllers/account/profile/change-pr
 import { GetProfileUseCase } from '@/domain/account/user/application/use-cases/profile/get-profile-use-case';
 import { ChangeProfileUseCase } from '@/domain/account/user/application/use-cases/profile/change-profile-use-case';
 import { GetCaregiverByIdUseCase } from '@/domain/medical/application/use-cases/caregiver/get-caregiver-by-id-use-case';
+import { GetFileController } from './controllers/files/get-file-controller';
 
 @Module({
   controllers: [
+    // Files
+      GetFileController,
     // Medical
       // Allergy
         GetAllAllergiesController,
@@ -285,7 +288,8 @@ import { GetCaregiverByIdUseCase } from '@/domain/medical/application/use-cases/
     {
       provide: Storage,
       useClass: GoogleDrive
-    }
+    },
+    GoogleDrive
   ],
   imports: [
     DatabaseModule,

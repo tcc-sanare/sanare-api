@@ -8,8 +8,8 @@ export class StoragedFile {
     return this.fileKey;
   }
 
-  async getSignedUrl(): Promise<string> {
-    const response = await this.storage.getSignedUrl(this.fileKey);
+  getSignedUrl(): string {
+    const response = this.storage.getSignedUrl(this.fileKey);
     return response.url;
   }
 

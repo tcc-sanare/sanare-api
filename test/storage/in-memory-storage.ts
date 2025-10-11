@@ -39,17 +39,13 @@ export class InMemoryStorage implements Storage {
 
     return;
   }
-  async getSignedUrl(fileKey: string): Promise<{ url: string }> {
+  getSignedUrl(fileKey: string): { url: string } {
     const file = this.items.find((item) => item.fileKey === fileKey);
 
     if (!file) {
       throw new Error('Image not found');
     }
 
-    const base64Data = Buffer.from(await file.file.arrayBuffer()).toString(
-      'base64',
-    );
-    const mimeType = file.file.type || 'application/octet-stream';
-    return { url: `data:${mimeType};base64,${base64Data}` };
+    return { url: `http://localhost:3000/files/${fileKey}` };
   }
 }
