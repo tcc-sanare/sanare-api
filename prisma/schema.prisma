@@ -259,8 +259,8 @@ model MedicalRecordToAllergies {
   allergyId       String
   description     String?
 
-  medicalRecord MedicalRecord @relation(fields: [medicalRecordId], references: [id])
-  allergy       Allergies     @relation(fields: [allergyId], references: [id])
+  medicalRecord MedicalRecord @relation(fields: [medicalRecordId], references: [id], onDelete: Cascade)
+  allergy       Allergies     @relation(fields: [allergyId], references: [id], onDelete: Cascade)
 
   @@id([medicalRecordId, allergyId])
   @@map("medical_record_to_allergies")
@@ -283,8 +283,8 @@ model MedicalRecordToChronicDiseases {
   medicalRecordId  String
   chronicDiseaseId String
 
-  medicalRecord  MedicalRecord   @relation(fields: [medicalRecordId], references: [id])
-  chronicDisease ChronicDiseases @relation(fields: [chronicDiseaseId], references: [id])
+  medicalRecord  MedicalRecord   @relation(fields: [medicalRecordId], references: [id], onDelete: Cascade)
+  chronicDisease ChronicDiseases @relation(fields: [chronicDiseaseId], references: [id], onDelete: Cascade)
 
   @@id([medicalRecordId, chronicDiseaseId])
   @@map("medical_record_to_chronic_diseases")
@@ -328,8 +328,8 @@ model MedicalLogsToDiseases {
   medicalLogId String
   diseaseId    String
 
-  medicalLog MedicalLogs @relation(fields: [medicalLogId], references: [id])
-  disease    Diseases    @relation(fields: [diseaseId], references: [id])
+  medicalLog MedicalLogs @relation(fields: [medicalLogId], references: [id], onDelete: Cascade)
+  disease    Diseases    @relation(fields: [diseaseId], references: [id], onDelete: Cascade)
 
   @@id([medicalLogId, diseaseId])
   @@map("medical_logs_to_diseases")
@@ -352,8 +352,8 @@ model MedicalLogsToSymptoms {
   medicalLogId String
   symptomId    String
 
-  medicalLog MedicalLogs @relation(fields: [medicalLogId], references: [id])
-  symptom    Symptoms    @relation(fields: [symptomId], references: [id])
+  medicalLog MedicalLogs @relation(fields: [medicalLogId], references: [id], onDelete: Cascade)
+  symptom    Symptoms    @relation(fields: [symptomId], references: [id], onDelete: Cascade)
 
   @@id([medicalLogId, symptomId])
   @@map("medical_logs_to_symptoms")
