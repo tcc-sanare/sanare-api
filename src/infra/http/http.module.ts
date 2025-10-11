@@ -111,6 +111,15 @@ import { GetMedicineAlarmByIdUseCase } from '@/domain/medical/application/use-ca
 import { GetMedicineAlarmsBySelfMonitorIdUseCase } from '@/domain/medical/application/use-cases/medicine-alarm/get-medicine-alarms-by-self-monitor-id-use-case';
 import { UpdateMedicineAlarmUseCase } from '@/domain/medical/application/use-cases/medicine-alarm/update-medicine-alarm-use-case';
 import { DeleteMedicineAlarmUseCase } from '@/domain/medical/application/use-cases/medicine-alarm/delete-medicine-alarm-use-case';
+import { DeleteCaregiverUseCase } from '@/domain/medical/application/use-cases/caregiver/delete-caregiver-use-case';
+import { DeleteCaregiverController } from './controllers/medical/caregiver/delete-caregiver-controller';
+import { DeleteSelfMonitorController } from './controllers/medical/self-monitor/delete-self-monitor-controller';
+import { DeleteSelfMonitorUseCase } from '@/domain/medical/application/use-cases/self-monitor/delete-self-monitor-use-case';
+import { GetProfileController } from './controllers/account/profile/get-profile-controller';
+import { ChangeProfileController } from './controllers/account/profile/change-profile-controller';
+import { GetProfileUseCase } from '@/domain/account/user/application/use-cases/profile/get-profile-use-case';
+import { ChangeProfileUseCase } from '@/domain/account/user/application/use-cases/profile/change-profile-use-case';
+import { GetCaregiverByIdUseCase } from '@/domain/medical/application/use-cases/caregiver/get-caregiver-by-id-use-case';
 
 @Module({
   controllers: [
@@ -127,6 +136,9 @@ import { DeleteMedicineAlarmUseCase } from '@/domain/medical/application/use-cas
         DeleteChronicDiseaseController,
         UpdateChronicDiseaseController,
     // User
+      // Profile
+        GetProfileController,
+        ChangeProfileController,
       // Account
         CreateAccountController,
         AuthenticateAccountController,
@@ -142,11 +154,13 @@ import { DeleteMedicineAlarmUseCase } from '@/domain/medical/application/use-cas
         UpdateSelfMonitorController,
         GetCaregiverRequestsController,
         CancelCaregiverRequestController,
+        DeleteSelfMonitorController,
       //Caregiver
         CreateCaregiverController,
         GetCaregiverByUserIdController,
         RespondSelfMonitorRequestController,
         GetSelfMonitorRequestsController,
+        DeleteCaregiverController,
       //MedicalRecord
         CreateaMedicalRecordController,
         GetMedicalRecordController,
@@ -195,10 +209,13 @@ import { DeleteMedicineAlarmUseCase } from '@/domain/medical/application/use-cas
         GetSelfMonitorsByCaregiverIdUseCase,
         GetSelfMonitorByIdUseCase,
         UpdateSelfMonitorUseCase,
+        DeleteSelfMonitorUseCase,
       //Caregiver
         CreateCaregiverUseCase,
+        GetCaregiverByIdUseCase,
         GetCaregiverByUserIdUseCase,
         GetCaregiverByCaregiverCodeUseCase,
+        DeleteCaregiverUseCase,
       //MedicalRecord
         CreateMedicalRecordUseCase,
         GetMedicalRecordBySelfMonitorIdUseCase,
@@ -238,6 +255,9 @@ import { DeleteMedicineAlarmUseCase } from '@/domain/medical/application/use-cas
         UpdateMedicineAlarmUseCase,
         DeleteMedicineAlarmUseCase,
     // User
+      // Profile
+         GetProfileUseCase,
+         ChangeProfileUseCase,
       // Account
         CreateAccountUseCase,
         AuthenticateAccountUseCase,
