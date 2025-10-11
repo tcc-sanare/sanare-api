@@ -73,10 +73,26 @@ export class PrismaCaregiverRepository implements CaregiverRepository {
   }
 
   async delete(caregiver: Caregiver): Promise<void> {
-    await this.prisma.caregiver.delete({
-      where: {
-        id: caregiver.id.toString(),
-      },
-    });
+
+    await this.prisma.$transaction([
+      this.prisma.caregiverRequest.deleteMany({
+        where: {
+          caregiverId: caregiver.id.toString()
+        }
+      }),
+      this.prisma.selfMonitor.updateMany({
+        where: {
+          caregiverId: caregiver.id.toString()
+        },
+        data: {
+          caregiverId: null
+        }
+      }),
+      this.prisma.caregiver.delete({
+        where: {
+          id: caregiver.id.toString(),
+        }
+      }),
+    ])
   }
 }
