@@ -49,12 +49,7 @@ export class GetSelfMonitorByCaregiverIdController {
 
         return {
           ...SelfMonitorPresenter.toHTTP(selfMonitor),
-          account: {
-            id: account.id,
-            name: account.name,
-            email: account.email,
-            profilePhotoUrl: await account.profilePhoto.getSignedUrl()
-          }
+          account: await AccountPresenter.toHTTP(account)
         };
 
       }))

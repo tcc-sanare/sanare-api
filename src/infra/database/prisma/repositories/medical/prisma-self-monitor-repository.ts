@@ -72,10 +72,14 @@ export class PrismaSelfMonitorRepository implements SelfMonitorRepository {
   }
   
   async delete(selfMonitor: SelfMonitor): Promise<void> {
-    await this.prisma.selfMonitor.delete({
-      where: {
-        id: selfMonitor.id.toString(),
-      },
-    });
+    await this.prisma.$transaction([
+      this.prisma.aiChats.deleteMany({ where: { selfMonitorId: selfMonitor.id.toString() } }),
+      this.prisma.caregiverRequest.deleteMany({ where: { selfMonitorId: selfMonitor.id.toString() }}),
+      this.prisma.medicalLogs.deleteMany({ where: { selfMonitorId: selfMonitor.id.toString() }}),
+      this.prisma.medicalRecord.deleteMany({ where: { selfMonitorId: selfMonitor.id.toString() }}),
+      this.prisma.medicineAlarms.deleteMany({ where: { selfMonitorId: selfMonitor.id.toString() }}),
+      this.prisma.medicalReports.deleteMany({ where: { selfMonitorId: selfMonitor.id.toString() }}),
+      this.prisma.selfMonitor.delete({ where: { id: selfMonitor.id.toString() }})
+    ]);
   }
 }

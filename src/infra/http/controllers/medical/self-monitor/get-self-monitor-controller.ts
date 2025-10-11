@@ -5,10 +5,18 @@ import { GetSelfMonitorByAccountIdUseCase } from '@/domain/medical/application/u
 import { AuthGuard } from '../../../guards/auth-guard';
 import { SelfMonitorPresenter } from '../../../presenters/self-monitor-presenter';
 import { CustomHttpException } from '../../../exceptions/custom-http-exception';
+import { CaregiverPresenter } from '@/infra/http/presenters/caregiver-presenter';
+import { GetCaregiverByIdUseCase } from '@/domain/medical/application/use-cases/caregiver/get-caregiver-by-id-use-case';
+import { GetMyAccountUseCase } from '@/domain/account/user/application/use-cases/account/get-my-account-use-case';
+import { AccountPresenter } from '@/infra/http/presenters/account-presenter';
 
 @Controller('self-monitor')
 export class GetSelfMonitorController {
-  constructor(private getSelfMonitor: GetSelfMonitorByAccountIdUseCase) {}
+  constructor(
+    private getSelfMonitor: GetSelfMonitorByAccountIdUseCase,
+    private getCaregiverById: GetCaregiverByIdUseCase,
+    private getAccountById: GetMyAccountUseCase
+  ) {}
 
   @Get()
   @UseGuards(AuthGuard)
@@ -19,8 +27,27 @@ export class GetSelfMonitorController {
 
     if (result.isLeft()) throw new CustomHttpException(result.value);
 
+    const caregiver = result.value.selfMonitor.caregiverId ? await this.getCaregiverById.execute({
+        id: result.value.selfMonitor.caregiverId.toString()
+      }).then(res => {
+        if (res.isLeft()) return null;
+        return res.value.caregiver;
+      }) : null;
+
     return {
-      selfMonitor: SelfMonitorPresenter.toHTTP(result.value.selfMonitor),
+      selfMonitor: {
+        ...SelfMonitorPresenter.toHTTP(result.value.selfMonitor),
+        caregiver: result.value.selfMonitor.caregiverId
+          ? await AccountPresenter.toHTTP(
+              await this.getAccountById.execute({
+                accountId: caregiver.userId.toString()
+              }).then(res => {
+                if (res.isLeft()) throw new CustomHttpException(res.value);
+                return res.value.account;
+              })
+            )
+          : null,
+      },
     };
   }
 }
