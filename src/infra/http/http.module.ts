@@ -121,6 +121,28 @@ import { GetProfileUseCase } from '@/domain/account/user/application/use-cases/p
 import { ChangeProfileUseCase } from '@/domain/account/user/application/use-cases/profile/change-profile-use-case';
 import { GetCaregiverByIdUseCase } from '@/domain/medical/application/use-cases/caregiver/get-caregiver-by-id-use-case';
 import { GetFileController } from './controllers/files/get-file-controller';
+import { MailProvider } from '@/domain/mail-provider/mail-provider';
+import { MailSender } from '../mail-sender/mail-sender';
+import { ChangePasswordUseCase } from '@/domain/account/user/application/use-cases/forgot-password/change-password-use-case';
+import { SendForgotPasswordCodeUseCase } from '@/domain/account/user/application/use-cases/forgot-password/send-forgot-password-code-use-case';
+import { ValidateForgotPasswordCodeUseCase } from '@/domain/account/user/application/use-cases/forgot-password/validate-forgot-password-code-use-case';
+import { SendForgotPasswordCodeController } from './controllers/account/forgot-password/send-forgot-password-code-controller';
+import { ValidateForgotPasswordCodeController } from './controllers/account/forgot-password/validate-forgot-password-code-controller';
+import { ChangePasswordController } from './controllers/account/forgot-password/change-password-controller';
+import { DisconnectSelfMonitorFromCaregiverUseCase } from '@/domain/medical/application/use-cases/caregiver/disconnect-self-monitor-from-caregiver-use-case';
+import { GetSelfMonitorAccessUseCase } from '@/domain/medical/application/use-cases/caregiver/get-self-monitor-access-use-case';
+import { DisconnectSelfMonitorController } from './controllers/medical/caregiver/disconnect-self-monitor-controller';
+import { GetSelfMonitorAccessController } from './controllers/medical/caregiver/get-self-monitor-access-controller';
+import { SignOutController } from './controllers/account/user/sign-out-controller';
+import { GetNotificationsController } from './controllers/account/notification/get-notifications-controller';
+import { DeleteNotificationController } from './controllers/account/notification/delete-notification-controller';
+import { GetNotificationByIdController } from './controllers/account/notification/get-notification-by-id-controller';
+import { UpdateDeviceUseCase } from '@/domain/account/user/application/use-cases/device/update-device-use-case';
+import { DeleteDeviceUseCase } from '@/domain/account/user/application/use-cases/device/delete-device-use-case';
+import { GetDeviceByTokenUseCase } from '@/domain/account/user/application/use-cases/device/get-device-by-token-use-case';
+import { GetNotificationsByAccountIdUseCase } from '@/domain/account/user/application/use-cases/notification/get-notifications-by-account-id-use-case';
+import { GetNotificationByIdUseCase } from '@/domain/account/user/application/use-cases/notification/get-notification-by-id-use-case';
+import { DeleteNotificationUseCase } from '@/domain/account/user/application/use-cases/notification/delete-notification-use-case';
 
 @Module({
   controllers: [
@@ -149,6 +171,15 @@ import { GetFileController } from './controllers/files/get-file-controller';
         CheckExistingEmailController,
         UpdateProfilePhotoAccountController,
         UpdateAccountController,
+        SignOutController,
+      // Notification
+        GetNotificationsController,
+        GetNotificationByIdController,
+        DeleteNotificationController,
+      // Forgot Password
+        SendForgotPasswordCodeController,
+        ValidateForgotPasswordCodeController,
+        ChangePasswordController,
       //Self Monitor
         CreateSelfMonitorController,
         GetSelfMonitorController,
@@ -161,6 +192,8 @@ import { GetFileController } from './controllers/files/get-file-controller';
       //Caregiver
         CreateCaregiverController,
         GetCaregiverByUserIdController,
+        DisconnectSelfMonitorController,
+        GetSelfMonitorAccessController,
         RespondSelfMonitorRequestController,
         GetSelfMonitorRequestsController,
         DeleteCaregiverController,
@@ -217,6 +250,8 @@ import { GetFileController } from './controllers/files/get-file-controller';
         CreateCaregiverUseCase,
         GetCaregiverByIdUseCase,
         GetCaregiverByUserIdUseCase,
+        DisconnectSelfMonitorFromCaregiverUseCase,
+        GetSelfMonitorAccessUseCase,
         GetCaregiverByCaregiverCodeUseCase,
         DeleteCaregiverUseCase,
       //MedicalRecord
@@ -268,7 +303,18 @@ import { GetFileController } from './controllers/files/get-file-controller';
         CheckExistingEmailUseCase,
         UpdateMyAccountUseCase,
         UpdateAccountEmailUseCase,
-
+      // Forgot Password
+        ChangePasswordUseCase,
+        SendForgotPasswordCodeUseCase,
+        ValidateForgotPasswordCodeUseCase,
+      // Device
+        GetDeviceByTokenUseCase,
+        UpdateDeviceUseCase,
+        DeleteDeviceUseCase,
+      // Notification
+        GetNotificationsByAccountIdUseCase,
+        GetNotificationByIdUseCase,
+        DeleteNotificationUseCase,
     {
       provide: Storage,
       useClass: InMemoryStorage
@@ -288,6 +334,10 @@ import { GetFileController } from './controllers/files/get-file-controller';
     {
       provide: Storage,
       useClass: GoogleDrive
+    },
+    {
+      provide: MailProvider,
+      useClass: MailSender
     },
     GoogleDrive
   ],
