@@ -2,7 +2,6 @@ import { StoragedFile } from "@/core/entities/storaged-file";
 import { Storage } from "@/domain/application/storage";
 import { Injectable } from "@nestjs/common";
 import { google } from "googleapis";
-import * as path from "node:path";
 import { Readable } from "node:stream";
 import { EnvService } from "../env/env.service";
 
@@ -44,7 +43,7 @@ export class GoogleDrive implements Storage {
     return { url: `${this.envService.get('NODE_ENV') === 'production' ? 'https://sanare-api.vercel.app' : 'http://localhost:3000'}/files/${key}` };
   }
 
-  async getFile(key: string) {
+  async getFile(key: string): Promise<any> {
     const service = await this.getService();
 
     const response = await service.files.get({
