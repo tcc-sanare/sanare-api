@@ -4,6 +4,7 @@ import { AccountRepository } from "../../repositories/account-repository";
 import { HashComparer } from "@/domain/account/cryptography/hash-comparer";
 import { Encrypter } from "@/domain/account/cryptography/encrypter";
 import { WrongCredentialsError } from "./errors/wrong-credentials-error";
+import { UniqueEntityID } from "@/core/entities/unique-entity-id";
 
 interface AuthenticateAccountUseCaseRequest {
   email: string;
@@ -14,6 +15,7 @@ type AuthenticateAccountUseCaseResponse = Either<
   WrongCredentialsError,
   {
     accessToken: string;
+    accountId: UniqueEntityID;
   }
 >;
 
@@ -49,6 +51,7 @@ export class AuthenticateAccountUseCase {
 
     return right({
       accessToken,
+      accountId: account.id,
     });
   }
 }

@@ -24,6 +24,12 @@ import { CaregiverRequestRepository } from '@/domain/medical/application/reposit
 import { PrismaCaregiverRequestRepository } from './prisma/repositories/medical/prisma-caregiver-request-repository';
 import { MedicineAlarmRepository } from '@/domain/medical/application/repositories/medicine-alarm-repository';
 import { PrismaMedicineAlarmRepository } from './prisma/repositories/medical/prisma-medicine-alarm-repository';
+import { ForgotPasswordRepository } from '@/domain/account/user/application/repositories/forgot-password-repository';
+import { PrismaForgotPasswordRepository } from './prisma/repositories/account/prisma-forgot-password-repository';
+import { DeviceRepository } from '@/domain/account/user/application/repositories/device-repository';
+import { PrismaDeviceRepository } from './prisma/repositories/account/prisma-device-repository';
+import { NotificationRepository } from '@/domain/account/user/application/repositories/notification-repository';
+import { PrismaNotificationRepository } from './prisma/repositories/account/prisma-notification-repository';
 
 @Module({
   providers: [
@@ -77,6 +83,18 @@ import { PrismaMedicineAlarmRepository } from './prisma/repositories/medical/pri
       {
         provide: Storage,
         useClass: GoogleDrive
+      },
+      {
+        provide: ForgotPasswordRepository,
+        useClass: PrismaForgotPasswordRepository
+      },
+      {
+        provide: DeviceRepository,
+        useClass: PrismaDeviceRepository
+      },
+      {
+        provide: NotificationRepository,
+        useClass: PrismaNotificationRepository
       }
   ],
   controllers: [],
@@ -93,7 +111,10 @@ import { PrismaMedicineAlarmRepository } from './prisma/repositories/medical/pri
     DiseaseRepository,
     MedicalLogRepository,
     CaregiverRequestRepository,
-    MedicineAlarmRepository
+    MedicineAlarmRepository,
+    ForgotPasswordRepository,
+    DeviceRepository,
+    NotificationRepository,
   ],
 })
 export class DatabaseModule {}

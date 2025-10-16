@@ -128,8 +128,7 @@ model Notifications {
   id     String  @id @default(uuid())
   title  String
   body   String
-  path   String?
-  isRead Boolean @default(false)
+  data   Json?
 
   userId String
 

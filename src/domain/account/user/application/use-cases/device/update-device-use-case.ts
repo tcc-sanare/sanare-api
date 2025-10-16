@@ -30,14 +30,14 @@ export class UpdateDeviceUseCase {
     const device = await this.deviceRepository.findByToken(data.token);
 
     if (!device) {
-      return left(new NotAllowedError<UpdateDeviceUseCaseRequest>({
-        statusCode: 400,
-        errors: [
-          {
-            message: "Dispositivo não encontrado",
-          }
-        ],
-      }));
+      const device = Device.create({
+        token: data.token,
+        userId: new UniqueEntityID(data.userId),
+      });
+
+      await this.deviceRepository.create(device);
+
+      return right({ device });
     }
 
     device.userId = new UniqueEntityID(data.userId);
