@@ -143,6 +143,9 @@ import { GetDeviceByTokenUseCase } from '@/domain/account/user/application/use-c
 import { GetNotificationsByAccountIdUseCase } from '@/domain/account/user/application/use-cases/notification/get-notifications-by-account-id-use-case';
 import { GetNotificationByIdUseCase } from '@/domain/account/user/application/use-cases/notification/get-notification-by-id-use-case';
 import { DeleteNotificationUseCase } from '@/domain/account/user/application/use-cases/notification/delete-notification-use-case';
+import { CloudMessaging } from '../cloud-messaging/cloud-messaging';
+import { NotificationProvider } from '@/domain/notification-provider/notification-provider';
+import { GetDevicesByUserIdUseCase } from '@/domain/account/user/application/use-cases/device/get-devices-by-user-id';
 
 @Module({
   controllers: [
@@ -309,6 +312,7 @@ import { DeleteNotificationUseCase } from '@/domain/account/user/application/use
         ValidateForgotPasswordCodeUseCase,
       // Device
         GetDeviceByTokenUseCase,
+        GetDevicesByUserIdUseCase,
         UpdateDeviceUseCase,
         DeleteDeviceUseCase,
       // Notification
@@ -338,6 +342,10 @@ import { DeleteNotificationUseCase } from '@/domain/account/user/application/use
     {
       provide: MailProvider,
       useClass: MailSender
+    },
+    {
+      provide: NotificationProvider,
+      useClass: CloudMessaging
     },
     GoogleDrive
   ],

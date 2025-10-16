@@ -2,8 +2,9 @@ import { NotificationProvider, SendNotificationRequest } from "@/domain/notifica
 import { Injectable } from "@nestjs/common";
 import { App, initializeApp } from "firebase-admin/app";
 import { EnvService } from "../env/env.service";
-import { credential, messaging } from "firebase-admin";
-import { Messaging } from "firebase-admin/lib/messaging/messaging";
+import { credential } from "firebase-admin";
+import { getMessaging } from "firebase-admin/messaging";
+import { Messaging,  } from "firebase-admin/lib/messaging/messaging";
 import { GetDevicesByUserIdUseCase } from "@/domain/account/user/application/use-cases/device/get-devices-by-user-id";
 import { Notification } from "@/domain/account/user/enterprise/entities/notification";
 import { NotificationRepository } from "@/domain/account/user/application/repositories/notification-repository";
@@ -27,7 +28,7 @@ export class CloudMessaging implements NotificationProvider {
       })
     });
 
-    this.messaging = messaging(app);
+    this.messaging = getMessaging(app);
   }
 
   async sendNotification(request: SendNotificationRequest): Promise<void> {
