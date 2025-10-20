@@ -41,7 +41,7 @@ export class GetSelfMonitorAccessUseCase {
     }
 
     const accessToken = await this.encrypter.encrypt({
-      sub: selfMonitor.id.toString(),
+      sub: selfMonitor.accountId.toString(),
       role: 'caregiver'
     });
 
