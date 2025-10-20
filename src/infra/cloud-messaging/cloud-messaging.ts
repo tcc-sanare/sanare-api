@@ -42,21 +42,23 @@ export class CloudMessaging implements NotificationProvider {
       });
 
     const tokens = devices.map(device => device.token).filter(token => !!token);
-    await this.messaging.sendEachForMulticast({
-      tokens,
-      notification: {
+    if (tokens.length > 0) {
+      await this.messaging.sendEachForMulticast({
+        tokens,
+        notification: {
+          title: request.title,
+          body: request.body,
+        },
+        data: request.data,
+      });
+
+      await this.notificationRepository.create(Notification.create({
+        accountId: request.accountId,
         title: request.title,
         body: request.body,
-      },
-      data: request.data,
-    });
-
-    await this.notificationRepository.create(Notification.create({
-      accountId: request.accountId,
-      title: request.title,
-      body: request.body,
-      data: request.data,
-    }));
+        data: request.data,
+      }));
+    }
   }
 
 }
