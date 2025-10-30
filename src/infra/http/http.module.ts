@@ -87,6 +87,40 @@ import { UpdateDiseaseController } from './controllers/medical/disease/update-di
 import { CreateMedicalLogController } from './controllers/medical/medical-log/create-medical-log-controller';
 import { GetMedicalLogsController } from './controllers/medical/medical-log/get-medical-logs-controller';
 import { UpdateMedicalLogController } from './controllers/medical/medical-log/update-medical-log-controller';
+import { CreatePostController } from './controllers/community/post/create-post-controller';
+import { DeletePostController } from './controllers/community/post/delete-post-controller';
+import { GetPostByIdController } from './controllers/community/post/get-post-by-id-controller';
+import { UpdatePostController } from './controllers/community/post/update-post-controller';
+import { CreateForumController } from './controllers/community/forum/create-forum-controller';
+import { DeleteForumController } from './controllers/community/forum/delete-forum-controller';
+import { GetAllForumsController } from './controllers/community/forum/get-all-forums-controller';
+import { GetForumByIdController } from './controllers/community/forum/get-forum-by-id-controller';
+import { UpdateForumController } from './controllers/community/forum/update-forum-controller';
+import { CreatePostUseCase } from '@/domain/community/application/use-cases/post/create-post-use-case';
+import { DeletePostUseCase } from '@/domain/community/application/use-cases/post/delete-post-use-case';
+import { GetPostByIdUseCase } from '@/domain/community/application/use-cases/post/get-post-by-id-use-case';
+import { GetPostsByForumIdUseCase } from '@/domain/community/application/use-cases/post/get-posts-by-forum-id-use-case';
+import { UpdatePostUseCase } from '@/domain/community/application/use-cases/post/update-post-use-case';
+import { CreateForumUseCase } from '@/domain/community/application/use-cases/forum/create-forum-use-case';
+import { DeleteForumUseCase } from '@/domain/community/application/use-cases/forum/delete-forum-use-case';
+import { GetAllForumsUseCase } from '@/domain/community/application/use-cases/forum/get-all-forums-use-case';
+import { GetForumByIdUseCase } from '@/domain/community/application/use-cases/forum/get-forum-by-id-use-case';
+import { UpdateForumUseCase } from '@/domain/community/application/use-cases/forum/update-forum-use-case';
+import { CreateCommunityNoteController } from './controllers/community/community-note/create-community-note-controller';
+import { DeleteCommunityNoteController } from './controllers/community/community-note/delete-community-note-controller';
+import { GetAllCommunityNotesByPostIdController } from './controllers/community/community-note/get-all-community-notes-by-post-id-controller';
+import { GetCommunityNoteByIdController } from './controllers/community/community-note/get-community-note-by-id-controller';
+import { UpdateCommunityNoteController } from './controllers/community/community-note/update-community-note-controller';
+import { CreateCommunityNoteUseCase } from '@/domain/community/application/use-cases/community-note/create-community-note-use-case';
+import { DeleteCommunityNoteUseCase } from '@/domain/community/application/use-cases/community-note/delete-community-note-use-case';
+import { GetAllCommunityNotesByPostIdUseCase } from '@/domain/community/application/use-cases/community-note/get-all-community-notes-by-post-id-use-case';
+import { GetCommunityNoteByIdUseCase } from '@/domain/community/application/use-cases/community-note/get-community-note-by-id-use-case';
+import { UpdateCommunityNoteUseCase } from '@/domain/community/application/use-cases/community-note/update-community-note-use-case';
+import { SavePostController } from './controllers/community/post/save-post-controller';
+import { RateCommunityNoteController } from './controllers/community/community-note/rate-community-note-controller';
+import { SaveForumController } from './controllers/community/forum/save-forum-controller';
+import { Gemini } from '@/domain/gemini-ai/gemini-ai';
+import { GeminiService } from '../gemini/gemini-service';
 
 @Module({
   controllers: [
@@ -136,7 +170,30 @@ import { UpdateMedicalLogController } from './controllers/medical/medical-log/up
       //MedicalLog
         CreateMedicalLogController,
         GetMedicalLogsController,
-        UpdateMedicalLogController
+        UpdateMedicalLogController,
+    // Community
+
+      //Post
+        CreatePostController,
+        DeletePostController,
+        // GetAllPostsByForumIdController,
+        SavePostController,
+        GetPostByIdController,
+        UpdatePostController,
+      // Forum
+        CreateForumController,
+        DeleteForumController,
+        GetAllForumsController,
+        GetForumByIdController,
+        UpdateForumController,
+        SaveForumController,
+      // Community Notes
+        CreateCommunityNoteController,
+        DeleteCommunityNoteController,
+        GetAllCommunityNotesByPostIdController,
+        GetCommunityNoteByIdController,
+        UpdateCommunityNoteController,
+        RateCommunityNoteController
   ],
   providers: [
     // Medical
@@ -194,6 +251,29 @@ import { UpdateMedicalLogController } from './controllers/medical/medical-log/up
         GetMyAccountUseCase,
         UpdateMyAccountUseCase,
 
+    // Community
+
+      // Post
+        CreatePostUseCase,
+        DeletePostUseCase,
+        GetPostByIdUseCase,
+        GetPostsByForumIdUseCase,
+        UpdatePostUseCase,
+
+      // Forum
+        CreateForumUseCase,
+        DeleteForumUseCase,
+        GetAllForumsUseCase,
+        GetForumByIdUseCase,
+        UpdateForumUseCase,
+      
+      // Community Notes
+        CreateCommunityNoteUseCase,
+        DeleteCommunityNoteUseCase,
+        GetAllCommunityNotesByPostIdUseCase,
+        GetCommunityNoteByIdUseCase,
+        UpdateCommunityNoteUseCase,
+
     {
       provide: Storage,
       useClass: InMemoryStorage
@@ -213,6 +293,10 @@ import { UpdateMedicalLogController } from './controllers/medical/medical-log/up
     {
       provide: Storage,
       useClass: GoogleDrive
+    },
+    {
+      provide: Gemini,
+      useClass: GeminiService
     }
   ],
   imports: [

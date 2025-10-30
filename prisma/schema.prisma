@@ -34,7 +34,7 @@ model Users {
 
   // Community
   posts                Posts[]
-  postSaves            PostSaves[]
+  forumSaves           ForumSaves[]
   communityNotes       CommunityNotes[]
   communityNoteRatings CommunityNoteRatings[]
 
@@ -125,7 +125,8 @@ model Notifications {
 
 model Forums {
   id       String  @id @default(uuid())
-  name     String
+  body     String
+  link     String
   imageKey String?
 
   status RowStatus @default(ACTIVED)
@@ -134,6 +135,7 @@ model Forums {
   updatedAt DateTime @updatedAt
 
   posts Posts[]
+  saves ForumSaves[]
 
   @@map("forums")
 }
@@ -156,21 +158,20 @@ model Posts {
   forum  Forums? @relation(fields: [forumId], references: [id])
 
   childPosts Posts[]          @relation("Parent")
-  saves      PostSaves[]
   notes      CommunityNotes[]
 
   @@map("posts")
 }
 
-model PostSaves {
+model ForumSaves {
   userId String
-  postId String
+  forumId String
 
-  user Users @relation(fields: [userId], references: [id])
-  post Posts @relation(fields: [postId], references: [id])
+  user  Users  @relation(fields: [userId], references: [id])
+  forum Forums @relation(fields: [forumId], references: [id])
 
-  @@id([userId, postId])
-  @@map("post_saves")
+  @@id([userId, forumId])
+  @@map("forum_saves")
 }
 
 model CommunityNotes {

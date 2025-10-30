@@ -20,6 +20,12 @@ import { DiseaseRepository } from '@/domain/medical/application/repositories/dis
 import { MedicalLogRepository } from '@/domain/medical/application/repositories/medical-log-repository';
 import { PrismaDiseaseRepository } from './prisma/repositories/medical/prisma-disease-repository';
 import { PrismaMedicalLogRepository } from './prisma/repositories/medical/prisma-medical-log-repository';
+import { ForumRepository } from '@/domain/community/application/repositories/forum-repository';
+import { PrismaForumRepository } from './prisma/repositories/community/prisma-forum-repository';
+import { PostRepository } from '@/domain/community/application/repositories/post-repository';
+import { PrismaPostRepository } from './prisma/repositories/community/prisma-post-repostiroty';
+import { CommunityNoteRepository } from '@/domain/community/application/repositories/community-note-repository';
+import { PrismaCommunityNoteRepository } from './prisma/repositories/community/prisma-community-note-repository';
 
 @Module({
   providers: [
@@ -65,6 +71,20 @@ import { PrismaMedicalLogRepository } from './prisma/repositories/medical/prisma
       {
         provide: Storage,
         useClass: GoogleDrive
+      },
+
+    //Community Notes
+      {
+        provide: ForumRepository,
+        useClass: PrismaForumRepository
+      },
+      {
+        provide: PostRepository,
+        useClass: PrismaPostRepository
+      },
+      {
+        provide: CommunityNoteRepository,
+        useClass: PrismaCommunityNoteRepository
       }
   ],
   controllers: [],
@@ -79,7 +99,10 @@ import { PrismaMedicalLogRepository } from './prisma/repositories/medical/prisma
     MedicalRecordRepository,
     SymptomRepository,
     DiseaseRepository,
-    MedicalLogRepository
+    MedicalLogRepository,
+    CommunityNoteRepository,
+    PostRepository,
+    ForumRepository
   ],
 })
 export class DatabaseModule {}
