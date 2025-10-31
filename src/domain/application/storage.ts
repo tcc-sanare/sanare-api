@@ -11,5 +11,5 @@ export abstract class Storage {
 
   abstract delete(fileKey: string): Promise<void>;
 
-  abstract getSignedUrl(fileKey: string): Promise<{ url: string }>;
+  abstract getSignedUrl(fileKey: string): { url: string };
 }

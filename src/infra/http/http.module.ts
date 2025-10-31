@@ -121,9 +121,70 @@ import { RateCommunityNoteController } from './controllers/community/community-n
 import { SaveForumController } from './controllers/community/forum/save-forum-controller';
 import { Gemini } from '@/domain/gemini-ai/gemini-ai';
 import { GeminiService } from '../gemini/gemini-service';
+import { CreateCaregiverRequestUseCase } from '@/domain/medical/application/use-cases/caregiver-request/create-caregiver-request-use-case';
+import { GetCaregiverRequestBySelfMonitorUseCase } from '@/domain/medical/application/use-cases/caregiver-request/get-caregiver-request-by-self-monitor-use-case';
+import { GetCaregiverRequestsByCaregiverUseCase } from '@/domain/medical/application/use-cases/caregiver-request/get-caregiver-requests-by-caregiver-use-case';
+import { UpdateCaregiverRequestUseCase } from '@/domain/medical/application/use-cases/caregiver-request/update-caregiver-request-use-case';
+import { GetSelfMonitorRequestsController } from './controllers/medical/caregiver/get-self-monitor-requests-controller';
+import { GetCaregiverRequestsController } from './controllers/medical/self-monitor/get-caregiver-requests-controller';
+import { RespondSelfMonitorRequestController } from './controllers/medical/caregiver/respond-self-monitor-request-controller';
+import { DeleteCaregiverRequestUseCase } from '@/domain/medical/application/use-cases/caregiver-request/delete-caregiver-request-use-case';
+import { CancelCaregiverRequestController } from './controllers/medical/self-monitor/cancel-caregiver-request-controller';
+import { GetSelfMonitorByIdUseCase } from '@/domain/medical/application/use-cases/self-monitor/get-self-monitor-by-id-use-case';
+import { CheckExistingEmailUseCase } from '@/domain/account/user/application/use-cases/account/check-existing-email-use-case';
+import { CheckExistingEmailController } from './controllers/account/user/check-existing-email-controller';
+import { UpdateAccountEmailUseCase } from '@/domain/account/user/application/use-cases/account/update-account-email-use-case';
+import { UpdateAccountController } from './controllers/account/user/update-account-controller';
+import { CreateMedicineAlarmController } from './controllers/medical/medicine-alarms/create-medicine-alarm-controller';
+import { GetMedicineAlarmByIdController } from './controllers/medical/medicine-alarms/get-medicine-alarm-by-id-controller';
+import { GetMedicineAlarmsController } from './controllers/medical/medicine-alarms/get-medicine-alarms-controller';
+import { UpdateMedicineAlarmController } from './controllers/medical/medicine-alarms/update-medicine-alarm-controller';
+import { DeleteMedicineAlarmController } from './controllers/medical/medicine-alarms/delete-medicine-alarm-controller';
+import { CreateMedicineAlarmUseCase } from '@/domain/medical/application/use-cases/medicine-alarm/create-medicine-alarm-use-case';
+import { GetMedicineAlarmByIdUseCase } from '@/domain/medical/application/use-cases/medicine-alarm/get-medicine-alarm-by-id-use-case';
+import { GetMedicineAlarmsBySelfMonitorIdUseCase } from '@/domain/medical/application/use-cases/medicine-alarm/get-medicine-alarms-by-self-monitor-id-use-case';
+import { UpdateMedicineAlarmUseCase } from '@/domain/medical/application/use-cases/medicine-alarm/update-medicine-alarm-use-case';
+import { DeleteMedicineAlarmUseCase } from '@/domain/medical/application/use-cases/medicine-alarm/delete-medicine-alarm-use-case';
+import { DeleteCaregiverUseCase } from '@/domain/medical/application/use-cases/caregiver/delete-caregiver-use-case';
+import { DeleteCaregiverController } from './controllers/medical/caregiver/delete-caregiver-controller';
+import { DeleteSelfMonitorController } from './controllers/medical/self-monitor/delete-self-monitor-controller';
+import { DeleteSelfMonitorUseCase } from '@/domain/medical/application/use-cases/self-monitor/delete-self-monitor-use-case';
+import { GetProfileController } from './controllers/account/profile/get-profile-controller';
+import { ChangeProfileController } from './controllers/account/profile/change-profile-controller';
+import { GetProfileUseCase } from '@/domain/account/user/application/use-cases/profile/get-profile-use-case';
+import { ChangeProfileUseCase } from '@/domain/account/user/application/use-cases/profile/change-profile-use-case';
+import { GetCaregiverByIdUseCase } from '@/domain/medical/application/use-cases/caregiver/get-caregiver-by-id-use-case';
+import { GetFileController } from './controllers/files/get-file-controller';
+import { MailProvider } from '@/domain/mail-provider/mail-provider';
+import { MailSender } from '../mail-sender/mail-sender';
+import { ChangePasswordUseCase } from '@/domain/account/user/application/use-cases/forgot-password/change-password-use-case';
+import { SendForgotPasswordCodeUseCase } from '@/domain/account/user/application/use-cases/forgot-password/send-forgot-password-code-use-case';
+import { ValidateForgotPasswordCodeUseCase } from '@/domain/account/user/application/use-cases/forgot-password/validate-forgot-password-code-use-case';
+import { SendForgotPasswordCodeController } from './controllers/account/forgot-password/send-forgot-password-code-controller';
+import { ValidateForgotPasswordCodeController } from './controllers/account/forgot-password/validate-forgot-password-code-controller';
+import { ChangePasswordController } from './controllers/account/forgot-password/change-password-controller';
+import { DisconnectSelfMonitorFromCaregiverUseCase } from '@/domain/medical/application/use-cases/caregiver/disconnect-self-monitor-from-caregiver-use-case';
+import { GetSelfMonitorAccessUseCase } from '@/domain/medical/application/use-cases/caregiver/get-self-monitor-access-use-case';
+import { DisconnectSelfMonitorController } from './controllers/medical/caregiver/disconnect-self-monitor-controller';
+import { GetSelfMonitorAccessController } from './controllers/medical/caregiver/get-self-monitor-access-controller';
+import { SignOutController } from './controllers/account/user/sign-out-controller';
+import { GetNotificationsController } from './controllers/account/notification/get-notifications-controller';
+import { DeleteNotificationController } from './controllers/account/notification/delete-notification-controller';
+import { GetNotificationByIdController } from './controllers/account/notification/get-notification-by-id-controller';
+import { UpdateDeviceUseCase } from '@/domain/account/user/application/use-cases/device/update-device-use-case';
+import { DeleteDeviceUseCase } from '@/domain/account/user/application/use-cases/device/delete-device-use-case';
+import { GetDeviceByTokenUseCase } from '@/domain/account/user/application/use-cases/device/get-device-by-token-use-case';
+import { GetNotificationsByAccountIdUseCase } from '@/domain/account/user/application/use-cases/notification/get-notifications-by-account-id-use-case';
+import { GetNotificationByIdUseCase } from '@/domain/account/user/application/use-cases/notification/get-notification-by-id-use-case';
+import { DeleteNotificationUseCase } from '@/domain/account/user/application/use-cases/notification/delete-notification-use-case';
+import { CloudMessaging } from '../cloud-messaging/cloud-messaging';
+import { NotificationProvider } from '@/domain/notification-provider/notification-provider';
+import { GetDevicesByUserIdUseCase } from '@/domain/account/user/application/use-cases/device/get-devices-by-user-id';
 
 @Module({
   controllers: [
+    // Files
+      GetFileController,
     // Medical
       // Allergy
         GetAllAllergiesController,
@@ -137,20 +198,42 @@ import { GeminiService } from '../gemini/gemini-service';
         DeleteChronicDiseaseController,
         UpdateChronicDiseaseController,
     // User
+      // Profile
+        GetProfileController,
+        ChangeProfileController,
       // Account
         CreateAccountController,
         AuthenticateAccountController,
         GetAccountController,
+        CheckExistingEmailController,
         UpdateProfilePhotoAccountController,
+        UpdateAccountController,
+        SignOutController,
+      // Notification
+        GetNotificationsController,
+        GetNotificationByIdController,
+        DeleteNotificationController,
+      // Forgot Password
+        SendForgotPasswordCodeController,
+        ValidateForgotPasswordCodeController,
+        ChangePasswordController,
       //Self Monitor
         CreateSelfMonitorController,
         GetSelfMonitorController,
         GetSelfMonitorByCaregiverIdController,
         ConnectCaregiverToSelfMonitorController,
         UpdateSelfMonitorController,
+        GetCaregiverRequestsController,
+        CancelCaregiverRequestController,
+        DeleteSelfMonitorController,
       //Caregiver
         CreateCaregiverController,
         GetCaregiverByUserIdController,
+        DisconnectSelfMonitorController,
+        GetSelfMonitorAccessController,
+        RespondSelfMonitorRequestController,
+        GetSelfMonitorRequestsController,
+        DeleteCaregiverController,
       //MedicalRecord
         CreateaMedicalRecordController,
         GetMedicalRecordController,
@@ -194,6 +277,12 @@ import { GeminiService } from '../gemini/gemini-service';
         GetCommunityNoteByIdController,
         UpdateCommunityNoteController,
         RateCommunityNoteController
+      //MedicineAlarm
+        CreateMedicineAlarmController,
+        GetMedicineAlarmByIdController,
+        GetMedicineAlarmsController,
+        UpdateMedicineAlarmController,
+        DeleteMedicineAlarmController
   ],
   providers: [
     // Medical
@@ -214,11 +303,17 @@ import { GeminiService } from '../gemini/gemini-service';
         CreateSelfMonitorUseCase,
         GetSelfMonitorByAccountIdUseCase,
         GetSelfMonitorsByCaregiverIdUseCase,
+        GetSelfMonitorByIdUseCase,
         UpdateSelfMonitorUseCase,
+        DeleteSelfMonitorUseCase,
       //Caregiver
         CreateCaregiverUseCase,
+        GetCaregiverByIdUseCase,
         GetCaregiverByUserIdUseCase,
+        DisconnectSelfMonitorFromCaregiverUseCase,
+        GetSelfMonitorAccessUseCase,
         GetCaregiverByCaregiverCodeUseCase,
+        DeleteCaregiverUseCase,
       //MedicalRecord
         CreateMedicalRecordUseCase,
         GetMedicalRecordBySelfMonitorIdUseCase,
@@ -244,11 +339,28 @@ import { GeminiService } from '../gemini/gemini-service';
         UpdateMedicalLogUseCase,
         GetMedicalLogByIdUseCase,
         
+      //CaregiverRequest
+        CreateCaregiverRequestUseCase,
+        GetCaregiverRequestBySelfMonitorUseCase,
+        GetCaregiverRequestsByCaregiverUseCase,
+        UpdateCaregiverRequestUseCase,
+        DeleteCaregiverRequestUseCase,
+
+      //MedicineAlarm
+        CreateMedicineAlarmUseCase,
+        GetMedicineAlarmByIdUseCase,
+        GetMedicineAlarmsBySelfMonitorIdUseCase,
+        UpdateMedicineAlarmUseCase,
+        DeleteMedicineAlarmUseCase,
     // User
+      // Profile
+         GetProfileUseCase,
+         ChangeProfileUseCase,
       // Account
         CreateAccountUseCase,
         AuthenticateAccountUseCase,
         GetMyAccountUseCase,
+        CheckExistingEmailUseCase,
         UpdateMyAccountUseCase,
 
     // Community
@@ -274,6 +386,20 @@ import { GeminiService } from '../gemini/gemini-service';
         GetCommunityNoteByIdUseCase,
         UpdateCommunityNoteUseCase,
 
+        UpdateAccountEmailUseCase,
+      // Forgot Password
+        ChangePasswordUseCase,
+        SendForgotPasswordCodeUseCase,
+        ValidateForgotPasswordCodeUseCase,
+      // Device
+        GetDeviceByTokenUseCase,
+        GetDevicesByUserIdUseCase,
+        UpdateDeviceUseCase,
+        DeleteDeviceUseCase,
+      // Notification
+        GetNotificationsByAccountIdUseCase,
+        GetNotificationByIdUseCase,
+        DeleteNotificationUseCase,
     {
       provide: Storage,
       useClass: InMemoryStorage
@@ -298,6 +424,14 @@ import { GeminiService } from '../gemini/gemini-service';
       provide: Gemini,
       useClass: GeminiService
     }
+      provide: MailProvider,
+      useClass: MailSender
+    },
+    {
+      provide: NotificationProvider,
+      useClass: CloudMessaging
+    },
+    GoogleDrive
   ],
   imports: [
     DatabaseModule,

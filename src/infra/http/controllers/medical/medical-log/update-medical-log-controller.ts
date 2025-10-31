@@ -64,5 +64,7 @@ export class UpdateMedicalLogController {
     // return {
     //     medicalLog:
     // }
+
+    return;
   }
 }

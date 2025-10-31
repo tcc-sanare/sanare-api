@@ -54,7 +54,8 @@ model Caregiver {
 
   user Users @relation(fields: [userId], references: [id])
 
-  selfMonitors SelfMonitor[]
+  selfMonitors      SelfMonitor[]
+  caregiverRequests CaregiverRequest[]
 
   @@map("caregivers")
 }
@@ -71,13 +72,30 @@ model SelfMonitor {
   caregiver Caregiver? @relation(fields: [caregiverId], references: [id])
   user      Users      @relation(fields: [userId], references: [id])
 
-  medicalRecord  MedicalRecord?
-  medicalLogs    MedicalLogs[]
-  reports        MedicalReports[]
-  medicineAlarms MedicineAlarms[]
-  aiChats        AiChats[]
+  medicalRecord     MedicalRecord?
+  medicalLogs       MedicalLogs[]
+  reports           MedicalReports[]
+  medicineAlarms    MedicineAlarms[]
+  aiChats           AiChats[]
+  caregiverRequests CaregiverRequest[]
 
   @@map("self_monitors")
+}
+
+model CaregiverRequest {
+  id            String @id @default(uuid())
+  selfMonitorId String
+  caregiverId   String
+
+  status String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  selfMonitor SelfMonitor @relation(fields: [selfMonitorId], references: [id])
+  caregiver   Caregiver   @relation(fields: [caregiverId], references: [id])
+
+  @@map("caregiver_requests")
 }
 
 model UserPhones {
@@ -110,8 +128,7 @@ model Notifications {
   id     String  @id @default(uuid())
   title  String
   body   String
-  path   String?
-  isRead Boolean @default(false)
+  data   Json?
 
   userId String
 
@@ -242,8 +259,8 @@ model MedicalRecordToAllergies {
   allergyId       String
   description     String?
 
-  medicalRecord MedicalRecord @relation(fields: [medicalRecordId], references: [id])
-  allergy       Allergies     @relation(fields: [allergyId], references: [id])
+  medicalRecord MedicalRecord @relation(fields: [medicalRecordId], references: [id], onDelete: Cascade)
+  allergy       Allergies     @relation(fields: [allergyId], references: [id], onDelete: Cascade)
 
   @@id([medicalRecordId, allergyId])
   @@map("medical_record_to_allergies")
@@ -266,8 +283,8 @@ model MedicalRecordToChronicDiseases {
   medicalRecordId  String
   chronicDiseaseId String
 
-  medicalRecord  MedicalRecord   @relation(fields: [medicalRecordId], references: [id])
-  chronicDisease ChronicDiseases @relation(fields: [chronicDiseaseId], references: [id])
+  medicalRecord  MedicalRecord   @relation(fields: [medicalRecordId], references: [id], onDelete: Cascade)
+  chronicDisease ChronicDiseases @relation(fields: [chronicDiseaseId], references: [id], onDelete: Cascade)
 
   @@id([medicalRecordId, chronicDiseaseId])
   @@map("medical_record_to_chronic_diseases")
@@ -311,8 +328,8 @@ model MedicalLogsToDiseases {
   medicalLogId String
   diseaseId    String
 
-  medicalLog MedicalLogs @relation(fields: [medicalLogId], references: [id])
-  disease    Diseases    @relation(fields: [diseaseId], references: [id])
+  medicalLog MedicalLogs @relation(fields: [medicalLogId], references: [id], onDelete: Cascade)
+  disease    Diseases    @relation(fields: [diseaseId], references: [id], onDelete: Cascade)
 
   @@id([medicalLogId, diseaseId])
   @@map("medical_logs_to_diseases")
@@ -335,8 +352,8 @@ model MedicalLogsToSymptoms {
   medicalLogId String
   symptomId    String
 
-  medicalLog MedicalLogs @relation(fields: [medicalLogId], references: [id])
-  symptom    Symptoms    @relation(fields: [symptomId], references: [id])
+  medicalLog MedicalLogs @relation(fields: [medicalLogId], references: [id], onDelete: Cascade)
+  symptom    Symptoms    @relation(fields: [symptomId], references: [id], onDelete: Cascade)
 
   @@id([medicalLogId, symptomId])
   @@map("medical_logs_to_symptoms")
@@ -362,7 +379,9 @@ model MedicineAlarms {
   name      String
   weekDays  String[]
   times     String[]
-  expiresAt DateTime
+  type      String
+  expiresAt DateTime?
+  active    Boolean
 
   selfMonitorId String
 

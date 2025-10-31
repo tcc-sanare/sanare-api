@@ -2,7 +2,6 @@ import { StoragedFile } from "@/core/entities/storaged-file";
 import { Storage } from "@/domain/application/storage";
 import { Injectable } from "@nestjs/common";
 import { google } from "googleapis";
-import * as path from "node:path";
 import { Readable } from "node:stream";
 import { EnvService } from "../env/env.service";
 
@@ -39,19 +38,32 @@ export class GoogleDrive implements Storage {
     return new StoragedFile(response.data.id, this)
   }
 
-  async getSignedUrl(key: string): Promise<{ url: string; }> {
+  getSignedUrl(key: string): { url: string; } {
+
+    return { url: `${this.envService.get('NODE_ENV') === 'production' ? 'https://sanare-api.vercel.app' : 'http://localhost:3000'}/files/${key}` };
+  }
+
+  async getFile(key: string): Promise<any> {
     const service = await this.getService();
 
-    const file = await service.files.get({
+    const response = await service.files.get({
       fileId: key,
-      alt: 'media'
+      alt: 'media',
+    }, { responseType: 'stream' });
+
+    const metadata = await service.files.get({
+      fileId: key,
+      fields: 'name, mimeType'
     });
 
-    const blob = file.data as unknown as Blob;
+    if (!response.data) {
+      throw new Error("File not found");
+    }
 
-    console.log(file.headers)
-
-    return { url: `data:${file.headers['content-type']};base64,${Buffer.from(await blob.arrayBuffer()).toString("base64")} `}
+    return {
+      ...response,
+      metadata: metadata,
+    };
   }
 
   async delete(key: string): Promise<void> {

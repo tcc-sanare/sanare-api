@@ -26,6 +26,16 @@ import { PostRepository } from '@/domain/community/application/repositories/post
 import { PrismaPostRepository } from './prisma/repositories/community/prisma-post-repostiroty';
 import { CommunityNoteRepository } from '@/domain/community/application/repositories/community-note-repository';
 import { PrismaCommunityNoteRepository } from './prisma/repositories/community/prisma-community-note-repository';
+import { CaregiverRequestRepository } from '@/domain/medical/application/repositories/caregiver-request-repository';
+import { PrismaCaregiverRequestRepository } from './prisma/repositories/medical/prisma-caregiver-request-repository';
+import { MedicineAlarmRepository } from '@/domain/medical/application/repositories/medicine-alarm-repository';
+import { PrismaMedicineAlarmRepository } from './prisma/repositories/medical/prisma-medicine-alarm-repository';
+import { ForgotPasswordRepository } from '@/domain/account/user/application/repositories/forgot-password-repository';
+import { PrismaForgotPasswordRepository } from './prisma/repositories/account/prisma-forgot-password-repository';
+import { DeviceRepository } from '@/domain/account/user/application/repositories/device-repository';
+import { PrismaDeviceRepository } from './prisma/repositories/account/prisma-device-repository';
+import { NotificationRepository } from '@/domain/account/user/application/repositories/notification-repository';
+import { PrismaNotificationRepository } from './prisma/repositories/account/prisma-notification-repository';
 
 @Module({
   providers: [
@@ -61,7 +71,15 @@ import { PrismaCommunityNoteRepository } from './prisma/repositories/community/p
       },
       {
         provide: MedicalLogRepository,
-        useClass: PrismaMedicalLogRepository
+        useClass: PrismaMedicalLogRepository,
+      },
+      {
+        provide: CaregiverRequestRepository,
+        useClass: PrismaCaregiverRequestRepository
+      },
+      {
+        provide: MedicineAlarmRepository,
+        useClass: PrismaMedicineAlarmRepository
       },
     // User
       {
@@ -85,6 +103,17 @@ import { PrismaCommunityNoteRepository } from './prisma/repositories/community/p
       {
         provide: CommunityNoteRepository,
         useClass: PrismaCommunityNoteRepository
+      {
+        provide: ForgotPasswordRepository,
+        useClass: PrismaForgotPasswordRepository
+      },
+      {
+        provide: DeviceRepository,
+        useClass: PrismaDeviceRepository
+      },
+      {
+        provide: NotificationRepository,
+        useClass: PrismaNotificationRepository
       }
   ],
   controllers: [],
@@ -103,6 +132,11 @@ import { PrismaCommunityNoteRepository } from './prisma/repositories/community/p
     CommunityNoteRepository,
     PostRepository,
     ForumRepository
+    CaregiverRequestRepository,
+    MedicineAlarmRepository,
+    ForgotPasswordRepository,
+    DeviceRepository,
+    NotificationRepository,
   ],
 })
 export class DatabaseModule {}

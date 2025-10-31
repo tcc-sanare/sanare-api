@@ -7,17 +7,18 @@ export class PrismaSelfMonitorMapper {
     return SelfMonitor.create({
       logInputs: raw.logInputs as unknown as SelfMonitorLogInput,
       accountId: new UniqueEntityID(raw.userId),
-      caregiverId: raw.caregiverId ? new UniqueEntityID(raw.caregiverId) : undefined,
+      caregiverId: raw.caregiverId ? new UniqueEntityID(raw.caregiverId) : raw.caregiverId as null | undefined,
       createdAt: raw.createdAt,
       updatedAt: raw.updatedAt,
     }, new UniqueEntityID(raw.id));
   }
 
   static toPrisma(selfMonitor: SelfMonitor): Prisma.SelfMonitorUncheckedCreateInput {
+    console.log(selfMonitor);
     return {
       id: selfMonitor.id.toString(),
       userId: selfMonitor.accountId.toString(),
-      caregiverId: selfMonitor.caregiverId?.toString(),
+      caregiverId: selfMonitor.caregiverId ? selfMonitor.caregiverId.toString() : null,
       logInputs: selfMonitor.logInputs,
       createdAt: selfMonitor.createdAt,
       updatedAt: selfMonitor.updatedAt,

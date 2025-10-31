@@ -62,6 +62,8 @@ export class UpdateAccountEmailUseCase {
     account.email = data.email;
     account.isVerified = false;
 
+    await this.accountRepository.save(account);
+
     return right({
       account,
     });
