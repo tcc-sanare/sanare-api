@@ -276,7 +276,7 @@ import { GetDevicesByUserIdUseCase } from '@/domain/account/user/application/use
         GetAllCommunityNotesByPostIdController,
         GetCommunityNoteByIdController,
         UpdateCommunityNoteController,
-        RateCommunityNoteController
+        RateCommunityNoteController,
       //MedicineAlarm
         CreateMedicineAlarmController,
         GetMedicineAlarmByIdController,
@@ -423,7 +423,8 @@ import { GetDevicesByUserIdUseCase } from '@/domain/account/user/application/use
     {
       provide: Gemini,
       useClass: GeminiService
-    }
+    },
+    {
       provide: MailProvider,
       useClass: MailSender
     },

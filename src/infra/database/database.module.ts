@@ -103,6 +103,7 @@ import { PrismaNotificationRepository } from './prisma/repositories/account/pris
       {
         provide: CommunityNoteRepository,
         useClass: PrismaCommunityNoteRepository
+      },
       {
         provide: ForgotPasswordRepository,
         useClass: PrismaForgotPasswordRepository
@@ -131,7 +132,7 @@ import { PrismaNotificationRepository } from './prisma/repositories/account/pris
     MedicalLogRepository,
     CommunityNoteRepository,
     PostRepository,
-    ForumRepository
+    ForumRepository,
     CaregiverRequestRepository,
     MedicineAlarmRepository,
     ForgotPasswordRepository,
