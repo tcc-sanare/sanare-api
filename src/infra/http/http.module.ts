@@ -180,6 +180,7 @@ import { DeleteNotificationUseCase } from '@/domain/account/user/application/use
 import { CloudMessaging } from '../cloud-messaging/cloud-messaging';
 import { NotificationProvider } from '@/domain/notification-provider/notification-provider';
 import { GetDevicesByUserIdUseCase } from '@/domain/account/user/application/use-cases/device/get-devices-by-user-id';
+import { ChatController } from './controllers/chat/chat-controller';
 
 @Module({
   controllers: [
@@ -282,7 +283,10 @@ import { GetDevicesByUserIdUseCase } from '@/domain/account/user/application/use
         GetMedicineAlarmByIdController,
         GetMedicineAlarmsController,
         UpdateMedicineAlarmController,
-        DeleteMedicineAlarmController
+        DeleteMedicineAlarmController,
+
+    // Chat
+      ChatController,
   ],
   providers: [
     // Medical
