@@ -20,6 +20,12 @@ import { DiseaseRepository } from '@/domain/medical/application/repositories/dis
 import { MedicalLogRepository } from '@/domain/medical/application/repositories/medical-log-repository';
 import { PrismaDiseaseRepository } from './prisma/repositories/medical/prisma-disease-repository';
 import { PrismaMedicalLogRepository } from './prisma/repositories/medical/prisma-medical-log-repository';
+import { ForumRepository } from '@/domain/community/application/repositories/forum-repository';
+import { PrismaForumRepository } from './prisma/repositories/community/prisma-forum-repository';
+import { PostRepository } from '@/domain/community/application/repositories/post-repository';
+import { PrismaPostRepository } from './prisma/repositories/community/prisma-post-repostiroty';
+import { CommunityNoteRepository } from '@/domain/community/application/repositories/community-note-repository';
+import { PrismaCommunityNoteRepository } from './prisma/repositories/community/prisma-community-note-repository';
 import { CaregiverRequestRepository } from '@/domain/medical/application/repositories/caregiver-request-repository';
 import { PrismaCaregiverRequestRepository } from './prisma/repositories/medical/prisma-caregiver-request-repository';
 import { MedicineAlarmRepository } from '@/domain/medical/application/repositories/medicine-alarm-repository';
@@ -84,6 +90,19 @@ import { PrismaNotificationRepository } from './prisma/repositories/account/pris
         provide: Storage,
         useClass: GoogleDrive
       },
+
+    //Community Notes
+      {
+        provide: ForumRepository,
+        useClass: PrismaForumRepository
+      },
+      {
+        provide: PostRepository,
+        useClass: PrismaPostRepository
+      },
+      {
+        provide: CommunityNoteRepository,
+        useClass: PrismaCommunityNoteRepository
       {
         provide: ForgotPasswordRepository,
         useClass: PrismaForgotPasswordRepository
@@ -110,6 +129,9 @@ import { PrismaNotificationRepository } from './prisma/repositories/account/pris
     SymptomRepository,
     DiseaseRepository,
     MedicalLogRepository,
+    CommunityNoteRepository,
+    PostRepository,
+    ForumRepository
     CaregiverRequestRepository,
     MedicineAlarmRepository,
     ForgotPasswordRepository,
