@@ -6,9 +6,9 @@ export interface PostCheckProps {
 
 interface Message {
   role: 'user' | 'model'
-  parts: {
+  parts: [{
     text: string
-  }
+  }]
 }
 
 export interface ChatProps {

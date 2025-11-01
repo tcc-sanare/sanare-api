@@ -41,9 +41,9 @@ export class ChatController {
         }).then(res => res.isRight() && res.value.medicalRecord),
       history: history?.map(message => ({
         role: message.role,
-        parts: {
+        parts: [{
           text: message.text
-        }
+        }]
       }))
     });
 
