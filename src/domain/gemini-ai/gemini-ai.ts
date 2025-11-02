@@ -1,4 +1,4 @@
-import { MedicalRecord } from "../medical/enterprise/entities/medical-record"
+import { BloodType } from "../medical/enterprise/entities/medical-record"
 
 export interface PostCheckProps {
   content: string
@@ -14,7 +14,12 @@ interface Message {
 export interface ChatProps {
   question: string
   history?: Message[]
-  medicalRecord?: MedicalRecord
+  medicalRecord?: {
+    name: string,
+    bloodType: BloodType,
+    allergies: string[],
+    chronicDiseases: string[]
+  }
 }
 
 export abstract class Gemini {

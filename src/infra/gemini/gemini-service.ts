@@ -1,6 +1,5 @@
 import { ChatProps, Gemini, PostCheckProps } from "@/domain/gemini-ai/gemini-ai";
 import { Injectable } from "@nestjs/common";
-import { MedicalRecordPresenter } from "../http/presenters/medical-record-presenter";
 
 interface GeminiChatResponse {
   yourAnswer: string
@@ -23,12 +22,12 @@ export class GeminiService implements Gemini {
         medicalRecord: {
           role: 'user',
           parts: [{
-            text: JSON.stringify(MedicalRecordPresenter.toHttp(props.medicalRecord))
+            text: JSON.stringify(props.medicalRecord)
           }]
         }
       })
     }).then(res => res.json())
-    console.log(result)
+    // console.log(result)
 
     // Verificar erro
     return result.yourAnswer
