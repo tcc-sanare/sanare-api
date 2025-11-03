@@ -1,15 +1,15 @@
 import { SendForgotPasswordCodeUseCase } from "@/domain/account/user/application/use-cases/forgot-password/send-forgot-password-code-use-case";
 import { ZodValidationPipe } from "@/infra/http/pipes/zod-validation-pipe";
-import { Body, Controller, Get, Post } from "@nestjs/common";
+import { Query, Controller, Get } from "@nestjs/common";
 import z from "zod";
 
-const bodySchema = z.object({
+const querySchema = z.object({
   email: z.string().email(),
 });
 
-type BodyDto = z.infer<typeof bodySchema>;
+type QueryDto = z.infer<typeof querySchema>;
 
-const bodyValidation = new ZodValidationPipe(bodySchema);
+const queryValidation = new ZodValidationPipe(querySchema);
 
 @Controller("forgot-password")
 export class SendForgotPasswordCodeController {
@@ -18,9 +18,9 @@ export class SendForgotPasswordCodeController {
   ) {}
 
   @Get()
-  async handle(@Body(bodyValidation) body: BodyDto): Promise<void> {
+  async handle(@Query(queryValidation) query: QueryDto): Promise<void> {
     await this.sendForgotPasswordCodeUseCase.execute({
-      email: body.email,
+      email: query.email,
     });
   }
 }
