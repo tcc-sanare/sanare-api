@@ -76,10 +76,14 @@ export class PrismaMedicalLogRepository implements MedicalLogRepository {
         })
     }
 
-    async findBySelfMonitorId(selfMonitorId: string): Promise<MedicalLog[] | null> {
+    async findBySelfMonitorId(selfMonitorId: string, date?: { from?: Date; to?: Date }): Promise<MedicalLog[] | null> {
         const medicalLogs = await this.prisma.medicalLogs.findMany({
             where: {
                 selfMonitorId,
+                createdAt: date && {
+                    gte: date.from,
+                    lte: date.to,
+                }
             },
             include: {
                 diseases: true,

@@ -181,6 +181,8 @@ import { CloudMessaging } from '../cloud-messaging/cloud-messaging';
 import { NotificationProvider } from '@/domain/notification-provider/notification-provider';
 import { GetDevicesByUserIdUseCase } from '@/domain/account/user/application/use-cases/device/get-devices-by-user-id';
 import { ChatController } from './controllers/chat/chat-controller';
+import { GetMedicalReportDataController } from './controllers/medical/medical-report/get-medical-report-data-controller';
+import { GetMedicalReportDataUseCase } from '@/domain/medical/application/use-cases/medical-report/get-medical-report-data-use-case';
 
 @Module({
   controllers: [
@@ -285,6 +287,9 @@ import { ChatController } from './controllers/chat/chat-controller';
         UpdateMedicineAlarmController,
         DeleteMedicineAlarmController,
 
+      //MedicalReport
+        GetMedicalReportDataController,
+
     // Chat
       ChatController,
   ],
@@ -356,6 +361,10 @@ import { ChatController } from './controllers/chat/chat-controller';
         GetMedicineAlarmsBySelfMonitorIdUseCase,
         UpdateMedicineAlarmUseCase,
         DeleteMedicineAlarmUseCase,
+
+      //MedicalReport
+        GetMedicalReportDataUseCase,
+
     // User
       // Profile
          GetProfileUseCase,

@@ -5,5 +5,5 @@ export abstract class MedicalLogRepository{
     // abstract delete(medicalLog: MedicalLog): Promise<void>
     abstract save(medicalLog: MedicalLog): Promise<void>
     abstract findById(id: string): Promise<MedicalLog | null>
-    abstract findBySelfMonitorId(selfMonitorId: string): Promise<MedicalLog[] | null>
+    abstract findBySelfMonitorId(selfMonitorId: string, date?: { from?: Date; to?: Date }): Promise<MedicalLog[] | null>
 }
