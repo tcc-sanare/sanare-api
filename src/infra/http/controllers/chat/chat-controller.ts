@@ -12,6 +12,8 @@ import { GetChronicDiseaseByIdUseCase } from "@/domain/medical/application/use-c
 import { GetAllergyByIdUseCase } from "@/domain/medical/application/use-cases/allergy/get-allergy-by-id-use-case";
 import { AllergyPresenter } from "../../presenters/allergy-presenter";
 import { ChronicDiseasePresenter } from "../../presenters/chronic-disease-presenter";
+import { GetMedicineAlarmsBySelfMonitorIdUseCase } from "@/domain/medical/application/use-cases/medicine-alarm/get-medicine-alarms-by-self-monitor-id-use-case";
+import { CreateMedicineAlarmUseCase } from "@/domain/medical/application/use-cases/medicine-alarm/create-medicine-alarm-use-case";
 
 const bodySchema = z.object({
   question: z.string().min(1, "A pergunta deve ter pelo menos um caracter"),
@@ -31,7 +33,9 @@ export class ChatController {
     private gemini: Gemini,
     private getMedicalRecord: GetMedicalRecordBySelfMonitorIdUseCase,
     private getChronicDiseaseByIdUseCase: GetChronicDiseaseByIdUseCase,
-    private getAllergieByIdUseCase: GetAllergyByIdUseCase
+    private getAllergieByIdUseCase: GetAllergyByIdUseCase,
+    private getMedicineAlarmsBySelfMonitorUseCase: GetMedicineAlarmsBySelfMonitorIdUseCase,
+    private createMedicineAlarmUseCase: CreateMedicineAlarmUseCase
   ) {};
 
   @Post()
@@ -65,22 +69,54 @@ export class ChatController {
     )).map(result => result.isRight() ? result.value.allergy : null)
       .filter(Boolean)
 
+    
+    const medicineAlarms = await this.getMedicineAlarmsBySelfMonitorUseCase.execute({
+      selfMonitorId: selfMonitor.id
+    })
+
     const answer = await this.gemini.chat({
-      question,
-      medicalRecord: {
+      message: question,
+      userData: {
         name: account.name,
         bloodType: medicalRecord.bloodType,
         allergies: allergies.map(item => AllergyPresenter.toHttp(item).name),
-        chronicDiseases: chronicDiseases.map(item => ChronicDiseasePresenter.toHttp(item).name)
+        chronicDiseases: chronicDiseases.map(item => ChronicDiseasePresenter.toHttp(item).name),
+        medicineAlarms: medicineAlarms.value.medicineAlarms ?? []
       },
-      history: history?.map(message => ({
+      userHistory: history?.map(message => ({
         role: message.role,
         parts: [{
           text: message.text
         }]
       }))
-    });
+    })
+    
+    if (answer.functionUsed) {
+      const hoursAndMinutes = answer.functionUsed.hours.map(hour => {
+        const [hourStr, minutesStr] = hour.split(':')
 
-    return { answer };
+        return {
+          hour: Number(hourStr),
+          minutes: Number(minutesStr)
+        }
+      })
+
+      const res = await this.createMedicineAlarmUseCase.execute(
+        {
+          name: answer.functionUsed.name,
+          weekdays: answer.functionUsed.weekdays,
+          type: answer.functionUsed.type,
+          active: true,
+          selfMonitorId: selfMonitor.id,
+          hours: hoursAndMinutes.map(item => item.hour) // !!! Verificar a possibilidade de horas tipo 12:30 !!!
+        }
+      )
+
+      const message = res.isRight() ? answer.functionUsed.success : answer.functionUsed.failure
+
+      return { answer:  message }
+    }
+
+    return { answer: answer.text }
   }
 }
