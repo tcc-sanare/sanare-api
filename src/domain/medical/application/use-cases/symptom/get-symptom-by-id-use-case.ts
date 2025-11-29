@@ -29,7 +29,7 @@ export class GetSymptomByIdUseCase {
         new ResourceNotFoundError<GetSymptomByIdUseCaseRequest>({
           errors: [
             {
-              message: 'Doença não encontrada',
+              message: 'Sintoma não encontrada',
             },
           ],
         }),

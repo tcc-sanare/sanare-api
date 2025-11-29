@@ -1,36 +1,30 @@
-import { ChatProps, Gemini, PostCheckProps } from "@/domain/gemini-ai/gemini-ai";
+import { ChatProps, CreateMedicalReportData, Gemini, GeminiChatResponse, HealthReport, PostCheckProps } from "@/domain/gemini-ai/gemini-ai";
 import { Injectable } from "@nestjs/common";
 
-interface GeminiChatResponse {
-  yourAnswer: string
+
+interface MedicalReportModelResponse {
+  name: string,
+  args: HealthReport
 }
 
 @Injectable()
 export class GeminiService implements Gemini {
   constructor() {}
 
-  async chat(props: ChatProps): Promise<String> {
+  async chat(props: ChatProps): Promise<GeminiChatResponse> {
 
-    const result: GeminiChatResponse = await fetch('https://san-ai-sigma.vercel.app/chat', {
+    const result = await fetch('https://san-ai-sigma.vercel.app/chat', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
-        question: props.question,
-        history: props.history,
-        medicalRecord: {
-          role: 'user',
-          parts: [{
-            text: JSON.stringify(props.medicalRecord)
-          }]
-        }
+        message: props.message,
+        userHistory: props.userHistory,
+        userData: JSON.stringify(props.userData)
       })
     }).then(res => res.json())
-    // console.log(result)
-
-    // Verificar erro
-    return result.yourAnswer
+    return result
 
   }
 
@@ -48,5 +42,16 @@ export class GeminiService implements Gemini {
       return result
   }
 
-
+  async generateMedicalReport(props: CreateMedicalReportData): Promise<HealthReport> {
+    const result: MedicalReportModelResponse = await fetch('https://san-ai-sigma.vercel.app/medical-report', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        data: JSON.stringify(props)
+      })
+    }).then(res => res.json())
+    return result.args
+  }
 }
