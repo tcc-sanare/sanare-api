@@ -5,7 +5,7 @@ import { GetAccount } from "@/infra/http/decorators/get-account";
 import { CustomHttpException } from "@/infra/http/exceptions/custom-http-exception";
 import { AuthGuard } from "@/infra/http/guards/auth-guard";
 import { MedicalLogPresenter } from "@/infra/http/presenters/medical-log-presenter";
-import { Controller, Get, UseGuards, Query } from "@nestjs/common";
+import { Controller, Get, UseGuards, Query, Header, Response } from "@nestjs/common";
 import { ZodValidationPipe } from "@/infra/http/pipes/zod-validation-pipe";
 import { z } from "zod";
 import { MedicalLog, MedicalLogProps } from "@/domain/medical/enterprise/entities/medical-log";
@@ -13,6 +13,10 @@ import { WatchedList } from "@/core/entities/watched-list";
 import { GetDiseaseByIdUseCase } from "@/domain/medical/application/use-cases/disease/get-disease-by-id-use-case";
 import { GetSymptomByIdUseCase } from "@/domain/medical/application/use-cases/symptom/get-symptom-by-id-use-case";
 import { Gemini } from "@/domain/gemini-ai/gemini-ai";
+import { GetMedicalRecordBySelfMonitorIdUseCase } from "@/domain/medical/application/use-cases/medical-record/get-medical-record-by-self-monitor-id";
+import { MedicalRecordPresenter } from "@/infra/http/presenters/medical-record-presenter";
+import { GetAllAllergiesUseCase } from "@/domain/medical/application/use-cases/allergy/get-all-allergies-use-case";
+import { GetAllChronicDiseasesUseCase } from "@/domain/medical/application/use-cases/chronic-disease/get-all-chronic-diseases-use-case";
 
 const querySchema = z.object({
   month: z.coerce.number().min(1).max(12),
@@ -28,15 +32,20 @@ export class GetMedicalReportDataController {
   constructor(
     private getMedicalReportDataUseCase: GetMedicalReportDataUseCase,
     private findSelfMonitorByAccountId: GetSelfMonitorByAccountIdUseCase,
+    private getMedicalRecordById: GetMedicalRecordBySelfMonitorIdUseCase,
+    private getAllergies: GetAllAllergiesUseCase,
+    private getChronicDiseases: GetAllChronicDiseasesUseCase,
     private getSymptomById: GetSymptomByIdUseCase,
     private gemini: Gemini
   ) {}
 
   @Get()
   @UseGuards(AuthGuard)
+  @Header('Content-Type', 'application/pdf')
   async handle(
     @Query(queryValidation) query: QueryDto,
-    @GetAccount() account: Account
+    @GetAccount() account: Account,
+    @Response() res
   ) {
     const selfMonitor = await this.findSelfMonitorByAccountId
       .execute({
@@ -45,6 +54,27 @@ export class GetMedicalReportDataController {
       .then((res) => {
         if (res.isLeft()) throw new CustomHttpException(res.value);
         return res.value.selfMonitor;
+      });
+
+    const medicalRecord = await this.getMedicalRecordById
+      .execute({
+        selfMonitorId: selfMonitor.id.toString(),
+      })
+      .then((res) => {
+        if (res.isLeft()) throw new CustomHttpException(res.value);
+        return res.value.medicalRecord;
+      });
+
+    const allergies = await this.getAllergies.execute()
+      .then(res => {
+        if (res.isLeft()) throw new CustomHttpException(res.value);
+        return res.value.allergies;
+      });
+
+    const chronicDiseases = await this.getChronicDiseases.execute()
+      .then(res => {
+        if (res.isLeft()) throw new CustomHttpException(res.value);
+        return res.value.chronicDiseases;
       });
 
     const result = await this.getMedicalReportDataUseCase
@@ -226,11 +256,45 @@ export class GetMedicalReportDataController {
       timeRegistered: getCreatedAt()
     }
 
+    console.log({ formatedData })
+
     const aiGeneratedMedicalReport = await this.gemini.generateMedicalReport(formatedData)
 
-    return {
-      dataToPdf: aiGeneratedMedicalReport
+    const pdfData = {
+      dataToPdf: aiGeneratedMedicalReport,
+      accountData: {
+        name: account.name,
+        email: account.email,
+      },
+      medicalRecordData: {
+        ...MedicalRecordPresenter.toHttp(medicalRecord),
+        allergies: medicalRecord.allergies.currentItems.map(allergy => {
+          return allergies.find(a => a.id.toString() === allergy.allergyId.toString())?.name
+
+        }).filter(a => a !== null),
+        chronicDiseases: medicalRecord.chronicDiseases.currentItems.map(chronicDisease => {
+          return chronicDiseases.find(cd => cd.id.toString() === chronicDisease.chronicDiseaseId.toString())?.name
+        }).filter(cd => cd !== null),
+      },
     }
+
+    const pdfRequest= await fetch("https://sanare-reports.vercel.app/generate", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(pdfData),
+    });
+
+    const pdfBuffer = Buffer.from(await pdfRequest.arrayBuffer());
+
+    res.setHeader("Content-Type", pdfRequest.headers.get("Content-Type") || "application/pdf");
+    res.setHeader(
+      "Content-Disposition",
+      `attachment; filename=sanare-report.pdf`
+    );
+
+    res.end(pdfBuffer);
   }
 }
 
