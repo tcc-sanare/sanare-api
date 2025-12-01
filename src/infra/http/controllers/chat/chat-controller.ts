@@ -108,7 +108,7 @@ export class ChatController {
           type: answer.functionUsed.type,
           active: true,
           selfMonitorId: selfMonitor.id,
-          hours: hoursAndMinutes.map(item => item.hour) // !!! Verificar a possibilidade de horas tipo 12:30 !!!
+          hours: hour,
         }
       )
 
